@@ -1,4 +1,4 @@
-const CACHE_NAME = 'wechat-screenshot-pwa-v19';
+const CACHE_NAME = 'wechat-screenshot-pwa-v21';
 
 const CORE_ASSETS = [
   './',
