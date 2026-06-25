@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>江西日扬信息技术有限公司</title>
+<meta name="keywords" content="江西南昌弱电工程公司,江西酒店智能化，酒店弱电工程，酒店智能客控，视频监控系统,防盗报警系统,门禁考勤系统,楼宇对讲系统,公共广播,背景音乐系统,停车场系统,视频会议系统,机房环境监控系统弱电系统集成,餐饮系统,智能化系统,灯光音响KTV">
+<meta name="description" content="成立于廿十一世纪初的 “江西日扬信息技术有限公司”，致力于信息技术产业，利用现代通信技术、计算机与控制技术，专业从事数据、医疗、金融、党政军、酒店、教育等多领域智能化专业解决方案的系统集成服务商。">
+<meta name="author" content="www.jxriyang.com"江西日扬信息技术有限公司 />
+<link rel="stylesheet" href="/skin/css/animate.min.css">
+<link href="/skin/css/css_whir.css" rel="stylesheet" type="text/css">
+<script src="/skin/js/html5media.min.js"></script>
+<script type="text/javascript" src="/skin/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="/skin/js/wow.min.js"></script>
+<script>
+if (!(/msie [6|7|8|9]/i.test(navigator.userAgent))){
+new WOW().init();
+};
+</script>
+<!--[if IE 6]>
+<script type="text/javascript" src="/skin/js/iepng.js"></script>
+<script type="text/javascript"> 
+EvPNG.fix('img,dl,div,a,li'); </script>
+<![endif]-->
+<!--[if lt IE 9]>
+<script type="text/javascript" src="/skin/js/html5shiv.v3.72.min.js"></script>
+<script type="text/javascript" src="/skin/js/respond.min.js"></script>
+<![endif]-->
+<!--[if IE]>
+<script>
+(function(){if(!/*@cc_on!@*/0)return;var e = "header,footer,nav,article,section,main,aside".split(','),i=e.length;while(i--){document.createElement(e[i])}})()
+</script>
+<![endif]-->
+<script src="/skin/js/jquery.superslide.2.1.1.js"></script>
+<link href="/skin/css/swiper.min.css" rel="stylesheet" type="text/css">
+<script src="/skin/js/swiper.min.js"></script>
+<script src="/skin/js/swiper.animate.min.js"></script>
+</head>
+<body>
+<!--top-->
+<header class="Header wow fadeIn">
+  <div class="Contain">
+    <h1 class="Logo"><a href='/'><img src="/static/upload/image/20231117/1700201950711362.jpg" /></a></h1>
+    <div class="Toper">
+      <div class="tel">联系方式：<span>19979180007</span></div>
+      
+      <!--PC下拉导航 s-->
+      <div class="MainNav pcnav">
+        <ul>
+          <li class="onnav"><span><a href='/'>首 页</a></span></li>
+          
+          <li > <span><a href="/about/">关于我们</a></span>
+            
+            <div class="NavPull">
+              <dl>
+                
+                <dd><a href="/jianjie/">公司简介</a></dd>
+                
+                <dd><a href="/wenhua/">企业文化</a></dd>
+                
+                <dd><a href="/rongyu/">荣誉证书</a></dd>
+                
+              </dl>
+            </div>
+            
+          </li>
+          
+          <li > <span><a href="/business/">业务板块</a></span>
+            
+            <div class="NavPull">
+              <dl>
+                
+                <dd><a href="/b2/">建筑智能化</a></dd>
+                
+                <dd><a href="/b1/">消防工程</a></dd>
+                
+                <dd><a href="/b3/">亮化工程</a></dd>
+                
+                <dd><a href="/b4/">机电工程</a></dd>
+                
+              </dl>
+            </div>
+            
+          </li>
+          
+          <li > <span><a href="/products/">解决方案</a></span>
+            
+            <div class="NavPull">
+              <dl>
+                
+                <dd><a href="/lm1/">智慧酒店</a></dd>
+                
+                <dd><a href="/lm2/">智慧社区</a></dd>
+                
+                <dd><a href="/lm3/">智慧学校</a></dd>
+                
+                <dd><a href="/lm4/">智慧城市</a></dd>
+                
+                <dd><a href="/lm5/">智慧文旅</a></dd>
+                
+                <dd><a href="/list_22/">智慧园区</a></dd>
+                
+              </dl>
+            </div>
+            
+          </li>
+          
+          <li > <span><a href="/case/">成功案例</a></span>
+            
+          </li>
+          
+          <li > <span><a href="/news/">行业资讯</a></span>
+            
+            <div class="NavPull">
+              <dl>
+                
+                <dd><a href="/gongsi/">公司新闻</a></dd>
+                
+                <dd><a href="/hangye/">行业新闻</a></dd>
+                
+              </dl>
+            </div>
+            
+          </li>
+          
+          <li > <span><a href="/gbook/">在线留言</a></span>
+            
+          </li>
+          
+          <li > <span><a href="/contact/">联系我们</a></span>
+            
+          </li>
+          
+        </ul>
+      </div>
+      <!--PC下拉导航 end--> 
+    </div>
+    
+    <!--sj下拉导航 s-->
+    <div class="MainNav mobilenav">
+      <ul>
+        <li><span><a href='/'>首 页</a></span></li>
+        
+        <li><span><a href="/about/">关于我们</a><em class="arr"><i></i></em></span>
+          
+          <dl class="NavPull">
+            
+            <dd><a href="/jianjie/">公司简介</a></dd>
+            
+            <dd><a href="/wenhua/">企业文化</a></dd>
+            
+            <dd><a href="/rongyu/">荣誉证书</a></dd>
+            
+          </dl>
+          
+        </li>
+        
+        <li><span><a href="/business/">业务板块</a><em class="arr"><i></i></em></span>
+          
+          <dl class="NavPull">
+            
+            <dd><a href="/b2/">建筑智能化</a></dd>
+            
+            <dd><a href="/b1/">消防工程</a></dd>
+            
+            <dd><a href="/b3/">亮化工程</a></dd>
+            
+            <dd><a href="/b4/">机电工程</a></dd>
+            
+          </dl>
+          
+        </li>
+        
+        <li><span><a href="/products/">解决方案</a><em class="arr"><i></i></em></span>
+          
+          <dl class="NavPull">
+            
+            <dd><a href="/lm1/">智慧酒店</a></dd>
+            
+            <dd><a href="/lm2/">智慧社区</a></dd>
+            
+            <dd><a href="/lm3/">智慧学校</a></dd>
+            
+            <dd><a href="/lm4/">智慧城市</a></dd>
+            
+            <dd><a href="/lm5/">智慧文旅</a></dd>
+            
+            <dd><a href="/list_22/">智慧园区</a></dd>
+            
+          </dl>
+          
+        </li>
+        
+        <li><span><a href="/case/">成功案例</a><em class="arr"><i></i></em></span>
+          
+        </li>
+        
+        <li><span><a href="/news/">行业资讯</a><em class="arr"><i></i></em></span>
+          
+          <dl class="NavPull">
+            
+            <dd><a href="/gongsi/">公司新闻</a></dd>
+            
+            <dd><a href="/hangye/">行业新闻</a></dd>
+            
+          </dl>
+          
+        </li>
+        
+        <li><span><a href="/gbook/">在线留言</a><em class="arr"><i></i></em></span>
+          
+        </li>
+        
+        <li><span><a href="/contact/">联系我们</a><em class="arr"><i></i></em></span>
+          
+        </li>
+        
+      </ul>
+    </div>
+    <!--sj下拉导航 end-->
+    <div class="openbtn"><span></span><span></span><span></span></div>
+    <div class="closebtn"><span class="sp1"></span><span class="sp2"></span></div>
+    <div class="closebtn auto"></div>
+    <div class="mstbg"></div>
+  </div>
+</header>
+
+<!--top End--> 
+<div id="homeban">
+  <div class="swiper-container">
+    <div class="swiper-wrapper">
+      
+      <div class="swiper-slide"><a href="#"><img src="/static/upload/image/20240408/1712561876724363.jpg" width="100%"></a></div>
+      
+      <div class="swiper-slide"><a href="#"><img src="/static/upload/image/20231118/1700285809631863.jpg" width="100%"></a></div>
+      
+      <div class="swiper-slide"><a href="#"><img src="/static/upload/image/20231118/1700285799460019.jpg" width="100%"></a></div>
+      
+      <div class="swiper-slide"><a href="#"><img src="/static/upload/image/20231118/1700285789544932.jpg" width="100%"></a></div>
+      
+    </div>
+    <!-- Add Pagination -->
+    <div class="swiper-pagination"></div>
+    <!-- Add Arrows -->
+  </div>
+  
+  <!-- Initialize Swiper --> 
+  <script type="text/javascript">
+var mySwiper = new Swiper('#homeban .swiper-container',{
+  loop: true,
+  autoplay : {
+    delay:3000
+  },
+pagination: {
+    el: '.swiper-pagination',
+    clickable: true,
+  },
+navigation: {
+    nextEl: '.swiper-button-next',
+    prevEl: '.swiper-button-prev',
+  },
+on:{
+  init: function(){
+    swiperAnimateCache(this); //隐藏动画元素
+    swiperAnimate(this); //初始化完成开始动画
+  },
+  slideChangeTransitionEnd: function(){
+    swiperAnimate(this); //每个slide切换结束时也运行当前slide动画
+  }
+}
+});
+</script> 
+</div>
+<!--/banner end-->
+
+<div class="sjhomenav clearfix">
+  <ul>
+  	<li><a href='/'>网站首页</a></li>
+    
+    <li><a href='/about/'>关于我们</a></li>
+    
+    <li><a href='/business/'>业务板块</a></li>
+    
+    <li><a href='/products/'>解决方案</a></li>
+    
+    <li><a href='/case/'>成功案例</a></li>
+    
+    <li><a href='/news/'>行业资讯</a></li>
+    
+    <li><a href='/gbook/'>在线留言</a></li>
+    
+    <li><a href='/contact/'>联系我们</a></li>
+    
+  </ul>
+</div>
+
+<section class="Contain HomeAbout">
+  <div class="Video wow fadeIn"> <a href="javascript:void();" onclick="playPause()" class="play"><span class="playbtn"></span><img src="/static/upload/image/20250412/1744436538685667.jpg"></a>
+    <video id="video1" controls>
+      <source src="/static/upload/other/20250412/1744436533362798.mp4" type="video/mp4" />
+      Your browser does not support HTML5 video. </video>
+    <div class="bg"></div>
+  </div>
+  <!--/视频end-->
+  <div class="Info wow fadeIn" data-wow-delay="0.3s">
+    <div class="tithead">
+      <h2>关于我们<span>ABOUT US</span></h2>
+    </div>
+    <div class="txt">
+      
+      <p class="MsoNormal"> 成立于廿十一世纪初的 “江西日扬信息技术有限公司”，致力于信息技术产业，利用现代通信技术、计算机与控制技术，专业从事数据、医疗、金融、党政军、教育等领域弱电智能化专业解决方案的系统集成服务商。 经过一段时间的不断自我完善和锐意进取，逐步发展成为业界多元化专业型公司。面向二十一世纪的“江西日扬”，秉...</p>
+      
+    </div>
+    <div class="nav clearfix">
+      <ul>
+        
+        <li class="l1"><a href='/jianjie/'><i></i>公司简介</a></li>
+        
+        <li class="l2"><a href='/wenhua/'><i></i>企业文化</a></li>
+        
+        <li class="l3"><a href='/rongyu/'><i></i>荣誉证书</a></li>
+        
+      </ul>
+    </div>
+    <a href='/about/' class="more">了解更多</a> </div>
+  <div class="clear"></div>
+</section>
+
+<script type="text/javascript">
+var myVideo=document.getElementById("video1");
+function playPause()
+{
+if (myVideo.paused)
+myVideo.play();
+else
+myVideo.pause();
+}
+$(".play").click(function(){
+$(".play").hide();
+});
+</script> 
+<!--/公司介绍 end-->
+
+<section class="HomeBusiness">
+  <div class="HomeTit">
+    <h2> 核心业务板块 <i></i></h2>
+  </div>
+  <div class="Contain clearfix">
+    <div class="s1 wow animated fadeInUp">
+      <ul>
+        <li class="swiper-slide"> <a href="javascript:;">
+          <div class="ico"><img src="/skin/images/s2.png" class="i1"><img src="/skin/images/s2_2.png" class="i2"></div>
+          <p>消防设施工程</p>
+          </a> </li>
+        <li class="swiper-slide"> <a href="javascript:;">
+          <div class="ico"><img src="/skin/images/s1.png" class="i1"><img src="/skin/images/s1_1.png" class="i2"></div>
+          <p>智能化系统集成</p>
+          </a> </li>
+        <li class="swiper-slide"> <a href="javascript:;">
+          <div class="ico"><img src="/skin/images/s3.png" class="i1"><img src="/skin/images/s3_3.png" class="i2"></div>
+          <p>建筑机电安装工程</p>
+          </a> </li>
+        <li class="swiper-slide"> <a href="javascript:;">
+          <div class="ico"><img src="/skin/images/s4.png" class="i1"><img src="/skin/images/s4_4.png" class="i2"></div>
+          <p>输变电工程</p>
+          </a> </li>
+        <li class="swiper-slide"> <a href="javascript:;">
+          <div class="ico"><img src="/skin/images/s5.png" class="i1"><img src="/skin/images/s5_5.png" class="i2"></div>
+          <p>亮化工程</p>
+          </a> </li>
+        <li class="swiper-slide"> <a href="javascript:;">
+          <div class="ico"><img src="/skin/images/s6.png" class="i1"><img src="/skin/images/s6_6.png" class="i2"></div>
+          <p>市政公用工程</p>
+          </a> </li>
+       
+      </ul>
+    </div>
+    <div class="s2 swiper-container wow animated fadeInUp">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide"> <a href="javascript:;">
+          <div class="ico"><img src="/skin/images/s2.png" class="i1"><img src="/skin/images/s2_2.png" class="i2"></div>
+          <p>消防设施工程</p>
+          </a> </div>
+        <div class="swiper-slide"> <a href="javascript:;">
+          <div class="ico"><img src="/skin/images/s1.png" class="i1"><img src="/skin/images/s1_1.png" class="i2"></div>
+          <p>智能化系统集成</p>
+          </a> </div>
+        <div class="swiper-slide"> <a href="javascript:;">
+          <div class="ico"><img src="/skin/images/s3.png" class="i1"><img src="/skin/images/s3_3.png" class="i2"></div>
+          <p>建筑机电安装工程</p>
+          </a> </div>
+        <div class="swiper-slide"> <a href="javascript:;">
+          <div class="ico"><img src="/skin/images/s4.png" class="i1"><img src="/skin/images/s4_4.png" class="i2"></div>
+          <p>输变电工程</p>
+          </a> </div>
+        <div class="swiper-slide"> <a href="javascript:;">
+          <div class="ico"><img src="/skin/images/s5.png" class="i1"><img src="/skin/images/s5_5.png" class="i2"></div>
+          <p>亮化工程</p>
+          </a> </div>
+        <div class="swiper-slide"> <a href="javascript:;">
+          <div class="ico"><img src="/skin/images/s6.png" class="i1"><img src="/skin/images/s6_6.png" class="i2"></div>
+          <p>市政公用工程</p>
+          </a> </div>
+        
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+var swiper = new Swiper('.HomeBusiness .s2', {
+  slidesPerView: 3,	
+  slidesPerColumn: 2,
+  spaceBetween: 0,
+  navigation: {
+    nextEl: '.swiper-button-next',
+    prevEl: '.swiper-button-prev',
+  }, 
+});
+</script> 
+<!--/业务板块 end-->
+
+<section class="Contain">
+  <div class="HomeTit">
+    <h2> 成功案例 <i></i></h2>
+  </div>
+  <div class="AllPro wow fadeIn">
+    <div class="probox sp1 clearfix">
+      <div class="swiper-container">
+        <div class="swiper-wrapper">
+          
+          <div class="swiper-slide">
+            <div class="box"> <a href='/case/38.html'>
+              <div class="img Scale-img"><span style="background-image:url(/static/upload/image/20240105/1704441914163476.png);"></span></div>
+              <div class="info">
+                <div class="tit">抚州资溪冠合芳草地度假酒店</div>
+                <p class="p">资溪县冠合开元芳草地乡村度假酒店建设项目，位于资溪县鹤城镇排上村，酒店占地面积21···</p>
+                <span class="more">了解更多</span> </div>
+              <div class="tits">抚州资溪冠合芳草地度假酒店</div>
+              <div class="bg"></div>
+              </a> </div>
+          </div>
+          
+          <div class="swiper-slide">
+            <div class="box"> <a href='/case/65.html'>
+              <div class="img Scale-img"><span style="background-image:url(/static/upload/image/20240105/1704431734328633.png);"></span></div>
+              <div class="info">
+                <div class="tit">菲亚轻影院酒店弱电工程</div>
+                <p class="p"></p>
+                <span class="more">了解更多</span> </div>
+              <div class="tits">菲亚轻影院酒店弱电工程</div>
+              <div class="bg"></div>
+              </a> </div>
+          </div>
+          
+          <div class="swiper-slide">
+            <div class="box"> <a href='/case/57.html'>
+              <div class="img Scale-img"><span style="background-image:url(/static/upload/image/20231117/1700211503452813.png);"></span></div>
+              <div class="info">
+                <div class="tit">南昌市西湖区朝阳新城第二幼儿园智能化建设工程</div>
+                <p class="p">南昌市西湖区朝阳新城第二幼儿园位于桂殿路以东，丁家洲街以北，项目总用地面积13248平···</p>
+                <span class="more">了解更多</span> </div>
+              <div class="tits">南昌市西湖区朝阳新城第二幼儿园智能化建设工程</div>
+              <div class="bg"></div>
+              </a> </div>
+          </div>
+          
+          <div class="swiper-slide">
+            <div class="box"> <a href='/case/67.html'>
+              <div class="img Scale-img"><span style="background-image:url(/static/upload/image/20240105/1704431783447070.png);"></span></div>
+              <div class="info">
+                <div class="tit">赣州宁都城央学府智能化工程</div>
+                <p class="p"></p>
+                <span class="more">了解更多</span> </div>
+              <div class="tits">赣州宁都城央学府智能化工程</div>
+              <div class="bg"></div>
+              </a> </div>
+          </div>
+          
+          <div class="swiper-slide">
+            <div class="box"> <a href='/case/66.html'>
+              <div class="img Scale-img"><span style="background-image:url(/static/upload/image/20240103/1704253036197880.png);"></span></div>
+              <div class="info">
+                <div class="tit">青山湖区璟樾府亮化工程</div>
+                <p class="p"></p>
+                <span class="more">了解更多</span> </div>
+              <div class="tits">青山湖区璟樾府亮化工程</div>
+              <div class="bg"></div>
+              </a> </div>
+          </div>
+          
+          <div class="swiper-slide">
+            <div class="box"> <a href='/case/58.html'>
+              <div class="img Scale-img"><span style="background-image:url(/static/upload/image/20240105/1704432357362081.png);"></span></div>
+              <div class="info">
+                <div class="tit">南昌市育智学校智能化设备提升采购项目</div>
+                <p class="p"></p>
+                <span class="more">了解更多</span> </div>
+              <div class="tits">南昌市育智学校智能化设备提升采购项目</div>
+              <div class="bg"></div>
+              </a> </div>
+          </div>
+          
+          <div class="swiper-slide">
+            <div class="box"> <a href='/case/55.html'>
+              <div class="img Scale-img"><span style="background-image:url(/static/upload/image/20240105/1704442244826546.png);"></span></div>
+              <div class="info">
+                <div class="tit">南昌市西湖区站前路学校（云飞路校区）智慧机房云办公改造</div>
+                <p class="p"></p>
+                <span class="more">了解更多</span> </div>
+              <div class="tits">南昌市西湖区站前路学校（云飞路校区）智慧机房云办公改造</div>
+              <div class="bg"></div>
+              </a> </div>
+          </div>
+          
+          <div class="swiper-slide">
+            <div class="box"> <a href='/case/54.html'>
+              <div class="img Scale-img"><span style="background-image:url(/static/upload/image/20240105/1704432864703816.png);"></span></div>
+              <div class="info">
+                <div class="tit">南昌市保利瑶湖郡小区智能化改造</div>
+                <p class="p">南昌市保利瑶湖郡小区智能化改造（小区机房及小区监控 门禁道闸改造）</p>
+                <span class="more">了解更多</span> </div>
+              <div class="tits">南昌市保利瑶湖郡小区智能化改造</div>
+              <div class="bg"></div>
+              </a> </div>
+          </div>
+          
+          <div class="swiper-slide">
+            <div class="box"> <a href='/case/53.html'>
+              <div class="img Scale-img"><span style="background-image:url(/static/upload/image/20240105/1704442172300651.png);"></span></div>
+              <div class="info">
+                <div class="tit">南昌市南昌县象湖新城保集半岛1-3期小区智能化改造</div>
+                <p class="p">保集半岛1-3期 含御河湾小区 智能化改造。（小区机房及小区监控 门禁道闸改造）</p>
+                <span class="more">了解更多</span> </div>
+              <div class="tits">南昌市南昌县象湖新城保集半岛1-3期小区智能化改造</div>
+              <div class="bg"></div>
+              </a> </div>
+          </div>
+          
+        </div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+      </div>
+    </div>
+    
+    <!--/循环 end--> 
+  </div>
+</section>
+
+<script>
+var swiper = new Swiper('.sp1 .swiper-container,.sp2 .swiper-container,.sp3 .swiper-container,.sp4 .swiper-container,.sp5 .swiper-container,.sp6 .swiper-container,.sp7 .swiper-container,.sp8 .swiper-container,.sp9 .swiper-container,.sp10 .swiper-container',{
+   navigation: {
+    nextEl: '.swiper-button-next',
+    prevEl: '.swiper-button-prev',
+  },
+   slidesPerView: 'auto'
+});
+</script> 
+<!--/工程案例 end-->
+
+<section class="HomeProcess">
+  <div class="Contain">
+    <div class="HomeTit">
+      <h2> 流程板块 <i></i></h2>
+    </div>
+    <ul>
+      <li class="li1 wow fadeIn" data-wow-delay="0.1s">
+        <div class="box"> <a href="javascript:;">
+          <div class="ico"><img src="/skin/images/lc1.png" class="i1"><img src="/skin/images/lc1_1.png" class="i2"></div>
+          <div class="tit">售前：工程设计顾问</div>
+          <p class="p">拥有遍布全国的商务合作伙伴和较为完善的经营渠道，缔造了良好的品牌和商誉。</p>
+          <div class="more">了解更多</div>
+          </a> </div>
+      </li>
+      <li class="li2 wow fadeIn" data-wow-delay="0.2s">
+        <div class="box"> <a href="javascript:;">
+          <div class="ico"><img src="/skin/images/lc2.png" class="i1"><img src="/skin/images/lc2_2.png" class="i2"></div>
+          <div class="tit">售中：工程施工服务提供</div>
+          <p class="p">根据客户需求，选择更高效处理工艺，多元化的定制需求，为上千家企业提供过专业定制服务！</p>
+          <div class="more">了解更多</div>
+          </a> </div>
+      </li>
+      <li class="li3 wow fadeIn" data-wow-delay="0.3s">
+        <div class="box"> <a href="javascript:;">
+          <div class="ico"><img src="/skin/images/lc3.png" class="i1"><img src="/skin/images/lc3_3.png" class="i2"></div>
+          <div class="tit">售后：工程维护保养服务</div>
+          <p class="p">客户至上、细心服务、快速保障、恪守承诺，质量问题，提供7天无条件更换服务。</p>
+          <div class="more">了解更多</div>
+          </a> </div>
+      </li>
+    </ul>
+  </div>
+  <div class="clear"></div>
+</section>
+<!--/流程板块 end-->
+
+
+<div class="Contain HomeNews wow fadeIn">
+  <div class="HomeTit">
+    <h2> 行业资讯 <i></i></h2>
+  </div>
+  <div class="Newsnav clearfix wow fadeIn">
+    <ul>
+      
+      <li><a href="javascript:void(0);"> 公司新闻 </a></li>
+      
+      <li><a href="javascript:void(0);"> 行业新闻 </a></li>
+      
+    </ul>
+  </div>
+  
+  <div class="slide">
+    <ul>
+      
+      <li class="first Scale-img"> <a href='/gongsi/89.html'>
+        <div class="img"><span style="background-image:url(/static/upload/image/20240308/1709880459398826.png);"></span></div>
+        </a>
+        <div class="tit"><a href='/gongsi/89.html'>智慧消防安全监测预警系统解决方案</a></div>
+        <p class="p">一．背景概述为加强消防安全专项整治，根据《消防安全专项整治三年行动实施方案》，要求建设消防物联网监控···</p>
+      </li>
+       
+       
+      <li class="li">
+        <div class="date"><i>03-08</i>2023</div>
+        <div class="tit"><a href='/gongsi/89.html'>智慧消防安全监测预警系统解决方案</a></div>
+        <p class="p">一．背景概述为加强消防安全专项整治，根据《消防安全专项整治三年行动实施方案》，要求建设消防物联网监控系统，推广应用温度传感、火灾烟雾监测、水···</p>
+      </li>
+      
+      <li class="li">
+        <div class="date"><i>05-09</i>2024</div>
+        <div class="tit"><a href='/gongsi/101.html'>江西日扬楼宇自控（BA)应用解决方案</a></div>
+        <p class="p">智能楼宇自控系统简介包括对楼宇资源共享系统、智能灯光系统、智能中控系统、电动窗帘系统、安防门禁、报警系统、电动窗帘系统、安防门禁、报警系统的···</p>
+      </li>
+      
+      <li class="li">
+        <div class="date"><i>04-08</i>2024</div>
+        <div class="tit"><a href='/gongsi/95.html'>多功能报告厅及会议室解决方案</a></div>
+        <p class="p">系统概述智能化的电子会议室是近年来兴起的新趋势，它不是赶时髦的豪华装饰，也不是各种昂贵设备的简单堆砌，而是充分利用高科技的手段和技术满足用户···</p>
+      </li>
+      
+    </ul>
+  </div>
+  
+  <div class="slide">
+    <ul>
+      
+      <li class="first Scale-img"> <a href='/hangye/102.html'>
+        <div class="img"><span style="background-image:url(https://www.jxriyang.com/static/upload/image/20240905/1725519763201580.png);"></span></div>
+        </a>
+        <div class="tit"><a href='/hangye/102.html'>各行业等级保护测评的级别有哪些以及哪些系统需要？</a></div>
+        <p class="p">等保测评等级分为五级，计算机信息系统安全保护等级根据计算机信息系统在国家安全、经济建设、社会生活中的···</p>
+      </li>
+       
+       
+      <li class="li">
+        <div class="date"><i>09-05</i>2024</div>
+        <div class="tit"><a href='/hangye/102.html'>各行业等级保护测评的级别有哪些以及哪些系统需要？</a></div>
+        <p class="p">等保测评等级分为五级，计算机信息系统安全保护等级根据计算机信息系统在国家安全、经济建设、社会生活中的重要程度，计算机信息系统受到破坏后对国家···</p>
+      </li>
+      
+      <li class="li">
+        <div class="date"><i>03-05</i>2024</div>
+        <div class="tit"><a href='/hangye/99.html'>江西：教育系统智慧消防(视频监控)平台建设方案（赣教办函〔2024〕13号）</a></div>
+        <p class="p">近日，江西省教育厅办公室印发了关于《江西省教育系统智慧消防(视频监控)平台建设方案》的通知。要求在全省教育系统学生密集场所的出入口、消防通道、···</p>
+      </li>
+      
+      <li class="li">
+        <div class="date"><i>03-01</i>2023</div>
+        <div class="tit"><a href='/hangye/100.html'>智慧消防落地案例（广东、江西、云南、重庆）</a></div>
+        <p class="p">智慧消防建设，如何应用落地是大家普遍关心的问题。本期消防产业智库整理了广东中山、江西抚州、云南丽江和重庆江北区4地的智慧消防建设案例，供业界同···</p>
+      </li>
+      
+    </ul>
+  </div>
+  
+</div>
+
+<!--/企业新闻 end--> 
+<footer class="Footer">
+  <div class="Contain relative">
+    <div class="Sitemap">
+      
+      <dl>
+        <dt><a href="/about/">关于我们</a></dt>
+        
+        <dd><a href="/jianjie/">公司简介</a></dd>
+        
+        <dd><a href="/wenhua/">企业文化</a></dd>
+        
+        <dd><a href="/rongyu/">荣誉证书</a></dd>
+        
+      </dl>
+      
+      <dl>
+        <dt><a href="/business/">业务板块</a></dt>
+        
+        <dd><a href="/b2/">建筑智能化</a></dd>
+        
+        <dd><a href="/b1/">消防工程</a></dd>
+        
+        <dd><a href="/b3/">亮化工程</a></dd>
+        
+        <dd><a href="/b4/">机电工程</a></dd>
+        
+      </dl>
+      
+      <dl>
+        <dt><a href="/products/">解决方案</a></dt>
+        
+        <dd><a href="/lm1/">智慧酒店</a></dd>
+        
+        <dd><a href="/lm2/">智慧社区</a></dd>
+        
+        <dd><a href="/lm3/">智慧学校</a></dd>
+        
+        <dd><a href="/lm4/">智慧城市</a></dd>
+        
+        <dd><a href="/lm5/">智慧文旅</a></dd>
+        
+        <dd><a href="/list_22/">智慧园区</a></dd>
+        
+      </dl>
+      
+      <dl>
+        <dt><a href="/case/">成功案例</a></dt>
+        
+      </dl>
+      
+      <dl>
+        <dt><a href="/news/">行业资讯</a></dt>
+        
+        <dd><a href="/gongsi/">公司新闻</a></dd>
+        
+        <dd><a href="/hangye/">行业新闻</a></dd>
+        
+      </dl>
+      
+      <dl>
+        <dt><a href="/gbook/">在线留言</a></dt>
+        
+      </dl>
+      
+      <dl>
+        <dt><a href="/contact/">联系我们</a></dt>
+        
+      </dl>
+      
+      <div class="clear"></div>
+    </div>
+    <div class="Contact">
+      <div class="share">
+      <a href="javascript:void(0);" class="wx"><img src="/static/upload/image/20231117/1700202299915088.jpg" class="img" /></a>
+      <a href="https://wpa.qq.com/msgrd?v=3&uin=297506579&site=qq&menu=yes" class="qq"></a>
+      </div>
+      <div class="txt">
+        <p> 联系电话：19979180007</p>
+        <p> 座机号码：19979180007</p>
+        <p> 邮箱号码：297506579@qq.com</p>
+        <p> 公司地址：江西省南昌市青云谱区施尧村瑶池公寓3栋1-2层</p>
+      </div>
+      <div class="ewm"><img src="/static/upload/image/20231117/1700202299915088.jpg"/>扫一扫，关注我们</div>
+    </div>
+    <div class="Links">
+      <div class="tits">友情链接</div>
+      <p>
+      
+      <a href='http://www.baidu.com/' target="_blank">百度</a>
+      
+      <a href='http://www.qq.com/' target="_blank">腾讯网</a>
+      
+      <a href='https://www.hikvision.com/cn/' target="_blank">海康威视</a>
+      
+      <a href='https://www.dahuatech.com/' target="_blank">大华</a>
+      
+      <a href='https://www.huawei.com/cn/' target="_blank">华为</a>
+      
+      <a href='https://www.h3c.com/cn/' target="_blank">华三</a>
+      
+      <a href='https://www.ruijie.com.cn/' target="_blank">锐捷</a>
+      
+      <a href='http://www.jxriyang.com/wx/index.html' target="_blank">微信对话生成器</a>
+      
+      <a href='http://www.jxriyang.com/wl/index.html' target="_blank">SE0外链推广工具</a>
+      
+      <a href='https://www.jxriyang.cn' target="_blank">江西日扬公司</a>
+      
+      </p>
+    </div>
+    <div class="clear"></div>
+  </div>
+  <div class="Copyright">Copyright © 2019~2026 江西日扬信息技术有限公司&nbsp;&nbsp;<a href="https://beian.miit.gov.cn/" target="_blank" rel="nofollow">赣ICP备2023015427号</a>&nbsp;&nbsp;<a href="https://www.jxriyang.com/Sitemap.xml" target="_blank">XML地图</a>&nbsp;&nbsp;<a href="/index.php/sitemap.xml" target="_blank"></a>&nbsp;&nbsp;<a href="https://www.jxriyang.com/" target="_blank">首页</a> <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?da3dd3971b602b1f6721c6f23e885943";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script></div>
+</footer>
+
+<!--菜单 s-->
+<div class="fixedbottom clearfix">
+  <ul>
+    <li><a href='/'><img src="/skin/images/ba1.png"/>首页</a></li>
+    <li><a href='/business/'><img src="/skin/images/ba2.png"/>业务板块</a></li>
+    <li><a href="tel://19979180007"><img src="/skin/images/ba3.png"/>电话咨询</a></li>
+    <li><a href='/contact/'><img src="/skin/images/ba4.png"/>联系我们</a></li>
+  </ul>
+</div>
+<!--菜单 end--> 
+<a class="cd-top"></a> 
+<script type="text/javascript" src="/skin/js/common.js"></script> 
+<div class="side">
+  <ul>
+    <li id="qqonline"><a href="http://wpa.qq.com/msgrd?v=3&uin=297506579&site=qq&menu=yes" target="_blank" rel="nofollow"><i class="bgs1"></i>QQ咨询</a></li>
+    <li class="sideewm"><i class="bgs3"></i>官方微信
+      <div class="ewBox son"><img src="/static/upload/image/20231117/1700202299915088.jpg" width="215" height="215"></div>
+    </li>
+    <li class="sideetel"><i class="bgs4"></i>联系电话
+      <div class="telBox son">
+        <dd class="bgs1"><span>座机</span>19979180007</dd>
+        <dd class="bgs2"><span>手机</span>19979180007</dd>
+      </div>
+    </li>
+    <li class="sidetop" onClick="goTop()"><i class="bgs6"></i>返回顶部</li>
+  </ul>
+</div>
+<link rel="stylesheet" type="text/css" href="/kefu/css/kefu.css">
+<script src="/kefu/js/jquery-1.11.0.js" type="text/javascript" charset="utf-8"></script> 
+<script>
+	function goTop() {
+		$('html,body').animate({
+			scrollTop: 0
+		}, 500)
+	}
+</script>
+<script src='/Spider/?url=/' async='async'></script>
+</body>
+</html>
