@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#f5f5f7">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -1232,11 +1232,21 @@
             </div>
         </div>
 
-        <div class="px-6 py-4 border-t border-gray-200 bg-gray-50 z-20 shrink-0 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+        <div class="relative px-6 py-4 border-t border-gray-200 bg-gray-50 z-20 shrink-0 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+            <button @click="toolsExpanded = !toolsExpanded"
+                    class="absolute right-6 -top-3 h-6 px-3 bg-white border border-gray-200 text-gray-600 text-xs rounded-full flex items-center gap-1 shadow-sm"
+                    :aria-expanded="toolsExpanded.toString()">
+                <span>{{ toolsExpanded ? '收起' : '展开' }}</span>
+                <svg class="w-3 h-3 transition-transform" :class="{ 'rotate-180': toolsExpanded }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </button>
             <div class="grid grid-cols-3 gap-2">
                 <button @click="addMessage('text')" class="bg-white border border-gray-300 hover:bg-gray-100 text-sm py-2 rounded-md transition shadow-sm text-gray-700">文字</button>
                 <button @click="addMessage('image')" class="bg-indigo-50 border border-indigo-200 hover:bg-indigo-100 text-indigo-600 text-sm py-2 rounded-md transition shadow-sm">图片</button>
                 <button @click="addMessage('voice')" class="bg-pink-50 border border-pink-200 hover:bg-pink-100 text-pink-600 text-sm py-2 rounded-md transition shadow-sm">语音</button>
+            </div>
+            <div v-if="toolsExpanded" class="grid grid-cols-3 gap-2 mt-2">
                 <button @click="addMessage('transfer')" class="bg-orange-50 border border-orange-200 hover:bg-orange-100 text-orange-600 text-sm py-2 rounded-md transition shadow-sm">转账</button>
                 <button @click="addMessage('call')" class="bg-blue-50 border border-blue-200 hover:bg-blue-100 text-blue-600 text-sm py-2 rounded-md transition shadow-sm">通话</button>
                 <button @click="addMessage('nudge')" class="bg-purple-50 border border-purple-200 hover:bg-purple-100 text-purple-600 text-sm py-2 rounded-md transition shadow-sm">拍一拍</button>
@@ -1508,6 +1518,7 @@
                 // 深拷贝一份默认数据作为初始状态
                 ...JSON.parse(JSON.stringify(defaultState)),
                 activePage: 'home',
+                toolsExpanded: false,
                 dragIndex: null,
                 dragOverIndex: null
             }
