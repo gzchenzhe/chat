@@ -130,7 +130,7 @@ PWA 使用 `sw.js` 做缓存。修改 `index.html`、图标、素材或样式后
 ## 部署建议
 
 - 推荐部署到 HTTPS 域名，PWA 安装和 Service Worker 在 HTTPS 下兼容性最好。
-- 如果部署到 GitHub Pages、Vercel、Netlify 等静态站点服务，直接上传 `PWA` 目录内容即可。
+- 如果部署到 GitHub Pages、Vercel、Netlify 等静态站点服务，直接上即可。
 - 如果部署到 IIS，可保留 `web.config`。
 
 ## 注意事项
