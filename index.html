@@ -1760,6 +1760,90 @@
 
                 this.downloadImage(dataUrl, fileName);
             },
+            async waitForPreviewImages(root) {
+                const images = Array.from(root.querySelectorAll('img'));
+                await Promise.all(images.map(img => {
+                    return new Promise(resolve => {
+                        const timeout = window.setTimeout(resolve, 1800);
+                        const done = () => {
+                            window.clearTimeout(timeout);
+                            resolve();
+                        };
+
+                        if (img.complete) {
+                            const decodePromise = img.naturalWidth > 0 && img.decode
+                                ? img.decode().catch(() => {})
+                                : Promise.resolve();
+                            decodePromise.finally(done);
+                            return;
+                        }
+
+                        img.addEventListener('load', done, { once: true });
+                        img.addEventListener('error', done, { once: true });
+                    });
+                }));
+                await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+            },
+            rasterizeImagesForExport(root) {
+                const restores = [];
+                const ratio = 3;
+
+                Array.from(root.querySelectorAll('.wechat-avatar, .image-bubble img')).forEach(img => {
+                    const rect = img.getBoundingClientRect();
+                    const cssWidth = Math.round(rect.width);
+                    const cssHeight = Math.round(rect.height);
+                    const naturalWidth = img.naturalWidth;
+                    const naturalHeight = img.naturalHeight;
+
+                    if (!cssWidth || !cssHeight || !naturalWidth || !naturalHeight) return;
+
+                    const computed = window.getComputedStyle(img);
+                    const objectFit = computed.objectFit || 'fill';
+                    const canvas = document.createElement('canvas');
+                    canvas.width = Math.max(1, Math.round(cssWidth * ratio));
+                    canvas.height = Math.max(1, Math.round(cssHeight * ratio));
+                    const ctx = canvas.getContext('2d');
+                    if (!ctx) return;
+
+                    let drawX = 0;
+                    let drawY = 0;
+                    let drawWidth = canvas.width;
+                    let drawHeight = canvas.height;
+
+                    if (objectFit === 'cover' || objectFit === 'contain') {
+                        const scale = objectFit === 'cover'
+                            ? Math.max(canvas.width / naturalWidth, canvas.height / naturalHeight)
+                            : Math.min(canvas.width / naturalWidth, canvas.height / naturalHeight);
+                        drawWidth = naturalWidth * scale;
+                        drawHeight = naturalHeight * scale;
+                        drawX = (canvas.width - drawWidth) / 2;
+                        drawY = (canvas.height - drawHeight) / 2;
+                    }
+
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
+
+                    restores.push({
+                        img,
+                        src: img.getAttribute('src'),
+                        objectFit: img.style.objectFit,
+                        objectPosition: img.style.objectPosition
+                    });
+
+                    img.src = canvas.toDataURL('image/png');
+                    img.style.objectFit = 'fill';
+                    img.style.objectPosition = 'center center';
+                });
+
+                return () => {
+                    restores.forEach(item => {
+                        if (item.src == null) item.img.removeAttribute('src');
+                        else item.img.setAttribute('src', item.src);
+                        item.img.style.objectFit = item.objectFit;
+                        item.img.style.objectPosition = item.objectPosition;
+                    });
+                };
+            },
             async generateImage(event) {
                 const node = document.getElementById('wechat-preview');
                 const btn = event?.currentTarget;
@@ -1776,10 +1860,18 @@
                     return;
                 }
 
+                let restoreImages = null;
                 try {
+                    await this.waitForPreviewImages(node);
+                    restoreImages = this.rasterizeImagesForExport(node);
+                    await this.waitForPreviewImages(node);
+
                     const dataUrl = await imageApi.toPng(node, {
                         pixelRatio: 3,
                         backgroundColor: bgColor,
+                        cacheBust: true,
+                        width: node.offsetWidth,
+                        height: node.offsetHeight,
                         style: { transform: 'scale(1)', transformOrigin: 'top left' }
                     });
                     await this.shareOrDownloadImage(dataUrl, `微信截图_${new Date().getTime()}.png`);
@@ -1787,6 +1879,7 @@
                     console.error('导出失败!', error);
                     alert('截图生成失败，请重试');
                 } finally {
+                    if (restoreImages) restoreImages();
                     btn.innerHTML = originalText;
                 }
             }
