@@ -849,6 +849,11 @@
             overflow: hidden;
         }
 
+        .pwa-home-page .pwa-action-row,
+        .pwa-editor-page .pwa-action-row {
+            display: none !important;
+        }
+
         .preview-card {
             width: 100%;
             max-width: 480px;
@@ -874,6 +879,38 @@
 
         .pwa-preview-stage .phone-shell {
             flex: 0 0 auto;
+        }
+
+        .generated-export-panel {
+            margin: 0 18px 92px;
+            padding: 12px;
+            border: 1px solid rgba(17, 24, 39, 0.08);
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.94);
+            box-shadow: 0 10px 26px rgba(15, 23, 42, 0.08);
+        }
+
+        .generated-export-panel img {
+            width: 112px;
+            max-height: 242px;
+            object-fit: contain;
+            border-radius: 8px;
+            border: 1px solid rgba(17, 24, 39, 0.08);
+            background: #ededed;
+        }
+
+        .generated-export-status {
+            font-size: 12px;
+            line-height: 18px;
+            color: #6b7280;
+        }
+
+        .generated-export-status.is-ready {
+            color: #07a857;
+        }
+
+        .generated-export-status.is-dirty {
+            color: #d97706;
         }
 
         .pwa-bottom-nav {
@@ -1012,7 +1049,7 @@
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                     重置
                 </button>
-                <button @click="generateImage($event)" class="pwa-action-btn is-primary bg-[#07c160] hover:bg-[#06ad56] text-white px-4 py-2 rounded-lg font-medium transition flex items-center gap-2 shadow-sm text-sm">
+                <button @click="exportGeneratedImage($event)" class="pwa-action-btn is-primary bg-[#07c160] hover:bg-[#06ad56] text-white px-4 py-2 rounded-lg font-medium transition flex items-center gap-2 shadow-sm text-sm">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                     导出截图
                 </button>
@@ -1114,7 +1151,7 @@
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                     重置
                 </button>
-                <button @click="generateImage($event)" class="pwa-action-btn is-primary bg-[#07c160] hover:bg-[#06ad56] text-white px-4 py-2 rounded-lg font-medium transition flex items-center gap-2 shadow-sm text-sm">
+                <button @click="exportGeneratedImage($event)" class="pwa-action-btn is-primary bg-[#07c160] hover:bg-[#06ad56] text-white px-4 py-2 rounded-lg font-medium transition flex items-center gap-2 shadow-sm text-sm">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                     导出截图
                 </button>
@@ -1139,7 +1176,7 @@
                         <div class="absolute left-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-30 transition cursor-grab text-gray-400">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                         </div>
-                        <button @click.stop="removeMessage(index)" class="absolute -right-2 -top-2 bg-red-500 text-white w-6 h-6 rounded-full opacity-0 group-hover:opacity-100 transition shadow-md flex items-center justify-center text-sm z-10 hover:bg-red-600">×</button>
+                        <button @click.stop="removeMessage(index)" class="absolute -right-2 -top-2 bg-red-500 text-white w-6 h-6 rounded-full opacity-100 transition shadow-md flex items-center justify-center text-sm z-10 hover:bg-red-600">×</button>
                         
                         <div class="pl-3">
                             <div v-if="msg.type === 'time' || msg.type === 'nudge'">
@@ -1242,7 +1279,7 @@
         </div>
 
         <div class="relative px-6 py-4 border-t border-gray-200 bg-gray-50 z-20 shrink-0 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-            <div class="flex justify-start mb-2">
+            <div class="flex items-center gap-2 mb-2">
                 <button @click="toolsExpanded = !toolsExpanded"
                         class="tool-toggle-btn h-6 px-3 bg-white border border-gray-200 text-gray-600 text-xs rounded-full flex items-center gap-1 shadow-sm"
                         :aria-expanded="toolsExpanded.toString()">
@@ -1251,6 +1288,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
                 </button>
+                <span class="bg-blue-100 text-blue-600 text-[10px] px-2 py-0.5 rounded-full">点击下方模块新增对话</span>
             </div>
             <div class="grid grid-cols-3 gap-2">
                 <button @click="addMessage('text')" class="bg-white border border-gray-300 hover:bg-gray-100 text-sm py-2 rounded-md transition shadow-sm text-gray-700">文字</button>
@@ -1277,7 +1315,11 @@
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                     重置
                 </button>
-                <button @click="generateImage($event)" class="pwa-action-btn is-primary bg-[#07c160] hover:bg-[#06ad56] text-white px-4 py-2 rounded-lg font-medium transition flex items-center gap-2 shadow-sm text-sm">
+                <button @click="generatePreparedImage($event)" class="pwa-action-btn bg-gray-100 hover:bg-gray-200 text-gray-600 px-3 py-2 rounded-lg font-medium transition flex items-center gap-1 shadow-sm text-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16a4 4 0 018 0m0 0a4 4 0 018 0M8 16V8a4 4 0 118 0v8m-8 0h8"></path></svg>
+                    生成图片
+                </button>
+                <button @click="exportGeneratedImage($event)" class="pwa-action-btn is-primary bg-[#07c160] hover:bg-[#06ad56] text-white px-4 py-2 rounded-lg font-medium transition flex items-center gap-2 shadow-sm text-sm">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                     导出截图
                 </button>
@@ -1476,6 +1518,30 @@
             </div>
         </div>
     </div>
+    <div v-if="generatedImagePanelVisible && (generatedImageUrl || generatedImageStatus)" class="generated-export-panel">
+        <div class="flex items-start gap-3">
+            <img v-if="generatedImageUrl" :src="generatedImageUrl" alt="已生成截图预览">
+            <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between gap-3 mb-1">
+                    <div class="text-sm font-semibold text-gray-800">最终导出图</div>
+                    <button type="button"
+                            @click="generatedImagePanelVisible = false"
+                            class="pwa-action-btn bg-gray-100 hover:bg-gray-200 text-gray-600 px-3 py-1 rounded-lg font-medium transition text-xs">
+                        关闭
+                    </button>
+                </div>
+                <div class="generated-export-status"
+                     :class="{ 'is-ready': generatedImageUrl && !generatedImageDirty, 'is-dirty': generatedImageDirty }">
+                    {{ generatedImageStatus || (generatedImageUrl ? '已生成，可导出' : '请先生成图片') }}
+                </div>
+                <button v-if="generatedImageDirty"
+                        @click="generatePreparedImage($event)"
+                        class="mt-3 pwa-action-btn bg-gray-100 hover:bg-gray-200 text-gray-600 px-3 py-2 rounded-lg font-medium transition flex items-center gap-1 shadow-sm text-sm">
+                    重新生成
+                </button>
+            </div>
+        </div>
+    </div>
     </div>
     </section>
 
@@ -1502,6 +1568,7 @@
     const defaultMyAvatar = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%232c3e50"/><circle cx="50" cy="40" r="16" fill="%23fce2c4"/><path d="M 25 100 L 35 65 Q 50 55 65 65 L 75 100" fill="%23fce2c4"/></svg>';
     const defaultOtherAvatar = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23c0392b"/><circle cx="50" cy="50" r="30" fill="%23f1c40f"/><path d="M 35 35 L 45 45 L 35 55 M 65 35 L 55 45 L 65 55" stroke="%23c0392b" stroke-width="4" fill="none"/></svg>';
     const defaultImage = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 250"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="%23d8e7d2"/><stop offset="1" stop-color="%23f4d2c2"/></linearGradient></defs><rect width="200" height="250" fill="url(%23g)"/><circle cx="100" cy="88" r="34" fill="%23ffffff" opacity=".72"/><path d="M40 214c9-43 31-67 60-67s51 24 60 67" fill="%23ffffff" opacity=".72"/></svg>';
+    const exportTransparentPixel = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
 
     // 定义一套初始默认数据，方便重置和初始化
     const defaultState = {
@@ -1530,6 +1597,10 @@
                 ...JSON.parse(JSON.stringify(defaultState)),
                 activePage: 'home',
                 toolsExpanded: false,
+                generatedImageUrl: '',
+                generatedImageDirty: false,
+                generatedImageStatus: '',
+                generatedImagePanelVisible: false,
                 dragIndex: null,
                 dragOverIndex: null
             }
@@ -1557,9 +1628,16 @@
             }
         },
         methods: {
+            markGeneratedImageDirty() {
+                if (!this.generatedImageUrl) return;
+                this.generatedImageDirty = true;
+                this.generatedImagePanelVisible = true;
+                this.generatedImageStatus = '内容已变化，请重新生成图片';
+            },
             // 保存状态到 localStorage
             saveState() {
                 try {
+                    this.markGeneratedImageDirty();
                     const stateToSave = {
                         isDarkMode: this.isDarkMode,
                         statusBarTime: this.statusBarTime,
@@ -1599,6 +1677,10 @@
                 if (confirm('确定要清空所有自定义数据并恢复到默认状态吗？')) {
                     const freshState = JSON.parse(JSON.stringify(defaultState));
                     Object.assign(this, freshState);
+                    this.generatedImageUrl = '';
+                    this.generatedImageDirty = false;
+                    this.generatedImageStatus = '';
+                    this.generatedImagePanelVisible = false;
                     localStorage.removeItem('wechat_editor_state_v18');
                 }
             },
@@ -1787,18 +1869,34 @@
             rasterizeImagesForExport(root) {
                 const restores = [];
                 const ratio = 3;
+                const resolvePosition = (token, freeSpace, fallback) => {
+                    if (!token) return freeSpace * fallback;
+                    if (token === 'left' || token === 'top') return 0;
+                    if (token === 'center') return freeSpace * 0.5;
+                    if (token === 'right' || token === 'bottom') return freeSpace;
+                    if (token.endsWith('%')) return freeSpace * ((parseFloat(token) || 0) / 100);
+                    if (token.endsWith('px')) return parseFloat(token) || 0;
+                    return freeSpace * fallback;
+                };
 
+                const seenTargets = new Set();
                 Array.from(root.querySelectorAll('.wechat-avatar, .image-bubble img')).forEach(img => {
-                    const rect = img.getBoundingClientRect();
-                    const cssWidth = Math.round(rect.width);
-                    const cssHeight = Math.round(rect.height);
+                    const imageBubble = img.closest('.image-bubble');
+                    const target = imageBubble && !img.classList.contains('wechat-avatar') ? imageBubble : img;
+                    if (seenTargets.has(target)) return;
+                    seenTargets.add(target);
+
+                    const rect = target.getBoundingClientRect();
+                    const targetStyle = window.getComputedStyle(target);
+                    const cssWidth = Math.round(target.offsetWidth || parseFloat(targetStyle.width) || rect.width);
+                    const cssHeight = Math.round(target.offsetHeight || parseFloat(targetStyle.height) || rect.height);
                     const naturalWidth = img.naturalWidth;
                     const naturalHeight = img.naturalHeight;
 
                     if (!cssWidth || !cssHeight || !naturalWidth || !naturalHeight) return;
 
-                    const computed = window.getComputedStyle(img);
-                    const objectFit = computed.objectFit || 'fill';
+                    const imageStyle = window.getComputedStyle(img);
+                    const objectFit = imageStyle.objectFit || 'fill';
                     const canvas = document.createElement('canvas');
                     canvas.width = Math.max(1, Math.round(cssWidth * ratio));
                     canvas.height = Math.max(1, Math.round(cssHeight * ratio));
@@ -1816,33 +1914,426 @@
                             : Math.min(canvas.width / naturalWidth, canvas.height / naturalHeight);
                         drawWidth = naturalWidth * scale;
                         drawHeight = naturalHeight * scale;
-                        drawX = (canvas.width - drawWidth) / 2;
-                        drawY = (canvas.height - drawHeight) / 2;
+                        const position = (imageStyle.objectPosition || '50% 50%').trim().split(/\s+/);
+                        drawX = resolvePosition(position[0], canvas.width - drawWidth, 0.5);
+                        drawY = resolvePosition(position[1], canvas.height - drawHeight, 0.5);
                     }
 
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
+                    try {
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
+                    } catch (error) {
+                        console.warn('Image canvas export fallback skipped', error);
+                        return;
+                    }
 
-                    restores.push({
-                        img,
-                        src: img.getAttribute('src'),
-                        objectFit: img.style.objectFit,
-                        objectPosition: img.style.objectPosition
-                    });
+                    const replacement = document.createElement('div');
+                    replacement.className = target.className;
+                    replacement.style.cssText = target.style.cssText;
+                    replacement.style.width = `${cssWidth}px`;
+                    replacement.style.height = `${cssHeight}px`;
+                    replacement.style.minWidth = `${cssWidth}px`;
+                    replacement.style.minHeight = `${cssHeight}px`;
+                    replacement.style.display = targetStyle.display === 'none' ? 'none' : (targetStyle.display || 'block');
+                    replacement.style.boxSizing = targetStyle.boxSizing;
+                    replacement.style.borderRadius = targetStyle.borderRadius;
+                    replacement.style.flexShrink = targetStyle.flexShrink;
+                    replacement.style.overflow = targetStyle.overflow;
+                    replacement.style.backgroundImage = `url("${canvas.toDataURL('image/png')}")`;
+                    replacement.style.backgroundSize = '100% 100%';
+                    replacement.style.backgroundPosition = 'center center';
+                    replacement.style.backgroundRepeat = 'no-repeat';
+                    replacement.setAttribute('aria-hidden', 'true');
 
-                    img.src = canvas.toDataURL('image/png');
-                    img.style.objectFit = 'fill';
-                    img.style.objectPosition = 'center center';
+                    target.replaceWith(replacement);
+                    restores.push({ target, replacement });
                 });
 
                 return () => {
                     restores.forEach(item => {
-                        if (item.src == null) item.img.removeAttribute('src');
-                        else item.img.setAttribute('src', item.src);
-                        item.img.style.objectFit = item.objectFit;
-                        item.img.style.objectPosition = item.objectPosition;
+                        if (item.replacement.parentNode) {
+                            item.replacement.replaceWith(item.target);
+                        }
                     });
                 };
+            },
+            nextFrame() {
+                return new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+            },
+            waitForImageReady(img) {
+                return new Promise(resolve => {
+                    let settled = false;
+                    const finish = () => {
+                        if (settled) return;
+                        settled = true;
+                        clearTimeout(timer);
+                        resolve();
+                    };
+                    const timer = setTimeout(finish, 3000);
+
+                    if (img.complete && img.naturalWidth > 0) {
+                        if (img.decode) img.decode().then(finish).catch(finish);
+                        else finish();
+                        return;
+                    }
+
+                    img.addEventListener('load', finish, { once: true });
+                    img.addEventListener('error', finish, { once: true });
+                });
+            },
+            async waitForExportReady(node) {
+                const images = Array.from(node.querySelectorAll('img'));
+                await Promise.all(images.map(img => this.waitForImageReady(img)));
+                if (document.fonts?.ready) {
+                    await Promise.race([
+                        document.fonts.ready.catch(() => {}),
+                        new Promise(resolve => setTimeout(resolve, 1500))
+                    ]);
+                }
+                await this.nextFrame();
+            },
+            getImageSource(img) {
+                const source = img.currentSrc || img.getAttribute('src') || img.src || '';
+                if (!source || source.startsWith('data:') || source.startsWith('blob:')) return source;
+                try {
+                    return new URL(source, document.baseURI).href;
+                } catch (e) {
+                    return source;
+                }
+            },
+            intersectRects(a, b) {
+                const left = Math.max(a.left, b.left);
+                const top = Math.max(a.top, b.top);
+                const right = Math.min(a.right, b.right);
+                const bottom = Math.min(a.bottom, b.bottom);
+                if (right <= left || bottom <= top) return null;
+                return { left, top, right, bottom, width: right - left, height: bottom - top };
+            },
+            getVisibleImageRect(img, root, imageRect, rootRect) {
+                let clip = this.intersectRects(imageRect, rootRect);
+                if (!clip) return null;
+
+                for (let el = img.parentElement; el && el !== root.parentElement; el = el.parentElement) {
+                    const style = window.getComputedStyle(el);
+                    if (/(auto|scroll|hidden|clip)/.test(`${style.overflow}${style.overflowX}${style.overflowY}`)) {
+                        clip = this.intersectRects(clip, el.getBoundingClientRect());
+                        if (!clip) return null;
+                    }
+                    if (el === root) break;
+                }
+
+                return {
+                    x: clip.left - rootRect.left,
+                    y: clip.top - rootRect.top,
+                    width: clip.width,
+                    height: clip.height
+                };
+            },
+            parseRadiusValue(value, width, height) {
+                const token = String(value || '0').trim().split(/\s+/)[0];
+                if (!token || token === '0') return 0;
+                if (token.endsWith('%')) return Math.min(width, height) * parseFloat(token) / 100;
+                return parseFloat(token) || 0;
+            },
+            readBorderRadius(style, width, height) {
+                return {
+                    tl: this.parseRadiusValue(style.borderTopLeftRadius, width, height),
+                    tr: this.parseRadiusValue(style.borderTopRightRadius, width, height),
+                    br: this.parseRadiusValue(style.borderBottomRightRadius, width, height),
+                    bl: this.parseRadiusValue(style.borderBottomLeftRadius, width, height)
+                };
+            },
+            getImageRadius(img, rect, style) {
+                let radius = this.readBorderRadius(style, rect.width, rect.height);
+                if (radius.tl || radius.tr || radius.br || radius.bl) return radius;
+
+                const parent = img.parentElement;
+                if (!parent) return radius;
+
+                const parentStyle = window.getComputedStyle(parent);
+                if (!/(hidden|clip)/.test(`${parentStyle.overflow}${parentStyle.overflowX}${parentStyle.overflowY}`)) {
+                    return radius;
+                }
+
+                const parentRect = parent.getBoundingClientRect();
+                return this.readBorderRadius(parentStyle, parentRect.width, parentRect.height);
+            },
+            collectImageOverlays(node) {
+                const rootRect = node.getBoundingClientRect();
+                return Array.from(node.querySelectorAll('img')).map(img => {
+                    const rect = img.getBoundingClientRect();
+                    if (!rect.width || !rect.height) return null;
+
+                    const visibleRect = this.getVisibleImageRect(img, node, rect, rootRect);
+                    if (!visibleRect) return null;
+
+                    const style = window.getComputedStyle(img);
+                    const src = this.getImageSource(img);
+                    if (!src) return null;
+
+                    return {
+                        src,
+                        x: rect.left - rootRect.left,
+                        y: rect.top - rootRect.top,
+                        width: rect.width,
+                        height: rect.height,
+                        visibleRect,
+                        naturalWidth: img.naturalWidth || rect.width,
+                        naturalHeight: img.naturalHeight || rect.height,
+                        objectFit: style.objectFit || 'fill',
+                        objectPosition: style.objectPosition || '50% 50%',
+                        opacity: parseFloat(style.opacity || '1'),
+                        filter: style.filter && style.filter !== 'none' ? style.filter : 'none',
+                        radius: this.getImageRadius(img, rect, style)
+                    };
+                }).filter(Boolean);
+            },
+            mutePreviewImages(node) {
+                const images = Array.from(node.querySelectorAll('img'));
+                const states = images.map(img => ({
+                    img,
+                    exportMuted: img.getAttribute('data-export-muted'),
+                    visibility: img.style.visibility
+                }));
+
+                images.forEach(img => {
+                    img.dataset.exportMuted = '1';
+                    img.style.visibility = 'hidden';
+                });
+
+                return () => {
+                    states.forEach(({ img, exportMuted, visibility }) => {
+                        if (exportMuted === null) img.removeAttribute('data-export-muted');
+                        else img.setAttribute('data-export-muted', exportMuted);
+                        img.style.visibility = visibility;
+                    });
+                };
+            },
+            loadExportImage(src) {
+                return new Promise((resolve, reject) => {
+                    const img = new Image();
+                    if (/^https?:/i.test(src)) {
+                        try {
+                            if (new URL(src).origin !== window.location.origin) img.crossOrigin = 'anonymous';
+                        } catch (e) {}
+                    }
+                    img.onload = () => resolve(img);
+                    img.onerror = reject;
+                    img.src = src;
+                });
+            },
+            addRoundedRectPath(ctx, x, y, width, height, radius) {
+                const tl = Math.min(radius.tl || 0, width / 2, height / 2);
+                const tr = Math.min(radius.tr || 0, width / 2, height / 2);
+                const br = Math.min(radius.br || 0, width / 2, height / 2);
+                const bl = Math.min(radius.bl || 0, width / 2, height / 2);
+
+                ctx.beginPath();
+                ctx.moveTo(x + tl, y);
+                ctx.lineTo(x + width - tr, y);
+                ctx.quadraticCurveTo(x + width, y, x + width, y + tr);
+                ctx.lineTo(x + width, y + height - br);
+                ctx.quadraticCurveTo(x + width, y + height, x + width - br, y + height);
+                ctx.lineTo(x + bl, y + height);
+                ctx.quadraticCurveTo(x, y + height, x, y + height - bl);
+                ctx.lineTo(x, y + tl);
+                ctx.quadraticCurveTo(x, y, x + tl, y);
+                ctx.closePath();
+            },
+            getObjectPosition(position) {
+                const tokens = String(position || '').toLowerCase().split(/\s+/);
+                let x = 0.5;
+                let y = 0.5;
+                let xSet = false;
+                let ySet = false;
+
+                tokens.forEach(token => {
+                    if (token === 'left') { x = 0; xSet = true; }
+                    else if (token === 'right') { x = 1; xSet = true; }
+                    else if (token === 'top') { y = 0; ySet = true; }
+                    else if (token === 'bottom') { y = 1; ySet = true; }
+                    else if (token === 'center') {}
+                    else if (token.endsWith('%')) {
+                        const value = parseFloat(token) / 100;
+                        if (!xSet) { x = value; xSet = true; }
+                        else if (!ySet) { y = value; ySet = true; }
+                    }
+                });
+
+                return { x, y };
+            },
+            drawImageByObjectFit(ctx, image, overlay, x, y, width, height) {
+                const fit = overlay.objectFit || 'fill';
+                const imageWidth = overlay.naturalWidth || image.naturalWidth || width;
+                const imageHeight = overlay.naturalHeight || image.naturalHeight || height;
+                const position = this.getObjectPosition(overlay.objectPosition);
+
+                if (fit === 'contain' || fit === 'cover' || fit === 'scale-down') {
+                    const containScale = Math.min(width / imageWidth, height / imageHeight);
+                    const coverScale = Math.max(width / imageWidth, height / imageHeight);
+                    let scale = fit === 'cover' ? coverScale : containScale;
+                    if (fit === 'scale-down') scale = Math.min(1, containScale);
+
+                    const drawWidth = imageWidth * scale;
+                    const drawHeight = imageHeight * scale;
+                    const drawX = x + (width - drawWidth) * position.x;
+                    const drawY = y + (height - drawHeight) * position.y;
+                    ctx.drawImage(image, drawX, drawY, drawWidth, drawHeight);
+                    return;
+                }
+
+                ctx.drawImage(image, x, y, width, height);
+            },
+            async paintImageOverlays(baseDataUrl, node, overlays) {
+                if (!overlays.length) return baseDataUrl;
+
+                const baseImage = await this.loadExportImage(baseDataUrl);
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const nodeRect = node.getBoundingClientRect();
+                const scaleX = baseImage.naturalWidth / nodeRect.width;
+                const scaleY = baseImage.naturalHeight / nodeRect.height;
+
+                canvas.width = baseImage.naturalWidth;
+                canvas.height = baseImage.naturalHeight;
+                ctx.drawImage(baseImage, 0, 0);
+
+                for (const overlay of overlays) {
+                    try {
+                        const image = await this.loadExportImage(overlay.src);
+                        const x = overlay.x * scaleX;
+                        const y = overlay.y * scaleY;
+                        const width = overlay.width * scaleX;
+                        const height = overlay.height * scaleY;
+                        const clip = overlay.visibleRect;
+                        const radius = {
+                            tl: (overlay.radius.tl || 0) * Math.min(scaleX, scaleY),
+                            tr: (overlay.radius.tr || 0) * Math.min(scaleX, scaleY),
+                            br: (overlay.radius.br || 0) * Math.min(scaleX, scaleY),
+                            bl: (overlay.radius.bl || 0) * Math.min(scaleX, scaleY)
+                        };
+
+                        ctx.save();
+                        ctx.beginPath();
+                        ctx.rect(clip.x * scaleX, clip.y * scaleY, clip.width * scaleX, clip.height * scaleY);
+                        ctx.clip();
+                        this.addRoundedRectPath(ctx, x, y, width, height, radius);
+                        ctx.clip();
+                        ctx.globalAlpha = Number.isFinite(overlay.opacity) ? overlay.opacity : 1;
+                        try { ctx.filter = overlay.filter || 'none'; } catch (e) { ctx.filter = 'none'; }
+                        this.drawImageByObjectFit(ctx, image, overlay, x, y, width, height);
+                        ctx.restore();
+                    } catch (e) {
+                        console.warn('Image overlay paint failed', overlay.src, e);
+                    }
+                }
+
+                return canvas.toDataURL('image/png');
+            },
+            async createExportImageDataUrl() {
+                const node = document.getElementById('wechat-preview');
+                if (!node) throw new Error('Preview node not found');
+
+                const imageApi = typeof htmlToImage !== 'undefined' ? htmlToImage : (window.htmlToImage || null);
+                if (!imageApi?.toPng) throw new Error('Image generator is not loaded');
+
+                let restoreImages = null;
+                try {
+                    await this.waitForExportReady(node);
+                    const imageOverlays = this.collectImageOverlays(node);
+                    restoreImages = this.mutePreviewImages(node);
+                    await this.nextFrame();
+
+                    const dataUrl = await imageApi.toPng(node, {
+                        pixelRatio: 3,
+                        backgroundColor: this.isDarkMode ? '#111111' : '#ededed',
+                        cacheBust: true,
+                        imagePlaceholder: exportTransparentPixel,
+                        style: { transform: 'scale(1)', transformOrigin: 'top left' }
+                    });
+                    const finalDataUrl = await this.paintImageOverlays(dataUrl, node, imageOverlays);
+                    await this.ensureGeneratedImageDecoded(finalDataUrl);
+                    return finalDataUrl;
+                } finally {
+                    if (restoreImages) restoreImages();
+                }
+            },
+            ensureGeneratedImageDecoded(dataUrl) {
+                return new Promise((resolve, reject) => {
+                    const image = new Image();
+                    let settled = false;
+                    const done = () => {
+                        if (settled) return;
+                        settled = true;
+                        resolve();
+                    };
+                    image.onload = done;
+                    image.onerror = reject;
+                    image.src = dataUrl;
+                    if (image.decode) image.decode().then(done).catch(() => {});
+                });
+            },
+            async generatePreparedImage(event) {
+                const btn = event?.currentTarget;
+                const originalText = btn?.innerHTML;
+                if (btn) btn.innerHTML = '正在生成...';
+                this.activePage = 'preview';
+                this.generatedImagePanelVisible = true;
+                this.generatedImageStatus = '正在生成最终图片...';
+
+                try {
+                    let dataUrl = '';
+                    let lastError = null;
+                    for (let attempt = 0; attempt < 3; attempt += 1) {
+                        try {
+                            if (attempt > 0) {
+                                this.generatedImageStatus = `正在重新生成(${attempt + 1}/3)...`;
+                                await new Promise(resolve => setTimeout(resolve, 360));
+                            }
+                            dataUrl = await this.createExportImageDataUrl();
+                            break;
+                        } catch (error) {
+                            lastError = error;
+                        }
+                    }
+
+                    if (!dataUrl) throw lastError || new Error('Image generation failed');
+
+                    this.generatedImageUrl = dataUrl;
+                    this.generatedImageDirty = false;
+                    this.generatedImageStatus = '已生成，可导出。请先确认缩略图完整。';
+                } catch (error) {
+                    console.error('生成图片失败!', error);
+                    this.generatedImageStatus = '生成失败，请重试';
+                    alert('图片生成失败，请重试');
+                } finally {
+                    if (btn && originalText != null) btn.innerHTML = originalText;
+                }
+            },
+            async exportGeneratedImage(event) {
+                if (!this.generatedImageUrl || this.generatedImageDirty) {
+                    this.activePage = 'preview';
+                    this.generatedImagePanelVisible = true;
+                    const message = this.generatedImageDirty
+                        ? '内容已经变化，请先重新生成图片，再导出。'
+                        : '请先点击“生成图片”，确认最终图完整后再导出。';
+                    this.generatedImageStatus = message;
+                    alert(message);
+                    return;
+                }
+
+                const btn = event?.currentTarget;
+                const originalText = btn?.innerHTML;
+                if (btn) btn.innerHTML = '正在导出...';
+
+                try {
+                    this.downloadImage(this.generatedImageUrl, `微信截图_${new Date().getTime()}.png`);
+                } catch (error) {
+                    console.error('导出失败!', error);
+                    alert('导出失败，请重试');
+                } finally {
+                    if (btn && originalText != null) btn.innerHTML = originalText;
+                }
             },
             async generateImage(event) {
                 const node = document.getElementById('wechat-preview');
@@ -1869,7 +2360,7 @@
                     const dataUrl = await imageApi.toPng(node, {
                         pixelRatio: 3,
                         backgroundColor: bgColor,
-                        cacheBust: true,
+                        cacheBust: false,
                         width: node.offsetWidth,
                         height: node.offsetHeight,
                         style: { transform: 'scale(1)', transformOrigin: 'top left' }
