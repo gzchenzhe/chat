@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="微信截图 PWA">
+  <rect width="512" height="512" rx="112" fill="#07c160"/>
+  <rect x="116" y="104" width="280" height="304" rx="44" fill="#ffffff"/>
+  <rect x="148" y="150" width="216" height="34" rx="17" fill="#e8f7ee"/>
+  <rect x="148" y="210" width="154" height="48" rx="18" fill="#f2f2f2"/>
+  <rect x="210" y="282" width="154" height="48" rx="18" fill="#95ec69"/>
+  <rect x="148" y="358" width="216" height="16" rx="8" fill="#d7f3e2"/>
+  <circle cx="180" cy="234" r="18" fill="#07c160"/>
+  <circle cx="332" cy="306" r="18" fill="#07c160"/>
+</svg>
