@@ -1095,7 +1095,7 @@
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                     重置
                 </button>
-                <button @click="exportGeneratedImage($event)" class="pwa-action-btn is-primary bg-[#07c160] hover:bg-[#06ad56] text-white px-4 py-2 rounded-lg font-medium transition flex items-center gap-2 shadow-sm text-sm">
+                <button @click="downloadGeneratedImage($event)" class="pwa-action-btn is-primary bg-[#07c160] hover:bg-[#06ad56] text-white px-4 py-2 rounded-lg font-medium transition flex items-center gap-2 shadow-sm text-sm">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                     导出截图
                 </button>
@@ -1214,7 +1214,7 @@
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                     重置
                 </button>
-                <button @click="exportGeneratedImage($event)" class="pwa-action-btn is-primary bg-[#07c160] hover:bg-[#06ad56] text-white px-4 py-2 rounded-lg font-medium transition flex items-center gap-2 shadow-sm text-sm">
+                <button @click="downloadGeneratedImage($event)" class="pwa-action-btn is-primary bg-[#07c160] hover:bg-[#06ad56] text-white px-4 py-2 rounded-lg font-medium transition flex items-center gap-2 shadow-sm text-sm">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                     导出截图
                 </button>
@@ -1395,11 +1395,11 @@
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                     重置
                 </button>
-                <button @click="generatePreparedImage($event)" class="pwa-action-btn bg-gray-100 hover:bg-gray-200 text-gray-600 px-3 py-2 rounded-lg font-medium transition flex items-center gap-1 shadow-sm text-sm">
+                <button data-testid="generate-image" @click="generatePreparedImage($event)" class="pwa-action-btn bg-gray-100 hover:bg-gray-200 text-gray-600 px-3 py-2 rounded-lg font-medium transition flex items-center gap-1 shadow-sm text-sm">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16a4 4 0 018 0m0 0a4 4 0 018 0M8 16V8a4 4 0 118 0v8m-8 0h8"></path></svg>
                     生成图片
                 </button>
-                <button @click="exportGeneratedImage($event)" class="pwa-action-btn is-primary bg-[#07c160] hover:bg-[#06ad56] text-white px-4 py-2 rounded-lg font-medium transition flex items-center gap-2 shadow-sm text-sm">
+                <button @click="downloadGeneratedImage($event)" class="pwa-action-btn is-primary bg-[#07c160] hover:bg-[#06ad56] text-white px-4 py-2 rounded-lg font-medium transition flex items-center gap-2 shadow-sm text-sm">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                     导出截图
                 </button>
@@ -1600,7 +1600,7 @@
     </div>
     <div v-if="generatedImagePanelVisible && (generatedImageUrl || generatedImageStatus)" class="generated-export-panel">
         <div class="flex items-start gap-3">
-            <img v-if="generatedImageUrl" :src="generatedImageUrl" alt="已生成截图预览">
+            <img v-if="generatedImageUrl" data-testid="generated-image-preview" :src="generatedImageUrl" alt="已生成截图预览">
             <div class="flex-1 min-w-0">
                 <div class="flex items-center justify-between gap-3 mb-1">
                     <div class="text-sm font-semibold text-gray-800">最终导出图</div>
@@ -1612,7 +1612,22 @@
                 </div>
                 <div class="generated-export-status"
                      :class="{ 'is-ready': generatedImageUrl && !generatedImageDirty, 'is-dirty': generatedImageDirty }">
-                    {{ generatedImageStatus || (generatedImageUrl ? '已生成，可导出' : '请先生成图片') }}
+                    {{ generatedImageStatus || (generatedImageUrl ? '已生成，可下载' : '请先生成图片') }}
+                </div>
+                <div v-if="generatedImageUrl && !generatedImageDirty" class="mt-3 flex flex-wrap gap-2">
+                    <button type="button"
+                            data-testid="download-generated-image"
+                            @click="downloadGeneratedImage($event)"
+                            class="pwa-action-btn is-primary bg-[#07c160] hover:bg-[#06ad56] text-white px-3 py-2 rounded-lg font-medium transition text-sm">
+                        下载图片
+                    </button>
+                    <button v-if="supportsFileShare"
+                            type="button"
+                            data-testid="share-generated-image"
+                            @click="shareGeneratedImage($event)"
+                            class="pwa-action-btn bg-gray-100 hover:bg-gray-200 text-gray-600 px-3 py-2 rounded-lg font-medium transition text-sm">
+                        系统分享
+                    </button>
                 </div>
                 <button v-if="generatedImageDirty"
                         @click="generatePreparedImage($event)"
@@ -1872,6 +1887,7 @@
                 dragOverIndex: null,
                 pointerSortPointerId: null,
                 isHydrating: true,
+                supportsFileShare: false,
                 storageStatus: '正在初始化本地存储…',
                 storageStatusType: 'normal'
             }
@@ -1879,6 +1895,12 @@
         async mounted() {
             // 页面加载时读取本地存储
             await this.loadState();
+            try {
+                const probeFile = new File([new Blob(['share-probe'], { type: 'image/png' })], 'share-probe.png', { type: 'image/png' });
+                this.supportsFileShare = Boolean(navigator.share && navigator.canShare?.({ files: [probeFile] }));
+            } catch (error) {
+                this.supportsFileShare = false;
+            }
         },
         watch: {
             // 监听数据变化，实现自动保存功能
@@ -2403,142 +2425,6 @@
                 a.download = fileName;
                 a.click();
             },
-            async shareOrDownloadImage(dataUrl, fileName) {
-                const response = await fetch(dataUrl);
-                const blob = await response.blob();
-                const file = new File([blob], fileName, { type: 'image/png' });
-
-                if (navigator.canShare?.({ files: [file] })) {
-                    try {
-                        await navigator.share({
-                            files: [file],
-                            title: fileName,
-                            text: '微信截图'
-                        });
-                        return;
-                    } catch (error) {
-                        if (error?.name === 'AbortError') return;
-                        console.warn('系统分享失败，改为下载图片。', error);
-                    }
-                }
-
-                this.downloadImage(dataUrl, fileName);
-            },
-            async waitForPreviewImages(root) {
-                const images = Array.from(root.querySelectorAll('img'));
-                await Promise.all(images.map(img => {
-                    return new Promise(resolve => {
-                        const timeout = window.setTimeout(resolve, 1800);
-                        const done = () => {
-                            window.clearTimeout(timeout);
-                            resolve();
-                        };
-
-                        if (img.complete) {
-                            const decodePromise = img.naturalWidth > 0 && img.decode
-                                ? img.decode().catch(() => {})
-                                : Promise.resolve();
-                            decodePromise.finally(done);
-                            return;
-                        }
-
-                        img.addEventListener('load', done, { once: true });
-                        img.addEventListener('error', done, { once: true });
-                    });
-                }));
-                await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-            },
-            rasterizeImagesForExport(root) {
-                const restores = [];
-                const ratio = 3;
-                const resolvePosition = (token, freeSpace, fallback) => {
-                    if (!token) return freeSpace * fallback;
-                    if (token === 'left' || token === 'top') return 0;
-                    if (token === 'center') return freeSpace * 0.5;
-                    if (token === 'right' || token === 'bottom') return freeSpace;
-                    if (token.endsWith('%')) return freeSpace * ((parseFloat(token) || 0) / 100);
-                    if (token.endsWith('px')) return parseFloat(token) || 0;
-                    return freeSpace * fallback;
-                };
-
-                const seenTargets = new Set();
-                Array.from(root.querySelectorAll('.wechat-avatar, .image-bubble img')).forEach(img => {
-                    const imageBubble = img.closest('.image-bubble');
-                    const target = imageBubble && !img.classList.contains('wechat-avatar') ? imageBubble : img;
-                    if (seenTargets.has(target)) return;
-                    seenTargets.add(target);
-
-                    const rect = target.getBoundingClientRect();
-                    const targetStyle = window.getComputedStyle(target);
-                    const cssWidth = Math.round(target.offsetWidth || parseFloat(targetStyle.width) || rect.width);
-                    const cssHeight = Math.round(target.offsetHeight || parseFloat(targetStyle.height) || rect.height);
-                    const naturalWidth = img.naturalWidth;
-                    const naturalHeight = img.naturalHeight;
-
-                    if (!cssWidth || !cssHeight || !naturalWidth || !naturalHeight) return;
-
-                    const imageStyle = window.getComputedStyle(img);
-                    const objectFit = imageStyle.objectFit || 'fill';
-                    const canvas = document.createElement('canvas');
-                    canvas.width = Math.max(1, Math.round(cssWidth * ratio));
-                    canvas.height = Math.max(1, Math.round(cssHeight * ratio));
-                    const ctx = canvas.getContext('2d');
-                    if (!ctx) return;
-
-                    let drawX = 0;
-                    let drawY = 0;
-                    let drawWidth = canvas.width;
-                    let drawHeight = canvas.height;
-
-                    if (objectFit === 'cover' || objectFit === 'contain') {
-                        const scale = objectFit === 'cover'
-                            ? Math.max(canvas.width / naturalWidth, canvas.height / naturalHeight)
-                            : Math.min(canvas.width / naturalWidth, canvas.height / naturalHeight);
-                        drawWidth = naturalWidth * scale;
-                        drawHeight = naturalHeight * scale;
-                        const position = (imageStyle.objectPosition || '50% 50%').trim().split(/\s+/);
-                        drawX = resolvePosition(position[0], canvas.width - drawWidth, 0.5);
-                        drawY = resolvePosition(position[1], canvas.height - drawHeight, 0.5);
-                    }
-
-                    try {
-                        ctx.clearRect(0, 0, canvas.width, canvas.height);
-                        ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
-                    } catch (error) {
-                        console.warn('Image canvas export fallback skipped', error);
-                        return;
-                    }
-
-                    const replacement = document.createElement('div');
-                    replacement.className = target.className;
-                    replacement.style.cssText = target.style.cssText;
-                    replacement.style.width = `${cssWidth}px`;
-                    replacement.style.height = `${cssHeight}px`;
-                    replacement.style.minWidth = `${cssWidth}px`;
-                    replacement.style.minHeight = `${cssHeight}px`;
-                    replacement.style.display = targetStyle.display === 'none' ? 'none' : (targetStyle.display || 'block');
-                    replacement.style.boxSizing = targetStyle.boxSizing;
-                    replacement.style.borderRadius = targetStyle.borderRadius;
-                    replacement.style.flexShrink = targetStyle.flexShrink;
-                    replacement.style.overflow = targetStyle.overflow;
-                    replacement.style.backgroundImage = `url("${canvas.toDataURL('image/png')}")`;
-                    replacement.style.backgroundSize = '100% 100%';
-                    replacement.style.backgroundPosition = 'center center';
-                    replacement.style.backgroundRepeat = 'no-repeat';
-                    replacement.setAttribute('aria-hidden', 'true');
-
-                    target.replaceWith(replacement);
-                    restores.push({ target, replacement });
-                });
-
-                return () => {
-                    restores.forEach(item => {
-                        if (item.replacement.parentNode) {
-                            item.replacement.replaceWith(item.target);
-                        }
-                    });
-                };
-            },
             nextFrame() {
                 return new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
             },
@@ -2883,7 +2769,9 @@
 
                     this.generatedImageUrl = dataUrl;
                     this.generatedImageDirty = false;
-                    this.generatedImageStatus = '已生成，可导出。请先确认缩略图完整。';
+                    this.generatedImageStatus = this.supportsFileShare
+                        ? '已生成。请确认缩略图完整，然后下载或使用系统分享。'
+                        : '已生成。请确认缩略图完整，然后下载图片。';
                 } catch (error) {
                     console.error('生成图片失败!', error);
                     this.generatedImageStatus = '生成失败，请重试';
@@ -2892,68 +2780,72 @@
                     if (btn && originalText != null) btn.innerHTML = originalText;
                 }
             },
-            async exportGeneratedImage(event) {
+            ensureGeneratedImageReady() {
                 if (!this.generatedImageUrl || this.generatedImageDirty) {
                     this.activePage = 'preview';
                     this.generatedImagePanelVisible = true;
                     const message = this.generatedImageDirty
-                        ? '内容已经变化，请先重新生成图片，再导出。'
-                        : '请先点击“生成图片”，确认最终图完整后再导出。';
+                        ? '内容已经变化，请先重新生成图片，再下载或分享。'
+                        : '请先点击“生成图片”，确认最终图完整后再下载或分享。';
                     this.generatedImageStatus = message;
                     alert(message);
+                    return false;
+                }
+                return true;
+            },
+            getGeneratedImageFileName() {
+                return `微信截图_${new Date().getTime()}.png`;
+            },
+            async createGeneratedImageFile(fileName = this.getGeneratedImageFileName()) {
+                const response = await fetch(this.generatedImageUrl);
+                if (!response.ok) throw new Error('无法读取已生成图片');
+                return new File([await response.blob()], fileName, { type: 'image/png' });
+            },
+            async downloadGeneratedImage(event) {
+                if (!this.ensureGeneratedImageReady()) return;
+
+                const btn = event?.currentTarget;
+                const originalText = btn?.innerHTML;
+                if (btn) btn.innerHTML = '正在下载...';
+
+                try {
+                    this.downloadImage(this.generatedImageUrl, this.getGeneratedImageFileName());
+                    this.generatedImageStatus = '图片下载已触发；如未出现文件，请检查浏览器下载权限。';
+                } catch (error) {
+                    console.error('下载失败!', error);
+                    alert('图片下载失败，请重试');
+                } finally {
+                    if (btn && originalText != null) btn.innerHTML = originalText;
+                }
+            },
+            async shareGeneratedImage(event) {
+                if (!this.ensureGeneratedImageReady()) return;
+                if (!this.supportsFileShare) {
+                    alert('当前浏览器不支持文件分享，请使用“下载图片”。');
                     return;
                 }
 
                 const btn = event?.currentTarget;
                 const originalText = btn?.innerHTML;
-                if (btn) btn.innerHTML = '正在导出...';
+                if (btn) btn.innerHTML = '正在分享...';
 
                 try {
-                    this.downloadImage(this.generatedImageUrl, `微信截图_${new Date().getTime()}.png`);
+                    const file = await this.createGeneratedImageFile();
+                    await navigator.share({
+                        files: [file],
+                        title: file.name,
+                        text: '微信截图'
+                    });
+                    this.generatedImageStatus = '已交给系统分享。';
                 } catch (error) {
-                    console.error('导出失败!', error);
-                    alert('导出失败，请重试');
+                    if (error?.name === 'AbortError') {
+                        this.generatedImageStatus = '已取消系统分享。';
+                        return;
+                    }
+                    console.error('分享失败!', error);
+                    alert('系统分享失败，请改用“下载图片”。');
                 } finally {
                     if (btn && originalText != null) btn.innerHTML = originalText;
-                }
-            },
-            async generateImage(event) {
-                const node = document.getElementById('wechat-preview');
-                const btn = event?.currentTarget;
-                if (!node || !btn) return;
-                const originalText = btn.innerHTML;
-                btn.innerHTML = '正在生成超清截图...';
-                
-                const bgColor = this.isDarkMode ? '#111111' : '#ededed';
-                
-                const imageApi = typeof htmlToImage !== 'undefined' ? htmlToImage : (window.htmlToImage || null);
-                if (!imageApi?.toPng) {
-                    btn.innerHTML = originalText;
-                    alert('截图生成组件未加载，请刷新页面后重试');
-                    return;
-                }
-
-                let restoreImages = null;
-                try {
-                    await this.waitForPreviewImages(node);
-                    restoreImages = this.rasterizeImagesForExport(node);
-                    await this.waitForPreviewImages(node);
-
-                    const dataUrl = await imageApi.toPng(node, {
-                        pixelRatio: 3,
-                        backgroundColor: bgColor,
-                        cacheBust: false,
-                        width: node.offsetWidth,
-                        height: node.offsetHeight,
-                        style: { transform: 'scale(1)', transformOrigin: 'top left' }
-                    });
-                    await this.shareOrDownloadImage(dataUrl, `微信截图_${new Date().getTime()}.png`);
-                } catch (error) {
-                    console.error('导出失败!', error);
-                    alert('截图生成失败，请重试');
-                } finally {
-                    if (restoreImages) restoreImages();
-                    btn.innerHTML = originalText;
                 }
             }
         }

@@ -22,6 +22,9 @@ Environment: Codex in-app Chromium browser against `http://127.0.0.1:8188/`.
 - A portable backup inlines the referenced images, clears IndexedDB asset IDs, changes and restores the test chat name successfully, and preserves all three stored assets.
 - The `480 × 320` PNG compression fixture is resized to `160 × 107`, reduced from 24,620 to 5,604 bytes, and survives an IndexedDB write/read cycle.
 - The data-management backup button is present and can be invoked. Backup payload creation and import application were verified independently because the in-app browser did not expose the Blob download as a downloadable event.
+- The preview page generates one `1125 × 2436` PNG that is reused by both download and system-share actions; the deprecated second rendering pipeline has been removed.
+- The unified download action produces an `image/png` file with a timestamped Chinese filename. The browser reports file-share support and exposes the separate system-share button without invoking the native share sheet during automated testing.
+- Pixel comparison against the visual baseline changed 841 of 2,740,500 pixels (about 0.031%, mean channel delta 0.0047) while preserving the exact dimensions.
 
 ### Not covered by viewport simulation
 

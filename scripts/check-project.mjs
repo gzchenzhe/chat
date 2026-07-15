@@ -93,6 +93,11 @@ record(/LEGACY_STATE_STORAGE_KEY\s*=\s*['"]wechat_editor_state_v18['"]/.test(htm
 record(/CURRENT_STATE_SCHEMA\s*=\s*2/.test(html), 'Expected state schema version 2 was not found');
 record(/wechat-screenshot-pwa-v\d+/.test(serviceWorker), 'Versioned PWA cache name was not found');
 record(/pixelRatio:\s*3/.test(html), 'Expected 3x PNG export configuration was not found');
+record(/async\s+downloadGeneratedImage\s*\(/.test(html), 'Unified generated-image download action was not found');
+record(/async\s+shareGeneratedImage\s*\(/.test(html), 'Unified generated-image share action was not found');
+record(/data-testid=["']generated-image-preview["']/.test(html), 'Generated-image preview test hook was not found');
+record(!/async\s+generateImage\s*\(/.test(html), 'Deprecated duplicate image-generation pipeline is still present');
+record(!/shareOrDownloadImage\s*\(/.test(html), 'Deprecated share-or-download fallback is still present');
 record(/activePage:\s*['"]home['"]/.test(html), 'Expected home page initial state was not found');
 
 const fixturePaths = [
