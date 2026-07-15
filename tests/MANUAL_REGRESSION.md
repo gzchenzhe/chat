@@ -8,7 +8,7 @@ Environment: Codex in-app Chromium browser against `http://127.0.0.1:8188/`.
 
 - The home, editor, and preview pages load and can be selected from the bottom navigation.
 - `tests/fixtures/all-message-types-state.json` renders all eight supported message types.
-- Adding and editing a text message updates `wechat_editor_state_v18`; the message remains after a reload.
+- Adding and editing a text message updates `wechat_editor_state_v19`; the message remains after a reload.
 - Dark mode updates both the preview and persisted state, and can be restored to light mode.
 - The normal two-step export flow generates a visually reviewed `1125 × 2436` PNG from the deterministic export fixture.
 - The generated PNG contains the expected local avatars and message image.
@@ -17,12 +17,17 @@ Environment: Codex in-app Chromium browser against `http://127.0.0.1:8188/`.
 - No new warning or error was logged while exporting the PNG fixtures. Earlier SVG fixture warnings were resolved by using deterministic PNG variants for runtime tests.
 - The per-message up/down controls reorder messages, persist the changed order, and can restore the original fixture order.
 - At a `390` px viewport, all eight message toolbars remain inside their cards and the dedicated drag handle reports `touch-action: none`.
+- A legacy `wechat_editor_state_v18` fixture migrates to schema version 2 under `wechat_editor_state_v19`; the legacy key is removed only after the new state is saved.
+- Legacy avatar and message Data URLs migrate to three IndexedDB assets. The lightweight v19 state omits the inline bytes, and all images hydrate again after reload.
+- A portable backup inlines the referenced images, clears IndexedDB asset IDs, changes and restores the test chat name successfully, and preserves all three stored assets.
+- The `480 × 320` PNG compression fixture is resized to `160 × 107`, reduced from 24,620 to 5,604 bytes, and survives an IndexedDB write/read cycle.
+- The data-management backup button is present and can be invoked. Backup payload creation and import application were verified independently because the in-app browser did not expose the Blob download as a downloadable event.
 
 ### Not covered by viewport simulation
 
 - Physical iOS Safari and Android Chrome touch behavior. Pointer-based handle sorting is implemented, but the test browser cannot inject native touch input; the up/down controls are the verified mobile fallback.
 - PWA installation, cache upgrade, and fully offline startup.
-- Native file-picker behavior and large real-world uploads.
+- Native file-picker behavior, backup file selection, and large real-world uploads.
 - Native download permissions and Web Share behavior.
 - Screen-reader and keyboard-only accessibility review.
 

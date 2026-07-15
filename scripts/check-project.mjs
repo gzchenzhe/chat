@@ -88,7 +88,9 @@ for (const cachedPath of new Set(cachedPaths)) {
   record(fs.existsSync(projectPath(cachedPath)), `Service worker caches a missing path: ./${cachedPath}`);
 }
 
-record(/wechat_editor_state_v18/.test(html), 'Expected localStorage key wechat_editor_state_v18 was not found');
+record(/STATE_STORAGE_KEY\s*=\s*['"]wechat_editor_state_v19['"]/.test(html), 'Expected current localStorage key wechat_editor_state_v19 was not found');
+record(/LEGACY_STATE_STORAGE_KEY\s*=\s*['"]wechat_editor_state_v18['"]/.test(html), 'Expected legacy v18 migration key was not found');
+record(/CURRENT_STATE_SCHEMA\s*=\s*2/.test(html), 'Expected state schema version 2 was not found');
 record(/wechat-screenshot-pwa-v\d+/.test(serviceWorker), 'Versioned PWA cache name was not found');
 record(/pixelRatio:\s*3/.test(html), 'Expected 3x PNG export configuration was not found');
 record(/activePage:\s*['"]home['"]/.test(html), 'Expected home page initial state was not found');
