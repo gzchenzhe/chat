@@ -74,11 +74,6 @@
 
         :root {
             --ios-font: "SF Pro", "PingFang SC", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-            --wechat-screen-width: 390px;
-            --wechat-screen-height: 844px;
-            --wechat-message-inset: 9px;
-            --wechat-text-bubble-width: 272px;
-            --wechat-text-padding-x: 11px;
             --wechat-green: #95ec69;
             --wechat-green-dark: #07c160;
             --wechat-bg-light: #ededed;
@@ -200,8 +195,8 @@
         }
 
         .phone-shell {
-            width: calc(var(--wechat-screen-width) + 16px);
-            height: calc(var(--wechat-screen-height) + 16px);
+            width: 391px;
+            height: 828px;
             border: 8px solid #111113;
             border-radius: 46px;
             background: #111113;
@@ -210,18 +205,16 @@
         }
 
         .wechat-screen {
-            width: var(--wechat-screen-width);
-            height: var(--wechat-screen-height);
+            width: 375px;
+            height: 812px;
             overflow: hidden;
             font-family: var(--ios-font);
             font-size: 17px;
             line-height: 1.35;
-            -webkit-text-size-adjust: 100%;
-            text-size-adjust: 100%;
         }
 
         .wechat-status-bar {
-            height: 47px;
+            height: 44px;
             padding: 0;
             position: relative;
             flex-shrink: 0;
@@ -278,8 +271,7 @@
             position: absolute;
             right: 16px;
             top: 16px;
-            width: 89.5px;
-            height: 19px;
+            width: 94px;
             display: flex;
             align-items: center;
             gap: 0;
@@ -304,17 +296,15 @@
         }
 
         .wechat-signal-img {
-            width: 20.5px;
-            height: 14.5px;
-            transform: translateY(0.5px);
+            width: 20px;
+            height: 14px;
         }
 
         .wechat-wifi-img {
-            width: 22.5px;
-            height: 17.8px;
-            margin-left: 4.5px;
+            width: 25px;
+            height: 19px;
+            margin-left: 6px;
             margin-right: 0;
-            transform: translateY(1px);
         }
 
         .wechat-network-label {
@@ -346,19 +336,18 @@
 
         .wechat-battery-image-wrap {
             position: relative;
-            width: 27.6px;
+            width: 29px;
             height: 14px;
-            margin-left: 4.5px;
+            margin-left: 5px;
             margin-right: 7px;
             flex: 0 0 auto;
-            transform: translateY(0.5px);
         }
 
         .wechat-battery-fill {
             position: absolute;
-            left: 2.6px;
-            top: 2.5px;
-            height: 8.5px;
+            left: 2.7px;
+            top: 2.7px;
+            height: 8.55px;
             border-radius: 1.7px;
             background: currentColor;
             z-index: 1;
@@ -367,7 +356,7 @@
         .wechat-battery-png {
             position: absolute;
             inset: 0;
-            width: 27.6px;
+            width: 29px;
             height: 14px;
             object-fit: contain;
             z-index: 2;
@@ -398,11 +387,11 @@
             /* 手动调整参数 1：左上角微信返回箭头。
                width/height 控制箭头大小；margin-left 控制左右位置；
                transform: translateY(...) 控制箭头上下位置，正数向下，负数向上。 */
-            width: 9px;
-            height: 18px;
-            margin-left: 5px;
+            width: 10px;
+            height: 21px;
+            margin-left: 0;
             object-fit: contain;
-            transform: translateY(0);
+            transform: translateY(1px);
         }
 
         .wechat-unread-badge {
@@ -411,18 +400,18 @@
                border-radius 控制圆角；font-size 控制未读数字大小；line-height 通常跟 height 一致；
                transform: translateY(...) 控制气泡上下位置。 */
             min-width: 26px;
-            height: 24px;
-            padding: 0 6.5px;
-            border-radius: 13px;
+            height: 22px;
+            padding: 0 7px;
+            border-radius: 12px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             font-family: "SF Pro", "Helvetica Neue", Arial, sans-serif;
             font-size: 14px;
-            line-height: 24px;
+            line-height: 22px;
             font-weight: 400;
             text-align: center;
-            transform: translateY(0.5px);
+            transform: translateY(1px);
         }
 
         .wechat-back-area .wechat-unread-badge {
@@ -434,7 +423,7 @@
             /* 手动调整参数 5：聊天标题文字。
                font-size 控制标题大小；line-height 控制标题所在导航栏的垂直对齐；
                font-weight 控制粗细。 */
-            font-size: 17px;
+            font-size: 16px;
             line-height: 44px;
             font-weight: 500;
             -webkit-text-stroke: 0.18px currentColor;
@@ -454,15 +443,14 @@
         .wechat-more-image {
             /* 手动调整参数 4：右上角三个点图标。
                width/height 控制三点图标大小；margin-right 控制离手机右边的距离。 */
-            width: 23.333px;
-            height: 4px;
-            margin-right: 4px;
+            width: 26px;
+            height: 6px;
+            margin-right: 1px;
             object-fit: contain;
-            transform: translateY(0.5px);
         }
 
         .wechat-message-list {
-            padding: 10px var(--wechat-message-inset);
+            padding: 10px 10px 10px;
         }
 
         .wechat-time-label {
@@ -493,15 +481,6 @@
             border-radius: 4px;
         }
 
-        /* 头像仅做视觉内移，不改变 flex 占位，因此满宽左右气泡仍保持同一组边界。 */
-        .wechat-message-row:not(.flex-row-reverse) > .wechat-avatar {
-            transform: translateX(4px);
-        }
-
-        .wechat-message-row.flex-row-reverse > .wechat-avatar {
-            transform: translateX(-4px);
-        }
-
         .wechat-nickname {
             font-size: 12px;
             line-height: 16px;
@@ -512,9 +491,9 @@
         .bubble-tail::before {
             content: '';
             position: absolute;
-            top: 15px;
+            top: 13px;
             width: 7px;
-            height: 11px;
+            height: 10px;
             transform: none;
             border-radius: 0;
             z-index: 0;
@@ -537,114 +516,23 @@
         .bubble-left-redpacket-accepted-light::before, .bubble-left-redpacket-accepted-dark::before { left: -5px; background-color: #fccd9f; clip-path: polygon(100% 0, 0 50%, 100% 100%); }
         .bubble-right-redpacket-accepted-light::before, .bubble-right-redpacket-accepted-dark::before { right: -5px; background-color: #fccd9f; clip-path: polygon(0 0, 100% 50%, 0 100%); }
 
-        /* 390pt iOS 微信文本气泡：满宽时左右消息占据同一横向区间。 */
+        /* 文本气泡核心规范（V18 修复字间距与左右内边距） */
         .text-bubble {
-            font-family: var(--ios-font);
-            font-size: 16.9px;
-            line-height: 21px;
+            font-size: 16px;
+            line-height: 20px;
             font-weight: 400;
-            letter-spacing: 0;
-            padding: 10px var(--wechat-text-padding-x);
-            min-height: 41px;
-            max-width: var(--wechat-text-bubble-width);
+            letter-spacing: 0.3px;
+            padding: 9px 12px 9px;
+            min-height: 40px;
+            max-width: 255px;
             box-sizing: border-box;
             border-radius: 5px;
             overflow-wrap: anywhere;
             word-break: normal;
-            line-break: strict;
             white-space: pre-wrap;
-            text-align: start;
             position: relative;
             z-index: 10;
             isolation: isolate;
-        }
-
-        /* 文本气泡的布局盒继续共用 x=59–331；可见气泡按 iOS 两侧头像间距镜像展开。 */
-        .text-bubble::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            border-radius: 5px;
-            z-index: -2;
-        }
-
-        .text-bubble.wechat-light-right,
-        .text-bubble.wechat-dark-right,
-        .text-bubble.wechat-light-left,
-        .text-bubble.wechat-dark-left {
-            background-color: transparent !important;
-        }
-
-        .text-bubble.wechat-light-right,
-        .text-bubble.wechat-dark-right {
-            padding-left: 5px;
-            padding-right: 17px;
-        }
-
-        .text-bubble.wechat-light-left,
-        .text-bubble.wechat-dark-left {
-            padding-left: 17px;
-            padding-right: 5px;
-        }
-
-        .text-bubble.wechat-light-right::after {
-            left: -7px;
-            right: 6px;
-            background-color: var(--wechat-green);
-        }
-
-        .text-bubble.wechat-dark-right::after {
-            left: -7px;
-            right: 6px;
-            background-color: var(--wechat-green-dark);
-        }
-
-        .text-bubble.wechat-light-left::after {
-            left: 6px;
-            right: -7px;
-            background-color: var(--wechat-left-light);
-        }
-
-        .text-bubble.wechat-dark-left::after {
-            left: 6px;
-            right: -7px;
-            background-color: var(--wechat-left-dark);
-        }
-
-        /* 满宽文字气泡统一使用 x=65–325 的可见主体；布局盒仍为 x=59–331，以保留尾巴与头像关系。 */
-        .text-bubble.wechat-text-message.wechat-light-right,
-        .text-bubble.wechat-text-message.wechat-dark-right,
-        .text-bubble.wechat-text-message.wechat-light-left,
-        .text-bubble.wechat-text-message.wechat-dark-left {
-            padding-left: 18px;
-            padding-right: 18px;
-            letter-spacing: -0.95px;
-        }
-
-        .text-bubble.wechat-text-message.wechat-light-right::after,
-        .text-bubble.wechat-text-message.wechat-dark-right::after,
-        .text-bubble.wechat-text-message.wechat-light-left::after,
-        .text-bubble.wechat-text-message.wechat-dark-left::after {
-            left: 6px;
-            right: 6px;
-        }
-
-        .text-bubble.bubble-tail::before {
-            top: 14.667px;
-            width: 5px;
-            height: 11px;
-            z-index: -1;
-        }
-
-        .text-bubble.bubble-left-dark::before,
-        .text-bubble.bubble-left-light::before {
-            left: 1px;
-        }
-
-        .text-bubble.bubble-right-dark::before,
-        .text-bubble.bubble-right-light::before {
-            right: 1px;
         }
        
         .finance-bubble { width: 242px; border-radius: 5px; position: relative; z-index: 10; isolation: isolate; }
@@ -762,11 +650,10 @@
 
         .wechat-bottom-bar {
             min-height: 87px;
-            padding: 5px 10.667px 25px 10.667px;
+            padding: 10px 8px 25px 9px;
             border-top-width: 0.5px;
             position: relative;
             flex-shrink: 0;
-            gap: 0;
         }
 
         .wechat-tool-icon {
@@ -776,15 +663,15 @@
         }
 
         .wechat-tool-image {
-            width: 26.667px;
-            height: 26.667px;
+            width: 29px;
+            height: 29px;
             object-fit: contain;
             flex-shrink: 0;
         }
 
         .wechat-voice-wave {
-            width: 11.333px;
-            height: 16.333px;
+            width: 14px;
+            height: 20px;
             object-fit: contain;
             flex: 0 0 auto;
         }
@@ -795,42 +682,36 @@
         }
 
         .wechat-transfer-img {
-            width: 40px;
-            height: 40px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
             object-fit: contain;
             flex: 0 0 auto;
         }
 
         .wechat-redpacket-img {
-            width: 34px;
-            height: 40px;
+            width: 40px;
+            height: 47px;
             object-fit: contain;
             flex: 0 0 auto;
         }
 
         .wechat-voice-toggle {
-            margin-right: 10.666px;
+            margin-right: 0;
         }
 
         .wechat-input-field {
-            height: 40px;
+            height: 36px;
             border-radius: 7px;
-            margin-right: 10.667px;
-            transform: translateY(-1px);
         }
 
         .wechat-mic-icon {
             position: absolute;
-            right: 14.5px;
-            top: 11px;
+            right: 9px;
+            top: 8px;
             width: 15px;
             height: 20px;
-            color: rgba(0, 0, 0, 0.55);
-        }
-
-        .wechat-mic-icon.text-white\/35 {
-            color: rgba(255, 255, 255, 0.55);
+            color: rgba(0, 0, 0, 0.30);
         }
 
         .wechat-bottom-outline {
@@ -844,19 +725,11 @@
         .wechat-home-indicator {
             position: absolute;
             left: 50%;
-            bottom: 9px;
-            width: 139px;
+            bottom: 7px;
+            width: 134px;
             height: 5px;
             border-radius: 999px;
             transform: translateX(-50%);
-        }
-
-        .wechat-bottom-bar .wechat-tool-image {
-            margin-top: 6px;
-        }
-
-        .wechat-emoji-button {
-            margin-right: 13.333px;
         }
 
         /* 拖拽动画 */
@@ -1518,7 +1391,7 @@
                                 <span v-if="!msg.isMe && showOtherName" class="wechat-nickname" :class="isDarkMode ? 'text-white/50' : 'text-black/40'">{{ otherName }}</span>
 
                                 <div v-if="msg.type === 'text'" 
-                                     class="text-bubble wechat-text-message bubble-tail transition-colors duration-300" 
+                                     class="text-bubble bubble-tail transition-colors duration-300" 
                                      :class="getTextClass(msg)">
                                     {{ msg.content }}
                                 </div>
@@ -1632,12 +1505,12 @@
                     </div>
 
                     <img src="pic/wechat-bottom-icon2.png"
-                         class="wechat-tool-image wechat-emoji-button cursor-pointer mt-[2px]"
+                         class="wechat-tool-image cursor-pointer mt-[2px]"
                          :class="{ 'theme-invert': isDarkMode }"
                          alt="">
 
                     <img src="pic/wechat-bottom-icon3.png"
-                         class="wechat-tool-image wechat-plus-button cursor-pointer mt-[2px]"
+                         class="wechat-tool-image cursor-pointer mt-[2px]"
                          :class="{ 'theme-invert': isDarkMode }"
                          alt="">
 
@@ -1838,7 +1711,7 @@
             },
             batteryFillWidth() {
                 const level = Math.max(0, Math.min(100, Number(this.batteryLevel) || 0));
-                return (19.2 * level / 100).toFixed(2);
+                return (20.2 * level / 100).toFixed(2);
             },
             getImageBubbleStyle(msg) {
                 const naturalWidth = Number(msg.imageWidth);
