@@ -28,6 +28,8 @@ const appCss = read('css/app.css');
 const packageSource = read('package.json');
 const manifestSource = read('manifest.webmanifest');
 const serviceWorker = read('sw.js');
+const wranglerSource = read('wrangler.jsonc');
+const assetsIgnore = read('.assetsignore');
 const applicationSource = `${html}\n${appScript}`;
 
 for (const requiredPath of [
@@ -37,6 +39,8 @@ for (const requiredPath of [
   'ASSET_PROVENANCE.md',
   'package-lock.json',
   'playwright.config.mjs',
+  'wrangler.jsonc',
+  '.assetsignore',
   'tests/e2e/app.spec.mjs',
   'css/app.css',
   'js/app.js',
@@ -82,6 +86,25 @@ try {
   record(true, 'Package JSON is valid');
 } catch (error) {
   record(false, `Package JSON is invalid: ${error.message}`);
+}
+
+let wrangler = null;
+try {
+  wrangler = JSON.parse(wranglerSource);
+  record(true, 'Wrangler JSONC is valid JSON');
+} catch (error) {
+  record(false, `Wrangler JSONC is invalid: ${error.message}`);
+}
+
+if (wrangler) {
+  record(wrangler.name === 'chat', 'Wrangler Worker name must remain chat');
+  record(/^\d{4}-\d{2}-\d{2}$/.test(wrangler.compatibility_date ?? ''), 'Wrangler compatibility_date is missing or invalid');
+  record(wrangler.assets?.directory === '.', 'Wrangler static asset directory must remain the project root');
+  record(wrangler.assets?.not_found_handling === 'single-page-application', 'Wrangler must use SPA not-found handling');
+}
+
+for (const requiredIgnore of ['node_modules/', '.git/', 'tests/', 'scripts/', 'package.json', 'wrangler.jsonc']) {
+  record(assetsIgnore.split(/\r?\n/).includes(requiredIgnore), `.assetsignore must exclude ${requiredIgnore}`);
 }
 
 if (packageJson) {

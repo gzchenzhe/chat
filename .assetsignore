@@ -1,0 +1,31 @@
+# Dependencies and generated output
+node_modules/
+dist/
+coverage/
+playwright-report/
+test-results/
+blob-report/
+.cache/
+tmp/
+.wrangler/
+
+# Source-control and local environment files
+.git/
+.github/
+.gitignore
+.gitattributes
+.assetsignore
+.preview-server.*
+.dev.vars*
+.env*
+*.tmp
+
+# Development-only project files
+tests/
+scripts/
+package.json
+package-lock.json
+playwright.config.mjs
+wrangler.jsonc
+web.config
+*.md

@@ -55,7 +55,7 @@ npx playwright install chromium
 npm test
 ```
 
-`npm test` 会先运行 121 项静态/资源/数据检查，再运行 4 项 Playwright Chromium 端到端测试。若 Windows PowerShell 的执行策略阻止 `npm.ps1`，可改用 `npm.cmd` 和 `npx.cmd`。
+`npm test` 会先运行 136 项静态/资源/数据检查，再运行 4 项 Playwright Chromium 端到端测试。若 Windows PowerShell 的执行策略阻止 `npm.ps1`，可改用 `npm.cmd` 和 `npx.cmd`。
 
 测试覆盖 v18→v19 数据迁移、三页导航、消息排序持久化、390 px 移动布局、PNG 尺寸以及 JSON 备份下载。详细人工验证见 [tests/MANUAL_REGRESSION.md](tests/MANUAL_REGRESSION.md)。
 
@@ -73,6 +73,18 @@ npm test
 生产环境应使用 HTTPS；`localhost`/`127.0.0.1` 仅适合开发。iOS Safari 可通过分享菜单“添加到主屏幕”，Android Chrome/Edge 可通过浏览器安装入口添加。
 
 修改入口、样式、脚本、字体或图片后，应同步检查 `sw.js` 的 `CORE_ASSETS` 并提升 `CACHE_NAME`。当前缓存名为 `wechat-screenshot-pwa-v30`。
+
+## Cloudflare Workers 部署
+
+仓库已经提交 `wrangler.jsonc`，以项目根目录作为静态资源目录；`.assetsignore` 会排除 `node_modules`、Git、测试、脚本、报告和开发文档，避免把 Wrangler 自身的 `workerd` 二进制当作网页资源上传。
+
+Cloudflare 的部署命令保持为：
+
+```bash
+npx wrangler deploy
+```
+
+不要删除 `.assetsignore` 中的 `node_modules/`。Cloudflare 构建阶段运行 `npm clean-install` 后会产生超过 Workers 单文件限制的开发二进制，但这些文件不属于 PWA 运行资源。
 
 ## 发布前门禁
 

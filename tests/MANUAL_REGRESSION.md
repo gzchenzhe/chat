@@ -26,6 +26,7 @@ Environment: Codex in-app Chromium browser against `http://127.0.0.1:8188/`.
 - The unified download action produces an `image/png` file with a timestamped Chinese filename. The browser reports file-share support and exposes the separate system-share button without invoking the native share sheet during automated testing.
 - Pixel comparison against the visual baseline changed 841 of 2,740,500 pixels (about 0.031%, mean channel delta 0.0047) while preserving the exact dimensions.
 - After extracting the inline code, `css/app.css` and `js/app.js` both load, all local fonts report ready, Vue mounts successfully, and the export retains the same dimensions and pixel-diff result.
+- The Cloudflare `.assetsignore` audit leaves 50 runtime files totaling 12,895,968 bytes; the largest included file is 5,798,120 bytes and no included asset exceeds the 25 MiB Workers limit. `node_modules/` is explicitly excluded.
 
 ### Not covered by viewport simulation
 

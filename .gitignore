@@ -5,6 +5,7 @@
 node_modules/
 dist/
 coverage/
+.wrangler/
 
 # Browser test output
 playwright-report/

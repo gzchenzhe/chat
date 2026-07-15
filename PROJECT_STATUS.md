@@ -30,7 +30,8 @@
 - 状态 schema 2、v18→v19 安全迁移、图片压缩和 IndexedDB 二进制存储。
 - JSON 便携备份导出/导入，备份内联引用图片。
 - PWA Manifest、Service Worker v30 核心缓存、主屏幕图标和 IIS 配置。
-- 119 项静态检查、固定 PNG 视觉基线和 4 项 Playwright Chromium 回归。
+- 136 项静态检查、固定 PNG 视觉基线和 4 项 Playwright Chromium 回归。
+- Cloudflare Workers 静态资源配置与 `.assetsignore`，避免部署时上传 `node_modules/workerd`。
 
 ## 3. 技术结构
 
@@ -47,6 +48,7 @@
 | 构建 | 运行无需构建；测试依赖 npm |
 | 自动化 | `scripts/check-project.mjs` + Playwright `1.61.1` |
 | PWA | `manifest.webmanifest` + `sw.js`，缓存 v30 |
+| Cloudflare | `wrangler.jsonc`，根目录静态资源；`.assetsignore` 排除开发依赖和测试文件 |
 
 核心数据流：
 
@@ -98,7 +100,7 @@ npm test
 
 2026-07-15 的结果：
 
-- 119 项项目检查通过：JS/Manifest/SW 语法、资源存在性、PWA 缓存、schema、依赖与 fixture 等。
+- 136 项项目检查通过：JS/Manifest/SW/Wrangler 语法、资源存在性、PWA 缓存、部署排除规则、schema、依赖与 fixture 等。
 - 4 项 Playwright Chromium 测试通过：迁移/导航、排序持久化、390 px 移动布局、PNG/备份下载。
 - 浏览器人工回归通过三页、八类消息、深浅色、编辑持久化、390×844 与 412×915 布局。
 - 固定导出图为 `1125 × 2436`；相对既有视觉基线仅 841/2,740,500 像素变化（约 0.031%，平均通道差 0.0047）。
@@ -144,6 +146,7 @@ npm test
 - 不删除来源不明资源来“顺手清理”；先确认引用，再按 `ASSET_PROVENANCE.md` 的替换方案执行。
 - 修改状态结构时新增 schema 迁移，不要只改存储键。
 - 修改静态资源时检查 `sw.js` 的 `CORE_ASSETS` 并提升 `CACHE_NAME`。
+- 修改 Cloudflare 资源目录时同步检查 `.assetsignore`；绝不能把 `node_modules` 作为静态资源上传。
 - 修改导出相关 DOM/CSS 后必须实际生成 PNG；只看页面预览不算完成。
 - 完成一批工作后运行 `npm test`、`git diff --check`，更新本文的验证、风险和进度记录。
 - 不要把 `developer@local` 当作用户真实邮箱，也不要未经用户确认配置全局 Git 身份或远程仓库。
