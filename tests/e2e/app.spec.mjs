@@ -1,0 +1,102 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { expect, test } from '@playwright/test';
+
+const testDirectory = path.dirname(fileURLToPath(import.meta.url));
+const root = path.resolve(testDirectory, '../..');
+const exportFixture = JSON.parse(fs.readFileSync(path.join(root, 'tests/fixtures/export-baseline-state.json'), 'utf8'));
+
+async function openLegacyFixture(page, fixture = exportFixture) {
+  await page.addInitScript(state => {
+    if (sessionStorage.getItem('e2e_fixture_loaded')) return;
+    localStorage.removeItem('wechat_editor_state_v18');
+    localStorage.removeItem('wechat_editor_state_v19');
+    localStorage.setItem('wechat_editor_state_v18', JSON.stringify(state));
+    sessionStorage.setItem('e2e_fixture_loaded', '1');
+  }, fixture);
+  await page.goto('/index.html');
+  await expect(page.getByRole('heading', { name: '首页', exact: true })).toBeVisible();
+  await expect.poll(() => page.evaluate(() => Boolean(localStorage.getItem('wechat_editor_state_v19')))).toBe(true);
+}
+
+async function messageOrder(page) {
+  return page.locator('[data-message-id]').evaluateAll(elements => elements.map(element => Number(element.dataset.messageId)));
+}
+
+test('migrates v18 state and navigates all three pages', async ({ page }) => {
+  await openLegacyFixture(page);
+
+  const stored = await page.evaluate(() => ({
+    legacy: localStorage.getItem('wechat_editor_state_v18'),
+    current: JSON.parse(localStorage.getItem('wechat_editor_state_v19'))
+  }));
+  expect(stored.legacy).toBeNull();
+  expect(stored.current.schemaVersion).toBe(2);
+  expect(stored.current.chatName).toBe('回归测试');
+  expect(stored.current.messages).toHaveLength(5);
+
+  await page.getByRole('button', { name: '编辑器', exact: true }).click();
+  await expect(page.getByRole('heading', { name: '微信截图编辑器', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: '预览分享', exact: true }).click();
+  await expect(page.getByRole('heading', { name: '预览图分享', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: '首页', exact: true }).click();
+  await expect(page.getByRole('heading', { name: '首页', exact: true })).toBeVisible();
+});
+
+test('reorders messages with accessible controls and persists the order', async ({ page }) => {
+  await openLegacyFixture(page);
+  await page.getByRole('button', { name: '编辑器', exact: true }).click();
+
+  await expect(page.locator('[data-message-id]')).toHaveCount(5);
+  expect(await messageOrder(page)).toEqual([1001, 1002, 1003, 1004, 1005]);
+  await page.getByRole('button', { name: '下移第 1 条消息', exact: true }).click();
+  await expect.poll(() => messageOrder(page)).toEqual([1002, 1001, 1003, 1004, 1005]);
+  await page.reload();
+  await expect.poll(() => messageOrder(page)).toEqual([1002, 1001, 1003, 1004, 1005]);
+});
+
+test('keeps all pages inside a mobile viewport', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await openLegacyFixture(page);
+
+  for (const pageName of ['首页', '编辑器', '预览分享']) {
+    await page.getByRole('button', { name: pageName, exact: true }).click();
+    await expect.poll(() => page.evaluate(() => ({
+      viewport: window.innerWidth,
+      documentWidth: document.documentElement.scrollWidth
+    }))).toEqual({ viewport: 390, documentWidth: 390 });
+  }
+
+  const handleTouchAction = await page.locator('.message-drag-handle').evaluateAll(handles =>
+    handles.map(handle => getComputedStyle(handle).touchAction)
+  );
+  expect(handleTouchAction.every(value => value === 'none')).toBe(true);
+});
+
+test('generates one export image and downloads a valid backup', async ({ page }) => {
+  await openLegacyFixture(page);
+  await page.getByRole('button', { name: '预览分享', exact: true }).click();
+  await page.getByTestId('generate-image').click();
+
+  const generatedImage = page.getByTestId('generated-image-preview');
+  await expect(generatedImage).toBeVisible({ timeout: 70_000 });
+  const dimensions = await generatedImage.evaluate(image => ({
+    width: image.naturalWidth,
+    height: image.naturalHeight,
+    source: image.currentSrc.slice(0, 22)
+  }));
+  expect(dimensions).toEqual({ width: 1125, height: 2436, source: 'data:image/png;base64,' });
+  await expect(page.getByTestId('download-generated-image')).toBeVisible();
+
+  await page.getByRole('button', { name: '首页', exact: true }).click();
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByTestId('export-backup').click();
+  const download = await downloadPromise;
+  expect(download.suggestedFilename()).toMatch(/^微信截图备份_\d{4}-\d{2}-\d{2}\.json$/);
+  const backup = JSON.parse(fs.readFileSync(await download.path(), 'utf8'));
+  expect(backup.format).toBe('wechat-screenshot-pwa-backup');
+  expect(backup.version).toBe(1);
+  expect(backup.state.schemaVersion).toBe(2);
+  expect(backup.state.messages).toHaveLength(5);
+});

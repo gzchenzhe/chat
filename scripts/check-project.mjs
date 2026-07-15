@@ -25,6 +25,7 @@ function read(relativePath) {
 const html = read('index.html');
 const appScript = read('js/app.js');
 const appCss = read('css/app.css');
+const packageSource = read('package.json');
 const manifestSource = read('manifest.webmanifest');
 const serviceWorker = read('sw.js');
 const applicationSource = `${html}\n${appScript}`;
@@ -32,6 +33,9 @@ const applicationSource = `${html}\n${appScript}`;
 for (const requiredPath of [
   'README.md',
   'PROJECT_STATUS.md',
+  'package-lock.json',
+  'playwright.config.mjs',
+  'tests/e2e/app.spec.mjs',
   'css/app.css',
   'js/app.js',
   'vendor/vue.global.prod.js',
@@ -68,6 +72,20 @@ try {
   record(true, 'Manifest JSON is valid');
 } catch (error) {
   record(false, `Manifest JSON is invalid: ${error.message}`);
+}
+
+let packageJson = null;
+try {
+  packageJson = JSON.parse(packageSource);
+  record(true, 'Package JSON is valid');
+} catch (error) {
+  record(false, `Package JSON is invalid: ${error.message}`);
+}
+
+if (packageJson) {
+  record(packageJson.scripts?.test?.includes('test:e2e'), 'npm test must include the Playwright regression suite');
+  record(packageJson.scripts?.['test:e2e'] === 'playwright test', 'Missing test:e2e Playwright script');
+  record(Boolean(packageJson.devDependencies?.['@playwright/test']), 'Missing @playwright/test development dependency');
 }
 
 try {

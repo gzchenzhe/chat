@@ -5,8 +5,12 @@
   "description": "Local development checks for the static WeChat screenshot editor PWA.",
   "scripts": {
     "check": "node scripts/check-project.mjs",
-    "test": "npm run check",
+    "test": "npm run check && npm run test:e2e",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
     "serve": "python -m http.server 8188"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.61.1"
   }
 }
-

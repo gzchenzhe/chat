@@ -36,3 +36,7 @@ Environment: Codex in-app Chromium browser against `http://127.0.0.1:8188/`.
 - Screen-reader and keyboard-only accessibility review.
 
 Viewport simulation is a layout check, not a substitute for physical-device acceptance testing.
+
+## Automated regression
+
+`npm test` runs 119 deterministic project checks followed by four Playwright Chromium tests. The suite covers v18-to-v19 migration and three-page navigation, accessible message sorting with reload persistence, 390 px mobile containment, 1125 × 2436 PNG generation, and JSON backup download. All four browser tests passed on 2026-07-15.
