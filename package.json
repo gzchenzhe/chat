@@ -1,0 +1,12 @@
+{
+  "name": "wechat-screenshot-pwa",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local development checks for the static WeChat screenshot editor PWA.",
+  "scripts": {
+    "check": "node scripts/check-project.mjs",
+    "test": "npm run check",
+    "serve": "python -m http.server 8188"
+  }
+}
+

@@ -1,0 +1,73 @@
+{
+  "isDarkMode": false,
+  "statusBarTime": "09:41",
+  "returnAppText": "",
+  "chatName": "全部消息类型",
+  "unreadCount": "",
+  "batteryLevel": 82,
+  "networkType": "wifi",
+  "otherName": "对方",
+  "showOtherName": false,
+  "myAvatar": "tests/fixtures/avatar-me.png",
+  "otherAvatar": "tests/fixtures/avatar-other.png",
+  "messages": [
+    {
+      "id": 2001,
+      "type": "time",
+      "isMe": false,
+      "content": "09:35"
+    },
+    {
+      "id": 2002,
+      "type": "text",
+      "isMe": false,
+      "content": "文字消息"
+    },
+    {
+      "id": 2003,
+      "type": "image",
+      "isMe": true,
+      "imageUrl": "tests/fixtures/message-landscape.png",
+      "imageWidth": 480,
+      "imageHeight": 320
+    },
+    {
+      "id": 2004,
+      "type": "voice",
+      "isMe": false,
+      "duration": 12,
+      "status": "unread",
+      "convertedText": ""
+    },
+    {
+      "id": 2005,
+      "type": "transfer",
+      "isMe": true,
+      "amount": "¥1.00",
+      "title": "请收款",
+      "bottomText": "转账",
+      "status": "accepted"
+    },
+    {
+      "id": 2006,
+      "type": "call",
+      "isMe": false,
+      "content": "通话时长 01:23"
+    },
+    {
+      "id": 2007,
+      "type": "nudge",
+      "isMe": false,
+      "content": "我拍了拍“对方”"
+    },
+    {
+      "id": 2008,
+      "type": "redPacket",
+      "isMe": true,
+      "title": "恭喜发财，大吉大利",
+      "statusText": "已领取",
+      "bottomText": "微信红包",
+      "status": "accepted"
+    }
+  ]
+}
