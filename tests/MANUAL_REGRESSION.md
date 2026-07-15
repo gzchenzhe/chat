@@ -15,14 +15,15 @@ Environment: Codex in-app Chromium browser against `http://127.0.0.1:8188/`.
 - At a `390 × 844` viewport, all three pages stay within a `390` px document width, the bottom navigation remains visible, and the phone preview is scaled inside the page.
 - At a `412 × 915` viewport, all three pages stay within a `412` px document width, the bottom navigation remains visible, and the phone preview is scaled inside the page.
 - No new warning or error was logged while exporting the PNG fixtures. Earlier SVG fixture warnings were resolved by using deterministic PNG variants for runtime tests.
+- The per-message up/down controls reorder messages, persist the changed order, and can restore the original fixture order.
+- At a `390` px viewport, all eight message toolbars remain inside their cards and the dedicated drag handle reports `touch-action: none`.
 
 ### Not covered by viewport simulation
 
-- Physical iOS Safari and Android Chrome touch behavior.
+- Physical iOS Safari and Android Chrome touch behavior. Pointer-based handle sorting is implemented, but the test browser cannot inject native touch input; the up/down controls are the verified mobile fallback.
 - PWA installation, cache upgrade, and fully offline startup.
 - Native file-picker behavior and large real-world uploads.
 - Native download permissions and Web Share behavior.
 - Screen-reader and keyboard-only accessibility review.
 
 Viewport simulation is a layout check, not a substitute for physical-device acceptance testing.
-

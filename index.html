@@ -732,9 +732,54 @@
             transform: translateX(-50%);
         }
 
-        /* 拖拽动画 */
-        .draggable-item { cursor: grab; transition: transform 0.2s, box-shadow 0.2s; }
-        .draggable-item:active { cursor: grabbing; }
+        /* 消息排序 */
+        .draggable-item { transition: transform 0.2s, box-shadow 0.2s; }
+        .message-item-toolbar {
+            min-height: 30px;
+            margin: -4px 0 8px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+        .message-drag-handle {
+            width: 34px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 0.5px solid #d1d1d6;
+            border-radius: 8px;
+            background: #ffffff;
+            color: #6b7280;
+            cursor: grab;
+            touch-action: none;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .message-drag-handle:active { cursor: grabbing; }
+        .message-sort-controls {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        #app .message-sort-button {
+            width: 30px;
+            height: 30px;
+            padding: 0 !important;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 0.5px solid #d1d1d6;
+            border-radius: 8px;
+            background: #ffffff;
+            color: #4b5563;
+            font-size: 16px;
+            line-height: 1;
+        }
+        #app .message-sort-button:hover:not(:disabled) { background: #f2f2f7; }
+        #app .message-sort-button:disabled { opacity: 0.3; cursor: not-allowed; }
+        #app .message-remove-button { color: #dc2626; }
         .is-dragging { opacity: 0.4; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); transform: scale(1.02); z-index: 50; }
         .drag-over { border-top: 3px solid #3b82f6 !important; padding-top: 13px !important; }
         .msg-list-move, .msg-list-enter-active, .msg-list-leave-active { transition: all 0.4s cubic-bezier(0.4,0,0.2,1); }
@@ -1164,20 +1209,37 @@
                 <div class="flex justify-between items-center mb-2">
                     <h2 class="font-semibold text-gray-700 flex items-center gap-2">
                         聊天内容编排 
-                        <span class="bg-blue-100 text-blue-600 text-[10px] px-2 py-0.5 rounded-full">长按模块可拖拽排序</span>
+                        <span class="bg-blue-100 text-blue-600 text-[10px] px-2 py-0.5 rounded-full">拖动手柄或使用上下按钮排序</span>
                     </h2>
                 </div>
                 
                 <transition-group name="msg-list" tag="div" class="space-y-4 relative w-full">
                     <div v-for="(msg, index) in messages" :key="msg.id" 
-                         draggable="true" @dragstart="onDragStart($event, index)" @dragover.prevent="onDragOver($event, index)" @dragenter.prevent="onDragEnter(index)" @dragleave.prevent="onDragLeave(index)" @drop="onDrop($event, index)" @dragend="onDragEnd"
+                         :data-message-id="String(msg.id)"
+                         @dragover.prevent="onDragOver($event, index)" @dragenter.prevent="onDragEnter(index)" @dragleave.prevent="onDragLeave(index)" @drop="onDrop($event, index)"
                          class="draggable-item bg-gray-50 p-4 rounded-lg border border-gray-200 relative group hover:border-gray-400 w-full"
                          :class="{ 'is-dragging': dragIndex === index, 'drag-over': dragOverIndex === index }">
-                        
-                        <div class="absolute left-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-30 transition cursor-grab text-gray-400">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+
+                        <div class="message-item-toolbar">
+                            <button type="button"
+                                    class="message-drag-handle"
+                                    draggable="true"
+                                    :aria-label="`拖动第 ${index + 1} 条消息排序`"
+                                    title="拖动排序"
+                                    @dragstart.stop="onDragStart($event, index)"
+                                    @dragend="onDragEnd"
+                                    @pointerdown="onPointerSortStart($event, index)"
+                                    @pointermove="onPointerSortMove($event)"
+                                    @pointerup="onPointerSortEnd($event)"
+                                    @pointercancel="onPointerSortCancel($event)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                            </button>
+                            <div class="message-sort-controls">
+                                <button type="button" class="message-sort-button" :disabled="index === 0" :aria-label="`上移第 ${index + 1} 条消息`" title="上移" @click.stop="moveMessageByOffset(index, -1)">↑</button>
+                                <button type="button" class="message-sort-button" :disabled="index === messages.length - 1" :aria-label="`下移第 ${index + 1} 条消息`" title="下移" @click.stop="moveMessageByOffset(index, 1)">↓</button>
+                                <button type="button" class="message-sort-button message-remove-button" :aria-label="`删除第 ${index + 1} 条消息`" title="删除" @click.stop="removeMessage(index)">×</button>
+                            </div>
                         </div>
-                        <button @click.stop="removeMessage(index)" class="absolute -right-2 -top-2 bg-red-500 text-white w-6 h-6 rounded-full opacity-100 transition shadow-md flex items-center justify-center text-sm z-10 hover:bg-red-600">×</button>
                         
                         <div class="pl-3">
                             <div v-if="msg.type === 'time' || msg.type === 'nudge'">
@@ -1603,7 +1665,8 @@
                 generatedImageStatus: '',
                 generatedImagePanelVisible: false,
                 dragIndex: null,
-                dragOverIndex: null
+                dragOverIndex: null,
+                pointerSortPointerId: null
             }
         },
         mounted() {
@@ -1767,6 +1830,21 @@
                 this.scrollToBottom();
             },
             removeMessage(index) { this.messages.splice(index, 1); },
+            moveMessage(fromIndex, toIndex) {
+                if (fromIndex === toIndex) return;
+                if (fromIndex < 0 || fromIndex >= this.messages.length) return;
+                if (toIndex < 0 || toIndex >= this.messages.length) return;
+                const [message] = this.messages.splice(fromIndex, 1);
+                this.messages.splice(toIndex, 0, message);
+            },
+            moveMessageByOffset(index, offset) {
+                this.moveMessage(index, index + offset);
+            },
+            clearSortState() {
+                this.dragIndex = null;
+                this.dragOverIndex = null;
+                this.pointerSortPointerId = null;
+            },
             onDragStart(event, index) {
                 this.dragIndex = index;
                 event.dataTransfer.effectAllowed = 'move';
@@ -1777,12 +1855,41 @@
             onDragLeave(index) { if(this.dragOverIndex === index) this.dragOverIndex = null; },
             onDrop(event, index) {
                 if (this.dragIndex !== null && this.dragIndex !== index) {
-                    const draggedItem = this.messages.splice(this.dragIndex, 1)[0];
-                    this.messages.splice(index, 0, draggedItem);
+                    this.moveMessage(this.dragIndex, index);
                 }
-                this.dragIndex = null; this.dragOverIndex = null;
+                this.clearSortState();
             },
-            onDragEnd() { this.dragIndex = null; this.dragOverIndex = null; },
+            onDragEnd() { this.clearSortState(); },
+            onPointerSortStart(event, index) {
+                if (event.pointerType === 'mouse') return;
+                event.preventDefault();
+                this.dragIndex = index;
+                this.dragOverIndex = index;
+                this.pointerSortPointerId = event.pointerId;
+                event.currentTarget.setPointerCapture?.(event.pointerId);
+            },
+            onPointerSortMove(event) {
+                if (this.pointerSortPointerId !== event.pointerId || this.dragIndex === null) return;
+                event.preventDefault();
+                const card = document.elementFromPoint(event.clientX, event.clientY)?.closest('[data-message-id]');
+                if (!card) return;
+                const targetIndex = this.messages.findIndex(message => String(message.id) === card.dataset.messageId);
+                if (targetIndex >= 0) this.dragOverIndex = targetIndex;
+            },
+            onPointerSortEnd(event) {
+                if (this.pointerSortPointerId !== event.pointerId) return;
+                event.preventDefault();
+                const fromIndex = this.dragIndex;
+                const toIndex = this.dragOverIndex;
+                try { event.currentTarget.releasePointerCapture?.(event.pointerId); } catch (error) {}
+                if (fromIndex !== null && toIndex !== null) this.moveMessage(fromIndex, toIndex);
+                this.clearSortState();
+            },
+            onPointerSortCancel(event) {
+                if (this.pointerSortPointerId !== event.pointerId) return;
+                try { event.currentTarget.releasePointerCapture?.(event.pointerId); } catch (error) {}
+                this.clearSortState();
+            },
             onAvatarChange(event, type) {
                 const file = event.target.files[0];
                 if (file) {
