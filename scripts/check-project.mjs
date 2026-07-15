@@ -153,7 +153,11 @@ for (const cachedPath of new Set(cachedPaths)) {
 
 record(/STATE_STORAGE_KEY\s*=\s*['"]wechat_editor_state_v19['"]/.test(applicationSource), 'Expected current localStorage key wechat_editor_state_v19 was not found');
 record(/LEGACY_STATE_STORAGE_KEY\s*=\s*['"]wechat_editor_state_v18['"]/.test(applicationSource), 'Expected legacy v18 migration key was not found');
-record(/CURRENT_STATE_SCHEMA\s*=\s*2/.test(applicationSource), 'Expected state schema version 2 was not found');
+record(/CURRENT_STATE_SCHEMA\s*=\s*3/.test(applicationSource), 'Expected state schema version 3 was not found');
+record(/OPPONENT_IDS\s*=\s*\[['"]other1['"],\s*['"]other2['"],\s*['"]other3['"]\]/.test(applicationSource), 'Expected three fixed opponent IDs were not found');
+record(/senderId:\s*['"]other1['"]/.test(applicationSource), 'Default message senderId was not found');
+record(/setMessageSender\s*\(/.test(applicationSource), 'Per-message sender selection method was not found');
+record(/v-for=["']\(opponent, opponentIndex\) in opponents["']/.test(html), 'Opponent settings controls were not found');
 record(/wechat-screenshot-pwa-v\d+/.test(serviceWorker), 'Versioned PWA cache name was not found');
 record(/pixelRatio:\s*3/.test(applicationSource), 'Expected 3x PNG export configuration was not found');
 record(/async\s+downloadGeneratedImage\s*\(/.test(applicationSource), 'Unified generated-image download action was not found');

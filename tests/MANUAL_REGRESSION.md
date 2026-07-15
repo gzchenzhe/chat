@@ -17,7 +17,9 @@ Environment: Codex in-app Chromium browser against `http://127.0.0.1:8188/`.
 - No new warning or error was logged while exporting the PNG fixtures. Earlier SVG fixture warnings were resolved by using deterministic PNG variants for runtime tests.
 - The per-message up/down controls reorder messages, persist the changed order, and can restore the original fixture order.
 - At a `390` px viewport, all eight message toolbars remain inside their cards and the dedicated drag handle reports `touch-action: none`.
-- A legacy `wechat_editor_state_v18` fixture migrates to schema version 2 under `wechat_editor_state_v19`; the legacy key is removed only after the new state is saved.
+- A legacy `wechat_editor_state_v18` fixture migrates to schema version 3 under `wechat_editor_state_v19`; the old opponent becomes `other1`, legacy `isMe` values become message `senderId` values, and the legacy key is removed only after the new state is saved.
+- The home page exposes three opponent nickname inputs and four avatar positions (me plus three opponents) without horizontal overflow at a 390 px viewport.
+- Each user message exposes one exclusive sender choice for the three dynamically named opponents and “是我发出的”. Choosing opponent 2 updates the preview nickname/avatar and persists `senderId: other2` with `isMe: false`.
 - Legacy avatar and message Data URLs migrate to three IndexedDB assets. The lightweight v19 state omits the inline bytes, and all images hydrate again after reload.
 - A portable backup inlines the referenced images, clears IndexedDB asset IDs, changes and restores the test chat name successfully, and preserves all three stored assets.
 - The `480 × 320` PNG compression fixture is resized to `160 × 107`, reduced from 24,620 to 5,604 bytes, and survives an IndexedDB write/read cycle.
@@ -40,4 +42,4 @@ Viewport simulation is a layout check, not a substitute for physical-device acce
 
 ## Automated regression
 
-`npm test` runs 119 deterministic project checks followed by four Playwright Chromium tests. The suite covers v18-to-v19 migration and three-page navigation, accessible message sorting with reload persistence, 390 px mobile containment, 1125 × 2436 PNG generation, and JSON backup download. All four browser tests passed on 2026-07-15.
+`npm test` runs 140 deterministic project checks followed by five Playwright Chromium tests. The suite covers v18-to-v19/schema 3 migration, named group-participant sender selection and persistence, three-page navigation, accessible message sorting with reload persistence, 390 px mobile containment, 1125 × 2436 PNG generation, and JSON backup download. All five browser tests passed on 2026-07-15.

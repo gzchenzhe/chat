@@ -97,11 +97,18 @@
                         <input type="checkbox" v-model="showOtherName" class="rounded text-green-600 w-4 h-4"> 显示昵称
                     </label>
                 </div>
-                <div>
-                    <label class="block text-sm text-gray-600 mb-1">对方昵称</label>
-                    <input v-model="otherName" type="text" class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500 outline-none">
+                <div class="participant-name-grid">
+                    <div v-for="(opponent, opponentIndex) in opponents" :key="`${opponent.id}-name`">
+                        <label :for="`opponent-name-${opponent.id}`" class="block text-sm text-gray-600 mb-1">对方{{ opponentIndex + 1 }}昵称</label>
+                        <input :id="`opponent-name-${opponent.id}`"
+                               v-model="opponent.name"
+                               :placeholder="`对方${opponentIndex + 1}`"
+                               :data-testid="`opponent-name-${opponentIndex + 1}`"
+                               type="text"
+                               class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500 outline-none">
+                    </div>
                 </div>
-                <div class="flex gap-6 mt-2">
+                <div class="participant-avatar-grid mt-2">
                     <div class="flex flex-col items-center gap-2">
                         <span class="text-sm text-gray-600">我的头像</span>
                         <label class="cursor-pointer relative group">
@@ -110,12 +117,16 @@
                             <input type="file" class="hidden" accept="image/*" @change="e => onAvatarChange(e, 'me')">
                         </label>
                     </div>
-                    <div class="flex flex-col items-center gap-2">
-                        <span class="text-sm text-gray-600">对方头像</span>
+                    <div v-for="(opponent, opponentIndex) in opponents" :key="`${opponent.id}-avatar`" class="flex flex-col items-center gap-2">
+                        <span class="text-sm text-gray-600">对方{{ opponentIndex + 1 }}头像</span>
                         <label class="cursor-pointer relative group">
-                            <img :src="otherAvatar" class="w-16 h-16 rounded-[6px] object-cover border-2 border-gray-200 bg-gray-100">
+                            <img :src="opponent.avatar" :alt="`${getOpponentDisplayName(opponent, opponentIndex)}的头像`" class="w-16 h-16 rounded-[6px] object-cover border-2 border-gray-200 bg-gray-100">
                             <div class="absolute inset-0 bg-black/40 hidden group-hover:flex items-center justify-center rounded-[6px] text-white text-xs">更换</div>
-                            <input type="file" class="hidden" accept="image/*" @change="e => onAvatarChange(e, 'other')">
+                            <input type="file"
+                                   class="hidden"
+                                   accept="image/*"
+                                   :data-testid="`opponent-avatar-${opponentIndex + 1}`"
+                                   @change="e => onAvatarChange(e, opponent.id)">
                         </label>
                     </div>
                 </div>
@@ -195,32 +206,48 @@
                         </div>
                         
                         <div class="pl-3">
+                            <fieldset v-if="msg.type !== 'time' && msg.type !== 'nudge'" class="message-sender-selector" @mousedown.stop>
+                                <legend>发送人</legend>
+                                <div class="message-sender-options">
+                                    <label v-for="(opponent, opponentIndex) in opponents"
+                                           :key="`${msg.id}-${opponent.id}`"
+                                           class="message-sender-option"
+                                           :class="{ 'is-selected': msg.senderId === opponent.id }">
+                                        <input type="radio"
+                                               :name="`sender-${msg.id}`"
+                                               :value="opponent.id"
+                                               :checked="msg.senderId === opponent.id"
+                                               @change="setMessageSender(msg, opponent.id)">
+                                        <span>{{ getOpponentDisplayName(opponent, opponentIndex) }}</span>
+                                    </label>
+                                    <label class="message-sender-option is-me" :class="{ 'is-selected': isMessageFromMe(msg) }">
+                                        <input type="radio"
+                                               :name="`sender-${msg.id}`"
+                                               value="me"
+                                               :checked="isMessageFromMe(msg)"
+                                               @change="setMessageSender(msg, 'me')">
+                                        <span>是我发出的</span>
+                                    </label>
+                                </div>
+                            </fieldset>
+
                             <div v-if="msg.type === 'time' || msg.type === 'nudge'">
                                 <label class="block text-xs text-gray-500 mb-1">{{ msg.type === 'time' ? '对话时间' : '系统提示' }}</label>
                                 <input v-model="msg.content" type="text" class="w-full px-3 py-1.5 border rounded text-sm text-center focus:ring-2 focus:ring-green-500 outline-none">
                             </div>
                             
                             <div v-if="msg.type === 'text'">
-                                <div class="flex justify-between text-xs text-gray-500 mb-1">
-                                    <label>文本内容</label>
-                                    <label class="flex items-center gap-1 cursor-pointer text-[#27c24c] font-medium" @mousedown.stop><input type="checkbox" v-model="msg.isMe" class="w-[14px] h-[14px]"> 是我发出的</label>
-                                </div>
+                                <div class="text-xs text-gray-500 mb-1"><label>文本内容</label></div>
                                 <textarea v-model="msg.content" rows="2" class="w-full px-3 py-2 border rounded-md text-sm focus:ring-2 focus:ring-green-500 outline-none resize-none" @mousedown.stop></textarea>
                             </div>
                             
                             <div v-if="msg.type === 'call'">
-                                <div class="flex justify-between text-xs text-gray-500 mb-1">
-                                    <label class="text-blue-600 font-medium">语音通话</label>
-                                    <label class="flex items-center gap-1 cursor-pointer text-[#27c24c] font-medium" @mousedown.stop><input type="checkbox" v-model="msg.isMe" class="w-[14px] h-[14px]"> 是我发出的</label>
-                                </div>
+                                <div class="text-xs text-gray-500 mb-1"><label class="text-blue-600 font-medium">语音通话</label></div>
                                 <input v-model="msg.content" type="text" class="w-full px-3 py-1.5 border rounded text-sm mt-1 focus:ring-2 focus:ring-green-500 outline-none" @mousedown.stop>
                             </div>
 
                             <div v-if="msg.type === 'image'">
-                                <div class="flex justify-between text-xs text-gray-500 mb-1">
-                                    <label class="text-indigo-600 font-medium">图片消息</label>
-                                    <label class="flex items-center gap-1 cursor-pointer text-[#27c24c] font-medium" @mousedown.stop><input type="checkbox" v-model="msg.isMe" class="w-[14px] h-[14px]"> 是我发出的</label>
-                                </div>
+                                <div class="text-xs text-gray-500 mb-1"><label class="text-indigo-600 font-medium">图片消息</label></div>
                                 <div class="mt-2 flex items-center gap-4">
                                     <img :src="msg.imageUrl" class="w-16 h-16 object-cover rounded border border-gray-300">
                                     <label class="bg-indigo-50 border border-indigo-200 hover:bg-indigo-100 text-indigo-600 px-3 py-1.5 rounded cursor-pointer text-sm transition" @mousedown.stop>
@@ -230,10 +257,7 @@
                             </div>
 
                             <div v-if="msg.type === 'voice'">
-                                <div class="flex justify-between text-xs text-gray-500 mb-1">
-                                    <label class="text-pink-600 font-medium">语音消息</label>
-                                    <label class="flex items-center gap-1 cursor-pointer text-[#27c24c] font-medium" @mousedown.stop><input type="checkbox" v-model="msg.isMe" class="w-[14px] h-[14px]"> 是我发出的</label>
-                                </div>
+                                <div class="text-xs text-gray-500 mb-1"><label class="text-pink-600 font-medium">语音消息</label></div>
                                 <div class="flex gap-2 mt-2 mb-2">
                                     <div class="flex-1">
                                         <label class="block text-xs text-gray-500 mb-1">时长(秒)</label>
@@ -253,10 +277,7 @@
                             </div>
 
                             <div v-if="msg.type === 'transfer'">
-                                <div class="flex justify-between text-xs text-gray-500 mb-1">
-                                    <label class="text-orange-600 font-medium">转账</label>
-                                    <label class="flex items-center gap-1 cursor-pointer text-[#27c24c] font-medium" @mousedown.stop><input type="checkbox" v-model="msg.isMe" class="w-[14px] h-[14px]"> 是我发出的</label>
-                                </div>
+                                <div class="text-xs text-gray-500 mb-1"><label class="text-orange-600 font-medium">转账</label></div>
                                 <div class="mt-2 mb-3">
                                     <label class="block text-xs text-gray-500 mb-1">状态</label>
                                     <select v-model="msg.status" class="w-full px-3 py-1.5 border rounded text-sm outline-none focus:ring-2 focus:ring-green-500" @mousedown.stop>
@@ -271,10 +292,7 @@
                             </div>
 
                             <div v-if="msg.type === 'redPacket'">
-                                <div class="flex justify-between text-xs text-gray-500 mb-1">
-                                    <label class="text-red-600 font-medium">红包</label>
-                                    <label class="flex items-center gap-1 cursor-pointer text-[#27c24c] font-medium" @mousedown.stop><input type="checkbox" v-model="msg.isMe" class="w-[14px] h-[14px]"> 是我发出的</label>
-                                </div>
+                                <div class="text-xs text-gray-500 mb-1"><label class="text-red-600 font-medium">红包</label></div>
                                 <div class="mt-2 mb-3">
                                     <label class="block text-xs text-gray-500 mb-1">状态</label>
                                     <select v-model="msg.status" class="w-full px-3 py-1.5 border rounded text-sm outline-none focus:ring-2 focus:ring-green-500" @mousedown.stop>
@@ -398,12 +416,12 @@
                             <span class="wechat-nudge-label" :class="isDarkMode ? 'text-white/50' : 'text-black/40'">{{ msg.content }}</span>
                         </div>
 
-                        <div v-if="msg.type !== 'time' && msg.type !== 'nudge'" class="wechat-message-row flex items-start" :class="{'flex-row-reverse': msg.isMe}">
-                            <img :src="msg.isMe ? myAvatar : otherAvatar" class="wechat-avatar object-cover flex-shrink-0"
+                        <div v-if="msg.type !== 'time' && msg.type !== 'nudge'" class="wechat-message-row flex items-start" :class="{'flex-row-reverse': isMessageFromMe(msg)}">
+                            <img :src="getMessageAvatar(msg)" class="wechat-avatar object-cover flex-shrink-0"
                                  :class="isDarkMode ? 'bg-gray-800' : 'bg-gray-200'">
                              
-                            <div class="wechat-bubble-stack flex flex-col" :class="{'items-end': msg.isMe}">
-                                <span v-if="!msg.isMe && showOtherName" class="wechat-nickname" :class="isDarkMode ? 'text-white/50' : 'text-black/40'">{{ otherName }}</span>
+                            <div class="wechat-bubble-stack flex flex-col" :class="{'items-end': isMessageFromMe(msg)}">
+                                <span v-if="!isMessageFromMe(msg) && showOtherName" class="wechat-nickname" :class="isDarkMode ? 'text-white/50' : 'text-black/40'">{{ getMessageSenderName(msg) }}</span>
 
                                 <div v-if="msg.type === 'text'" 
                                      class="text-bubble bubble-tail transition-colors duration-300" 
@@ -417,30 +435,30 @@
                                     <img :src="msg.imageUrl" class="w-full h-full object-cover block" @load="event => onPreviewImageLoad(event, msg)">
                                 </div>
 
-                                <div v-if="msg.type === 'voice'" class="flex flex-col" :class="msg.isMe ? 'items-end' : 'items-start'">
-                                    <div class="flex items-center gap-[6px]" :class="msg.isMe ? 'flex-row-reverse' : 'flex-row'">
+                                <div v-if="msg.type === 'voice'" class="flex flex-col" :class="isMessageFromMe(msg) ? 'items-end' : 'items-start'">
+                                    <div class="flex items-center gap-[6px]" :class="isMessageFromMe(msg) ? 'flex-row-reverse' : 'flex-row'">
                                         <div class="text-bubble bubble-tail flex items-center cursor-pointer relative z-10 transition-colors duration-300"
-                                             :class="[getTextClass(msg), msg.isMe ? 'flex-row-reverse' : 'flex-row']"
+                                             :class="[getTextClass(msg), isMessageFromMe(msg) ? 'flex-row-reverse' : 'flex-row']"
                                              :style="{ width: getVoiceWidth(msg.duration) }">
-                                            <img :src="msg.isMe ? 'pic/wechat-voice-icon2-clean.png' : 'pic/wechat-voice-icon1-clean.png'"
+                                            <img :src="isMessageFromMe(msg) ? 'pic/wechat-voice-icon2-clean.png' : 'pic/wechat-voice-icon1-clean.png'"
                                                  class="wechat-voice-wave"
-                                                 :class="{ 'is-me': msg.isMe, 'is-dark': isDarkMode }"
+                                                 :class="{ 'is-me': isMessageFromMe(msg), 'is-dark': isDarkMode }"
                                                  alt="">
-                                            <span class="text-[15px] leading-none mt-[1px]" :class="msg.isMe ? 'mr-[5px]' : 'ml-[5px]'">{{ msg.duration }}"</span>
+                                            <span class="text-[15px] leading-none mt-[1px]" :class="isMessageFromMe(msg) ? 'mr-[5px]' : 'ml-[5px]'">{{ msg.duration }}"</span>
                                         </div>
                                         <div v-if="msg.status === 'unread'" class="w-[8px] h-[8px] bg-[#ff4d4f] rounded-full flex-shrink-0 mt-[2px]"></div>
                                     </div>
                                     <div v-if="msg.status === 'converted'" 
                                          class="mt-[4px] text-[16px] leading-[22px] px-[12px] py-[9px] rounded-[6px] max-w-[250px] break-words relative z-10 transition-colors duration-300"
-                                         :class="isDarkMode ? (msg.isMe ? 'bg-[#27c24c] text-black' : 'bg-[#2c2c2c] text-[#e5e5e5]') : (msg.isMe ? 'bg-[#ffffff] text-black wechat-soft-shadow' : 'bg-[#ffffff] text-black wechat-soft-shadow')">
+                                         :class="isDarkMode ? (isMessageFromMe(msg) ? 'bg-[#27c24c] text-black' : 'bg-[#2c2c2c] text-[#e5e5e5]') : (isMessageFromMe(msg) ? 'bg-[#ffffff] text-black wechat-soft-shadow' : 'bg-[#ffffff] text-black wechat-soft-shadow')">
                                         {{ msg.convertedText }}
                                     </div>
                                 </div>
 
                                 <div v-if="msg.type === 'call'" 
                                      class="text-bubble bubble-tail flex items-center transition-colors duration-300" 
-                                     :class="[getTextClass(msg), msg.isMe ? '!text-black' : '']">
-                                    <template v-if="msg.isMe">
+                                     :class="[getTextClass(msg), isMessageFromMe(msg) ? '!text-black' : '']">
+                                    <template v-if="isMessageFromMe(msg)">
                                         <span class="mr-[6px]">{{ msg.content }}</span>
                                         <svg class="w-[18px] h-[18px] flex-shrink-0" :class="isDarkMode ? 'text-black' : 'text-black'" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                                             <path d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-2.896-1.595-5.22-3.92-6.815-6.816l1.293-.97c.362-.271.527-.733.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />

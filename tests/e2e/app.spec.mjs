@@ -32,8 +32,12 @@ test('migrates v18 state and navigates all three pages', async ({ page }) => {
     current: JSON.parse(localStorage.getItem('wechat_editor_state_v19'))
   }));
   expect(stored.legacy).toBeNull();
-  expect(stored.current.schemaVersion).toBe(2);
+  expect(stored.current.schemaVersion).toBe(3);
   expect(stored.current.chatName).toBe('回归测试');
+  expect(stored.current.opponents).toHaveLength(3);
+  expect(stored.current.opponents[0].name).toBe('测试对象');
+  expect(stored.current.messages[1].senderId).toBe('other1');
+  expect(stored.current.messages[2].senderId).toBe('me');
   expect(stored.current.messages).toHaveLength(5);
 
   await page.getByRole('button', { name: '编辑器', exact: true }).click();
@@ -42,6 +46,37 @@ test('migrates v18 state and navigates all three pages', async ({ page }) => {
   await expect(page.getByRole('heading', { name: '预览图分享', exact: true })).toBeVisible();
   await page.getByRole('button', { name: '首页', exact: true }).click();
   await expect(page.getByRole('heading', { name: '首页', exact: true })).toBeVisible();
+});
+
+test('selects named group participants per message and persists the sender', async ({ page }) => {
+  await openLegacyFixture(page);
+
+  await page.getByTestId('opponent-name-1').fill('林一');
+  await page.getByTestId('opponent-name-2').fill('周二');
+  await page.getByTestId('opponent-name-3').fill('陈三');
+  const opponent2Avatar = page.locator('img[alt="周二的头像"]');
+  const originalOpponent2Avatar = await opponent2Avatar.getAttribute('src');
+  await page.getByTestId('opponent-avatar-2').setInputFiles(path.join(root, 'tests/fixtures/avatar-me.png'));
+  await expect.poll(() => opponent2Avatar.getAttribute('src')).not.toBe(originalOpponent2Avatar);
+  await page.getByRole('button', { name: '编辑器', exact: true }).click();
+
+  const textMessage = page.locator('[data-message-id="1002"]');
+  await expect(textMessage.getByRole('radio', { name: '林一', exact: true })).toBeChecked();
+  await textMessage.getByRole('radio', { name: '周二', exact: true }).check();
+  await expect(textMessage.getByRole('radio', { name: '周二', exact: true })).toBeChecked();
+
+  await page.getByRole('button', { name: '预览分享', exact: true }).click();
+  await expect(page.locator('.wechat-message-row .wechat-nickname').first()).toHaveText('周二');
+  const previewAvatar = await page.locator('.wechat-message-row .wechat-avatar').first().getAttribute('src');
+  const expectedAvatar = await page.locator('img[alt="周二的头像"]').getAttribute('src');
+  expect(previewAvatar).toBe(expectedAvatar);
+
+  const storedMessage = await page.evaluate(() => {
+    const state = JSON.parse(localStorage.getItem('wechat_editor_state_v19'));
+    return state.messages.find(message => message.id === 1002);
+  });
+  expect(storedMessage.senderId).toBe('other2');
+  expect(storedMessage.isMe).toBe(false);
 });
 
 test('reorders messages with accessible controls and persists the order', async ({ page }) => {
@@ -97,6 +132,7 @@ test('generates one export image and downloads a valid backup', async ({ page })
   const backup = JSON.parse(fs.readFileSync(await download.path(), 'utf8'));
   expect(backup.format).toBe('wechat-screenshot-pwa-backup');
   expect(backup.version).toBe(1);
-  expect(backup.state.schemaVersion).toBe(2);
+  expect(backup.state.schemaVersion).toBe(3);
+  expect(backup.state.opponents).toHaveLength(3);
   expect(backup.state.messages).toHaveLength(5);
 });

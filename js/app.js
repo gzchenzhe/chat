@@ -1,10 +1,13 @@
 const defaultMyAvatar = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%232c3e50"/><circle cx="50" cy="40" r="16" fill="%23fce2c4"/><path d="M 25 100 L 35 65 Q 50 55 65 65 L 75 100" fill="%23fce2c4"/></svg>';
 const defaultOtherAvatar = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23c0392b"/><circle cx="50" cy="50" r="30" fill="%23f1c40f"/><path d="M 35 35 L 45 45 L 35 55 M 65 35 L 55 45 L 65 55" stroke="%23c0392b" stroke-width="4" fill="none"/></svg>';
+const defaultOtherAvatar2 = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%233b82f6"/><circle cx="50" cy="39" r="18" fill="%23fde6d2"/><path d="M20 100c4-25 16-39 30-39s26 14 30 39" fill="%23f5f7fb"/></svg>';
+const defaultOtherAvatar3 = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%237c3aed"/><circle cx="50" cy="39" r="18" fill="%23f7d7c4"/><path d="M20 100c4-25 16-39 30-39s26 14 30 39" fill="%23facc15"/></svg>';
 const defaultImage = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 250"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="%23d8e7d2"/><stop offset="1" stop-color="%23f4d2c2"/></linearGradient></defs><rect width="200" height="250" fill="url(%23g)"/><circle cx="100" cy="88" r="34" fill="%23ffffff" opacity=".72"/><path d="M40 214c9-43 31-67 60-67s51 24 60 67" fill="%23ffffff" opacity=".72"/></svg>';
 const exportTransparentPixel = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
 const STATE_STORAGE_KEY = 'wechat_editor_state_v19';
 const LEGACY_STATE_STORAGE_KEY = 'wechat_editor_state_v18';
-const CURRENT_STATE_SCHEMA = 2;
+const CURRENT_STATE_SCHEMA = 3;
+const OPPONENT_IDS = ['other1', 'other2', 'other3'];
 const BACKUP_FORMAT = 'wechat-screenshot-pwa-backup';
 const ASSET_DATABASE_NAME = 'wechat_screenshot_pwa';
 const ASSET_DATABASE_VERSION = 1;
@@ -197,14 +200,16 @@ const defaultState = {
     unreadCount: '92', 
     batteryLevel: 65,
     networkType: '5G',
-    otherName: '塔西', 
     showOtherName: false, 
     myAvatar: defaultMyAvatar,
     myAvatarAssetId: null,
-    otherAvatar: defaultOtherAvatar,
-    otherAvatarAssetId: null,
+    opponents: [
+        { id: 'other1', name: '塔西', avatar: defaultOtherAvatar, avatarAssetId: null },
+        { id: 'other2', name: '', avatar: defaultOtherAvatar2, avatarAssetId: null },
+        { id: 'other3', name: '', avatar: defaultOtherAvatar3, avatarAssetId: null }
+    ],
     messages: [
-        { id: 1, type: 'text', isMe: false, content: '欢迎使用' }
+        { id: 1, type: 'text', senderId: 'other1', isMe: false, content: '欢迎使用' }
     ]
 };
 
@@ -249,12 +254,13 @@ createApp({
         unreadCount: 'saveState',
         batteryLevel: 'saveState',
         networkType: 'saveState',
-        otherName: 'saveState',
         showOtherName: 'saveState',
         myAvatar: 'saveState',
         myAvatarAssetId: 'saveState',
-        otherAvatar: 'saveState',
-        otherAvatarAssetId: 'saveState',
+        opponents: {
+            handler: 'saveState',
+            deep: true
+        },
         messages: {
             handler: 'saveState',
             deep: true
@@ -272,7 +278,7 @@ createApp({
             const normalized = JSON.parse(JSON.stringify(defaultState));
             const scalarFields = [
                 'isDarkMode', 'statusBarTime', 'returnAppText', 'chatName', 'unreadCount',
-                'batteryLevel', 'networkType', 'otherName', 'showOtherName'
+                'batteryLevel', 'networkType', 'showOtherName'
             ];
 
             scalarFields.forEach(field => {
@@ -281,10 +287,29 @@ createApp({
 
             normalized.myAvatar = typeof source.myAvatar === 'string' ? source.myAvatar : defaultMyAvatar;
             normalized.myAvatarAssetId = typeof source.myAvatarAssetId === 'string' ? source.myAvatarAssetId : null;
-            normalized.otherAvatar = typeof source.otherAvatar === 'string' ? source.otherAvatar : defaultOtherAvatar;
-            normalized.otherAvatarAssetId = typeof source.otherAvatarAssetId === 'string' ? source.otherAvatarAssetId : null;
+            const sourceOpponents = Array.isArray(source.opponents) ? source.opponents : [];
+            normalized.opponents = defaultState.opponents.map((fallback, index) => {
+                const candidate = sourceOpponents.find(opponent => opponent?.id === fallback.id) || sourceOpponents[index] || {};
+                const legacyCandidate = index === 0 ? {
+                    name: source.otherName,
+                    avatar: source.otherAvatar,
+                    avatarAssetId: source.otherAvatarAssetId
+                } : {};
+                const participant = sourceOpponents.length ? candidate : legacyCandidate;
+                return {
+                    id: fallback.id,
+                    name: typeof participant.name === 'string' ? participant.name : fallback.name,
+                    avatar: typeof participant.avatar === 'string' ? participant.avatar : fallback.avatar,
+                    avatarAssetId: typeof participant.avatarAssetId === 'string' ? participant.avatarAssetId : null
+                };
+            });
             normalized.messages = Array.isArray(source.messages)
-                ? source.messages.filter(message => message && typeof message === 'object').map(message => ({ ...message }))
+                ? source.messages.filter(message => message && typeof message === 'object').map(message => {
+                    const senderId = message.senderId === 'me' || OPPONENT_IDS.includes(message.senderId)
+                        ? message.senderId
+                        : (message.isMe ? 'me' : 'other1');
+                    return { ...message, senderId, isMe: senderId === 'me' };
+                })
                 : JSON.parse(JSON.stringify(defaultState.messages));
             normalized.schemaVersion = CURRENT_STATE_SCHEMA;
             return normalized;
@@ -299,12 +324,15 @@ createApp({
                 unreadCount: this.unreadCount,
                 batteryLevel: this.batteryLevel,
                 networkType: this.networkType,
-                otherName: this.otherName,
                 showOtherName: this.showOtherName,
                 myAvatar: portable || !this.myAvatarAssetId ? this.myAvatar : '',
                 myAvatarAssetId: portable ? null : this.myAvatarAssetId,
-                otherAvatar: portable || !this.otherAvatarAssetId ? this.otherAvatar : '',
-                otherAvatarAssetId: portable ? null : this.otherAvatarAssetId,
+                opponents: this.opponents.map(opponent => ({
+                    id: opponent.id,
+                    name: opponent.name,
+                    avatar: portable || !opponent.avatarAssetId ? opponent.avatar : '',
+                    avatarAssetId: portable ? null : opponent.avatarAssetId
+                })),
                 messages: this.messages.map(message => ({
                     ...message,
                     imageUrl: message.type === 'image' && !portable && message.imageAssetId ? '' : message.imageUrl,
@@ -323,8 +351,10 @@ createApp({
                 if (!state.myAvatarAssetId) {
                     state.myAvatarAssetId = await this.persistInlineImage(state.myAvatar, 'avatar_me');
                 }
-                if (!state.otherAvatarAssetId) {
-                    state.otherAvatarAssetId = await this.persistInlineImage(state.otherAvatar, 'avatar_other');
+                for (const opponent of state.opponents) {
+                    if (!opponent.avatarAssetId) {
+                        opponent.avatarAssetId = await this.persistInlineImage(opponent.avatar, `avatar_${opponent.id}`);
+                    }
                 }
                 for (const message of state.messages) {
                     if (message.type === 'image' && !message.imageAssetId) {
@@ -356,7 +386,10 @@ createApp({
             };
 
             state.myAvatar = await hydrate(state.myAvatarAssetId, state.myAvatar || defaultMyAvatar);
-            state.otherAvatar = await hydrate(state.otherAvatarAssetId, state.otherAvatar || defaultOtherAvatar);
+            for (const [index, opponent] of state.opponents.entries()) {
+                const fallbackAvatar = defaultState.opponents[index]?.avatar || defaultOtherAvatar;
+                opponent.avatar = await hydrate(opponent.avatarAssetId, opponent.avatar || fallbackAvatar);
+            }
             for (const message of state.messages) {
                 if (message.type === 'image') {
                     message.imageUrl = await hydrate(message.imageAssetId, message.imageUrl || defaultImage);
@@ -464,7 +497,7 @@ createApp({
         getReferencedAssetIds() {
             return [
                 this.myAvatarAssetId,
-                this.otherAvatarAssetId,
+                ...this.opponents.map(opponent => opponent.avatarAssetId),
                 ...this.messages.map(message => message.imageAssetId)
             ].filter(Boolean);
         },
@@ -555,22 +588,44 @@ createApp({
             }
             return { ...processed, assetId };
         },
+        getOpponentDisplayName(opponent, index = this.opponents.indexOf(opponent)) {
+            const name = typeof opponent?.name === 'string' ? opponent.name.trim() : '';
+            return name || `对方${Math.max(0, index) + 1}`;
+        },
+        getMessageOpponent(msg) {
+            return this.opponents.find(opponent => opponent.id === msg.senderId) || this.opponents[0];
+        },
+        getMessageSenderName(msg) {
+            const opponent = this.getMessageOpponent(msg);
+            return this.getOpponentDisplayName(opponent);
+        },
+        getMessageAvatar(msg) {
+            return this.isMessageFromMe(msg) ? this.myAvatar : this.getMessageOpponent(msg)?.avatar || defaultOtherAvatar;
+        },
+        isMessageFromMe(msg) {
+            return msg?.senderId === 'me' || (!msg?.senderId && Boolean(msg?.isMe));
+        },
+        setMessageSender(msg, senderId) {
+            const normalizedSenderId = senderId === 'me' || OPPONENT_IDS.includes(senderId) ? senderId : 'other1';
+            msg.senderId = normalizedSenderId;
+            msg.isMe = normalizedSenderId === 'me';
+        },
         getTextClass(msg) {
             const theme = this.isDarkMode ? 'dark' : 'light';
-            const side = msg.isMe ? 'right' : 'left';
+            const side = this.isMessageFromMe(msg) ? 'right' : 'left';
             const shadow = (!this.isDarkMode) ? 'wechat-soft-shadow' : '';
             return `wechat-${theme}-${side} bubble-${side}-${theme} ${shadow}`;
         },
         getTransferClass(msg) {
             const theme = this.isDarkMode ? 'dark' : 'light';
-            const side = msg.isMe ? 'right' : 'left';
+            const side = this.isMessageFromMe(msg) ? 'right' : 'left';
             const state = msg.status === 'pending' ? 'pending' : 'accepted';
             const shadow = (!this.isDarkMode) ? 'wechat-soft-shadow' : '';
             return `transfer-${state}-${theme} bubble-${side}-orange-${state}-${theme} ${shadow}`;
         },
         getRedPacketClass(msg) {
             const theme = this.isDarkMode ? 'dark' : 'light';
-            const side = msg.isMe ? 'right' : 'left';
+            const side = this.isMessageFromMe(msg) ? 'right' : 'left';
             const state = msg.status === 'pending' ? 'pending' : 'accepted';
             const shadow = (!this.isDarkMode) ? 'wechat-soft-shadow' : '';
             return `redpacket-${state}-${theme} bubble-${side}-redpacket-${state}-${theme} ${shadow}`;
@@ -621,7 +676,7 @@ createApp({
             msg.imageHeight = img.naturalHeight;
         },
         addMessage(type) {
-            const baseMsg = { id: Date.now(), type: type, isMe: true };
+            const baseMsg = { id: Date.now(), type: type, senderId: 'me', isMe: true };
             if (type === 'text') baseMsg.content = '输入内容...';
             else if (type === 'image') { baseMsg.imageUrl = defaultImage; baseMsg.imageAssetId = null; baseMsg.imageWidth = 200; baseMsg.imageHeight = 250; }
             else if (type === 'voice') { baseMsg.duration = 10; baseMsg.status = 'unread'; baseMsg.convertedText = '转换后的文字...'; }
@@ -702,20 +757,22 @@ createApp({
             try { event.currentTarget.releasePointerCapture?.(event.pointerId); } catch (error) {}
             this.clearSortState();
         },
-        async onAvatarChange(event, type) {
+        async onAvatarChange(event, participantId) {
             const input = event.target;
             const file = input.files?.[0];
             if (!file) return;
 
             try {
-                const processed = await this.processAndStoreImage(file, type === 'me' ? 'avatar_me' : 'avatar_other', 1024);
-                const previousAssetId = type === 'me' ? this.myAvatarAssetId : this.otherAvatarAssetId;
-                if (type === 'me') {
+                const opponent = this.opponents.find(item => item.id === participantId);
+                if (participantId !== 'me' && !opponent) throw new Error('找不到对应的群聊成员');
+                const processed = await this.processAndStoreImage(file, participantId === 'me' ? 'avatar_me' : `avatar_${participantId}`, 1024);
+                const previousAssetId = participantId === 'me' ? this.myAvatarAssetId : opponent.avatarAssetId;
+                if (participantId === 'me') {
                     this.myAvatar = processed.dataUrl;
                     this.myAvatarAssetId = processed.assetId;
                 } else {
-                    this.otherAvatar = processed.dataUrl;
-                    this.otherAvatarAssetId = processed.assetId;
+                    opponent.avatar = processed.dataUrl;
+                    opponent.avatarAssetId = processed.assetId;
                 }
                 if (previousAssetId && previousAssetId !== processed.assetId) {
                     deleteAssetBlob(previousAssetId).catch(error => console.warn('删除旧头像失败。', error));

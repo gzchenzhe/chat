@@ -714,6 +714,100 @@ select.pwa-native-select {
     transform: translateX(-50%);
 }
 
+/* 群聊人物与发送人选择 */
+.participant-name-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.participant-avatar-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: start;
+    gap: 10px;
+}
+
+.participant-avatar-grid > div {
+    min-width: 0;
+}
+
+.participant-avatar-grid span {
+    width: 100%;
+    overflow: hidden;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.message-sender-selector {
+    margin: 0 0 12px;
+    padding: 0;
+    border: 0;
+}
+
+.message-sender-selector legend {
+    margin-bottom: 6px;
+    color: #6b7280;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+.message-sender-options {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+}
+
+.message-sender-option {
+    min-width: 0;
+    min-height: 32px;
+    padding: 6px 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #d1d5db;
+    border-radius: 7px;
+    background: #ffffff;
+    color: #4b5563;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 16px;
+    transition: border-color 160ms ease, background 160ms ease, color 160ms ease;
+}
+
+.message-sender-option:hover {
+    border-color: #9ca3af;
+    background: #f9fafb;
+}
+
+.message-sender-option input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+.message-sender-option span {
+    min-width: 0;
+    overflow: hidden;
+    pointer-events: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.message-sender-option.is-selected {
+    border-color: #07c160;
+    background: #e9f8ef;
+    color: #079447;
+    font-weight: 600;
+}
+
+.message-sender-option:focus-within {
+    outline: 2px solid rgba(7, 193, 96, 0.28);
+    outline-offset: 1px;
+}
+
 /* 消息排序 */
 .draggable-item { transition: transform 0.2s, box-shadow 0.2s; }
 .message-item-toolbar {
