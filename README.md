@@ -1,141 +1,84 @@
 # 微信截图编辑器 PWA
 
-一个三页面 PWA 版本的微信聊天截图编辑器。当前版本保留原项目的 UI 和功能逻辑，将功能拆分为“首页 / 编辑器 / 预览分享”三个页面，并支持添加到手机主屏幕使用。
+一个无需构建即可运行的静态 Vue 3 PWA，用于编辑和导出仿微信聊天界面的 PNG。界面分为“首页 / 编辑器 / 预览分享”三页，可作为本地设计预览工具安装到主屏幕。
 
-> 仅用于学习、演示、设计稿预览等正当场景。请勿用于伪造证据、冒充他人或误导传播。
-
-## 页面展示
+> 仅用于学习、演示和设计稿预览。请勿用于伪造证据、冒充他人或误导传播。仓库中的部分字体和仿微信/iOS 图片没有可核验的分发授权，公开发布前必须先处理 [素材来源与发布门禁](ASSET_PROVENANCE.md)。
 
 ![微信截图编辑器 PWA 三页面展示](assets/showcase.png)
 
-## 页面结构
+## 当前功能
 
-- 首页：全局外观、人物设置。
-- 编辑器：聊天内容编排，支持添加、编辑、拖拽排序各类消息。
-- 预览分享：查看微信聊天预览图，并执行重置或导出截图。
+- 编辑浅色/深色主题、状态栏、聊天标题、未读数、网络和电量。
+- 设置双方头像、对方昵称及昵称显示开关。
+- 支持文字、图片、语音、转账、通话、拍一拍、时间戳和红包八类消息。
+- 支持拖动手柄排序，并提供触屏友好的上移/下移按钮。
+- 新上传图片会自动缩放压缩；轻量状态保存在 `localStorage`，图片二进制优先保存在 IndexedDB。
+- 可导出/导入包含设置、消息和图片的 JSON 备份。
+- 先生成一张 `1125 × 2436` PNG 供确认，再使用同一结果下载或调用系统文件分享。
+- 支持 PWA Manifest、Service Worker 离线缓存和主屏幕安装。
 
-## 功能
-
-- 支持浅色/深色模式。
-- 支持编辑手机时间、返回标识、聊天标题、未读数、电池电量、网络标识。
-- 支持设置双方头像、对方昵称、是否显示昵称。
-- 支持消息类型：
-  - 文字
-  - 图片
-  - 语音
-  - 转账
-  - 通话
-  - 拍一拍
-  - 时间戳
-  - 红包
-- 支持拖拽调整聊天内容顺序。
-- 支持本地自动保存编辑状态。
-- 支持导出高清 PNG 截图。
-- 支持 PWA 安装到手机主屏幕。
-
-## 目录
+## 项目结构
 
 ```text
-PWA/
-├── index.html                # PWA 主页面
-├── manifest.webmanifest      # PWA 名称、图标、启动方式配置
-├── sw.js                     # Service Worker 离线缓存
-├── README.md                 # 项目说明文档
-├── assets/
-│   ├── showcase.png          # 三页面展示图
-│   ├── icon.svg
-│   ├── icon-192.png
-│   ├── icon-512.png
-│   └── apple-touch-icon.png
-├── fonts/                    # 字体资源
-├── pic/                      # 微信/iOS 界面素材
-├── vendor/                   # Vue、Tailwind、html-to-image 等本地依赖
-└── web.config                # IIS 部署配置
+.
+├── index.html                 # 三页模板和静态入口
+├── css/app.css                # 应用样式与本地字体声明
+├── js/app.js                  # Vue 状态、存储、排序、备份和导出逻辑
+├── manifest.webmanifest       # PWA 安装配置
+├── sw.js                      # v30 核心资源缓存
+├── vendor/                    # Vue、Tailwind CSS、html-to-image 本地副本
+├── fonts/                     # 本地字体（公开分发前必须完成授权处理）
+├── pic/                       # 仿微信/iOS UI 素材（公开分发前必须完成授权处理）
+├── assets/                    # PWA 图标和展示图
+├── tests/                     # 固定测试数据、视觉基线、手工与 E2E 回归
+├── scripts/check-project.mjs  # 无构建静态一致性检查
+├── PROJECT_STATUS.md          # 后续 AI/开发者接手入口
+├── THIRD_PARTY_NOTICES.md     # 软件依赖版本、指纹和许可证状态
+└── ASSET_PROVENANCE.md        # 字体、图片的来源缺口与发布门禁
 ```
 
-## 本地预览
+## 本地运行
 
-进入 `PWA` 目录后启动静态服务：
+不要通过 `file://` 直接双击打开，Service Worker、字体和导出链路需要 HTTP 环境。
 
 ```bash
 python -m http.server 8188
 ```
 
-访问：
+然后访问 `http://127.0.0.1:8188/`。
 
-```text
-http://127.0.0.1:8188/
+## 开发与测试
+
+```bash
+npm install
+npx playwright install chromium
+npm test
 ```
 
-## 添加到主屏幕教程
+`npm test` 会先运行 121 项静态/资源/数据检查，再运行 4 项 Playwright Chromium 端到端测试。若 Windows PowerShell 的执行策略阻止 `npm.ps1`，可改用 `npm.cmd` 和 `npx.cmd`。
 
-### iPhone / iPad Safari
+测试覆盖 v18→v19 数据迁移、三页导航、消息排序持久化、390 px 移动布局、PNG 尺寸以及 JSON 备份下载。详细人工验证见 [tests/MANUAL_REGRESSION.md](tests/MANUAL_REGRESSION.md)。
 
-1. 用 Safari 打开 PWA 网址。
-2. 点击浏览器底部的“分享”按钮。
-3. 在分享菜单中选择“添加到主屏幕”。
-4. 确认名称和图标。
-5. 点击“添加”。
-6. 回到主屏幕后，点击图标即可像 App 一样打开。
+## 数据与备份
 
-### 安卓 Chrome
+- 当前状态键：`wechat_editor_state_v19`，schema 版本为 `2`。
+- 首次读取旧键 `wechat_editor_state_v18` 时会迁移；只有新状态保存成功后才删除旧键。
+- 图片优先写入 IndexedDB 数据库 `wechat_screenshot_pwa_assets`；localStorage 只保存资源 ID 和文本状态。
+- 头像最长边压缩到 1024 px，消息图片最长边压缩到 1600 px。
+- 导出备份会重新内联图片，便于跨浏览器恢复。
+- 清理站点数据仍会删除本地状态和图片，重要内容应先导出备份。
 
-1. 用 Chrome 打开 PWA 网址。
-2. 点击右上角三个点菜单。
-3. 选择“添加到主屏幕”或“安装应用”。
-4. 确认名称和图标。
-5. 点击“添加”或“安装”。
+## PWA 安装与缓存
 
-### Edge / Chrome 桌面端
+生产环境应使用 HTTPS；`localhost`/`127.0.0.1` 仅适合开发。iOS Safari 可通过分享菜单“添加到主屏幕”，Android Chrome/Edge 可通过浏览器安装入口添加。
 
-1. 用浏览器打开 PWA 网址。
-2. 地址栏右侧如果出现安装图标，点击安装。
-3. 或打开浏览器菜单，选择“应用 / 安装此站点为应用”。
+修改入口、样式、脚本、字体或图片后，应同步检查 `sw.js` 的 `CORE_ASSETS` 并提升 `CACHE_NAME`。当前缓存名为 `wechat-screenshot-pwa-v30`。
 
-## 主屏幕名称与图标
+## 发布前门禁
 
-主屏幕显示名称主要在这里修改：
+- 在真实 iPhone Safari 和 Android Chrome 验证触摸排序、上传、下载/分享、安装、升级和离线启动。
+- 解决 [ASSET_PROVENANCE.md](ASSET_PROVENANCE.md) 中所有 `BLOCKED` 项；当前仓库不应直接作为公开素材包分发。
+- 保留 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) 并为重新取得的第三方文件记录准确版本和来源。
+- 运行 `npm test` 并确认工作树只包含预期改动。
 
-```json
-// manifest.webmanifest
-"name": "微信截图 PWA",
-"short_name": "截图PWA"
-```
-
-iOS Safari 还会读取：
-
-```html
-<!-- index.html -->
-<meta name="apple-mobile-web-app-title" content="微信截图 PWA">
-<title>微信截图 PWA</title>
-```
-
-主屏幕图标文件位于：
-
-```text
-assets/apple-touch-icon.png
-assets/icon-192.png
-assets/icon-512.png
-```
-
-## 缓存更新说明
-
-PWA 使用 `sw.js` 做缓存。修改 `index.html`、图标、素材或样式后，如果手机主屏幕仍显示旧版本，可以：
-
-1. 关闭主屏幕 App 后重新打开。
-2. 在 Safari 中刷新一次网页。
-3. 必要时删除主屏幕图标后重新添加。
-4. 开发时可修改 `sw.js` 中的 `CACHE_NAME` 版本号，强制刷新缓存。
-
-## 部署建议
-
-- 推荐部署到 HTTPS 域名，PWA 安装和 Service Worker 在 HTTPS 下兼容性最好。
-- 如果部署到 GitHub Pages、Vercel、Netlify 等静态站点服务，直接上即可。
-- 如果部署到 IIS，可保留 `web.config`。
-
-## 注意事项
-
-- 所有数据保存在当前浏览器的 `localStorage` 中。
-- 更换浏览器或清理浏览器数据后，编辑内容会丢失。
-- 导出图片依赖浏览器对 Canvas、字体、图片跨域加载的支持。
-- 本项目素材和截图样式仅用于合法用途。
+更多实现状态、风险和接手规则见 [PROJECT_STATUS.md](PROJECT_STATUS.md)。

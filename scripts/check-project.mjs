@@ -33,6 +33,8 @@ const applicationSource = `${html}\n${appScript}`;
 for (const requiredPath of [
   'README.md',
   'PROJECT_STATUS.md',
+  'THIRD_PARTY_NOTICES.md',
+  'ASSET_PROVENANCE.md',
   'package-lock.json',
   'playwright.config.mjs',
   'tests/e2e/app.spec.mjs',
