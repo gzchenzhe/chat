@@ -345,6 +345,7 @@ select.pwa-native-select {
 }
 
 .wechat-nav-bar {
+    position: relative;
     height: 44px;
     padding: 0 12px;
     border-bottom-width: 0.5px;
@@ -352,6 +353,8 @@ select.pwa-native-select {
 }
 
 .wechat-back-area {
+    position: relative;
+    z-index: 2;
     width: 104px;
     min-width: 104px;
     display: flex;
@@ -401,20 +404,40 @@ select.pwa-native-select {
     margin-left: 6px;
 }
 
+.wechat-nav-title-frame {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: 64px;
+    bottom: 0;
+    left: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+    pointer-events: none;
+}
+
 .wechat-nav-title {
     /* 手动调整参数 5：聊天标题文字。
        font-size 控制标题大小；line-height 控制标题所在导航栏的垂直对齐；
        font-weight 控制粗细。 */
     font-size: 16px;
+    display: inline-block;
+    flex: none;
     line-height: 44px;
     font-weight: 500;
     -webkit-text-stroke: 0.18px currentColor;
     text-shadow: 0 0 0 currentColor;
     text-align: center;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    transform-origin: center center;
 }
 
 .wechat-nav-more {
+    position: relative;
+    z-index: 2;
     width: 104px;
     min-width: 104px;
     display: flex;

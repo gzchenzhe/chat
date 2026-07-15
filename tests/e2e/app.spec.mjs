@@ -111,7 +111,35 @@ test('keeps all pages inside a mobile viewport', async ({ page }) => {
 
 test('generates one export image and downloads a valid backup', async ({ page }) => {
   await openLegacyFixture(page);
+  const wechatChatTitle = '健康生活远离股市(8)';
+  await page.getByTestId('chat-name-input').fill(wechatChatTitle);
   await page.getByRole('button', { name: '预览分享', exact: true }).click();
+  const renderedTitle = page.locator('.wechat-nav-title');
+  await expect(renderedTitle).toHaveText(wechatChatTitle);
+  await expect.poll(() => renderedTitle.evaluate(element => {
+    const frame = element.parentElement.getBoundingClientRect();
+    const title = element.getBoundingClientRect();
+    const nav = element.closest('.wechat-nav-bar');
+    return {
+      navHeight: getComputedStyle(nav).height,
+      renderedWidth: Math.round(title.width),
+      frameWidth: Math.round(frame.width),
+      lineHeight: getComputedStyle(element).lineHeight,
+      whiteSpace: getComputedStyle(element).whiteSpace,
+      transform: getComputedStyle(element).transform
+    };
+  })).toMatchObject({
+    navHeight: '44px',
+    lineHeight: '44px',
+    whiteSpace: 'nowrap'
+  });
+  const fittedTitle = await renderedTitle.evaluate(element => ({
+    renderedWidth: element.getBoundingClientRect().width,
+    frameWidth: element.parentElement.getBoundingClientRect().width,
+    inlineTransform: element.style.transform
+  }));
+  expect(fittedTitle.renderedWidth).toBeLessThanOrEqual(fittedTitle.frameWidth);
+  expect(fittedTitle.inlineTransform).toBe('scale(1)');
   await page.getByTestId('generate-image').click();
 
   const generatedImage = page.getByTestId('generated-image-preview');
@@ -123,6 +151,16 @@ test('generates one export image and downloads a valid backup', async ({ page })
   }));
   expect(dimensions).toEqual({ width: 1125, height: 2436, source: 'data:image/png;base64,' });
   await expect(page.getByTestId('download-generated-image')).toBeVisible();
+
+  await page.getByRole('button', { name: '首页', exact: true }).click();
+  const longChatTitle = `${wechatChatTitle}这是一个需要自动缩小但保持完整单行显示的群聊标题`;
+  await page.getByTestId('chat-name-input').fill(longChatTitle);
+  await page.getByRole('button', { name: '预览分享', exact: true }).click();
+  await expect(renderedTitle).toHaveText(longChatTitle);
+  await expect.poll(() => renderedTitle.evaluate(element => ({
+    fits: element.getBoundingClientRect().width <= element.parentElement.getBoundingClientRect().width,
+    inlineTransform: element.style.transform
+  }))).toEqual({ fits: true, inlineTransform: expect.not.stringMatching(/^scale\(1\)$/) });
 
   await page.getByRole('button', { name: '首页', exact: true }).click();
   const downloadPromise = page.waitForEvent('download');

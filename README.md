@@ -8,7 +8,7 @@
 
 ## 当前功能
 
-- 编辑浅色/深色主题、状态栏、聊天标题、未读数、网络和电量。
+- 编辑浅色/深色主题、状态栏、聊天标题、未读数、网络和电量；聊天标题保持单行居中，超长时自动等比缩小。
 - 设置我的头像和三位对方的昵称、头像及昵称显示开关。
 - 每条用户消息可从三位对方的真实昵称或“是我发出的”中选择发送人，群聊预览会匹配对应头像与昵称。
 - 支持文字、图片、语音、转账、通话、拍一拍、时间戳和红包八类消息。
@@ -26,7 +26,7 @@
 ├── css/app.css                # 应用样式与本地字体声明
 ├── js/app.js                  # Vue 状态、存储、排序、备份和导出逻辑
 ├── manifest.webmanifest       # PWA 安装配置
-├── sw.js                      # v31 核心资源缓存
+├── sw.js                      # v32 核心资源缓存
 ├── vendor/                    # Vue、Tailwind CSS、html-to-image 本地副本
 ├── fonts/                     # 本地字体（公开分发前必须完成授权处理）
 ├── pic/                       # 仿微信/iOS UI 素材（公开分发前必须完成授权处理）
@@ -56,7 +56,7 @@ npx playwright install chromium
 npm test
 ```
 
-`npm test` 会先运行 140 项静态/资源/数据检查，再运行 5 项 Playwright Chromium 端到端测试。若 Windows PowerShell 的执行策略阻止 `npm.ps1`，可改用 `npm.cmd` 和 `npx.cmd`。
+`npm test` 会先运行 143 项静态/资源/数据检查，再运行 5 项 Playwright Chromium 端到端测试。若 Windows PowerShell 的执行策略阻止 `npm.ps1`，可改用 `npm.cmd` 和 `npx.cmd`。
 
 测试覆盖 v18→v19/schema 3 数据迁移、群聊发送人选择与持久化、三页导航、消息排序、390 px 移动布局、PNG 尺寸以及 JSON 备份下载。详细人工验证见 [tests/MANUAL_REGRESSION.md](tests/MANUAL_REGRESSION.md)。
 
@@ -74,7 +74,7 @@ npm test
 
 生产环境应使用 HTTPS；`localhost`/`127.0.0.1` 仅适合开发。iOS Safari 可通过分享菜单“添加到主屏幕”，Android Chrome/Edge 可通过浏览器安装入口添加。
 
-修改入口、样式、脚本、字体或图片后，应同步检查 `sw.js` 的 `CORE_ASSETS` 并提升 `CACHE_NAME`。当前缓存名为 `wechat-screenshot-pwa-v31`。
+修改入口、样式、脚本、字体或图片后，应同步检查 `sw.js` 的 `CORE_ASSETS` 并提升 `CACHE_NAME`。当前缓存名为 `wechat-screenshot-pwa-v32`。
 
 ## Cloudflare Workers 部署
 

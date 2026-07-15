@@ -226,6 +226,7 @@ createApp({
             generatedImageDirty: false,
             generatedImageStatus: '',
             generatedImagePanelVisible: false,
+            chatTitleScale: 1,
             dragIndex: null,
             dragOverIndex: null,
             pointerSortPointerId: null,
@@ -238,6 +239,8 @@ createApp({
     async mounted() {
         // 页面加载时读取本地存储
         await this.loadState();
+        this.updateChatTitleScale();
+        document.fonts?.ready?.then(() => this.updateChatTitleScale()).catch(() => {});
         try {
             const probeFile = new File([new Blob(['share-probe'], { type: 'image/png' })], 'share-probe.png', { type: 'image/png' });
             this.supportsFileShare = Boolean(navigator.share && navigator.canShare?.({ files: [probeFile] }));
@@ -250,7 +253,12 @@ createApp({
         isDarkMode: 'saveState',
         statusBarTime: 'saveState',
         returnAppText: 'saveState',
-        chatName: 'saveState',
+        chatName: {
+            handler() {
+                this.saveState();
+                this.updateChatTitleScale();
+            }
+        },
         unreadCount: 'saveState',
         batteryLevel: 'saveState',
         networkType: 'saveState',
@@ -267,6 +275,16 @@ createApp({
         }
     },
     methods: {
+        updateChatTitleScale() {
+            this.$nextTick(() => {
+                const frame = this.$refs.chatTitleFrame;
+                const title = this.$refs.chatTitle;
+                if (!frame || !title) return;
+                const availableWidth = Math.max(1, frame.clientWidth - 4);
+                const naturalWidth = Math.max(1, title.scrollWidth);
+                this.chatTitleScale = Math.min(1, availableWidth / naturalWidth);
+            });
+        },
         markGeneratedImageDirty() {
             if (!this.generatedImageUrl) return;
             this.generatedImageDirty = true;

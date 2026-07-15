@@ -61,7 +61,7 @@
                 <div class="flex gap-4 items-end">
                     <div class="flex-1">
                         <label class="block text-sm text-gray-600 mb-1">聊天标题</label>
-                        <input v-model="chatName" type="text" class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500 outline-none">
+                        <input v-model="chatName" data-testid="chat-name-input" type="text" class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500 outline-none">
                     </div>
                     <div class="flex-1">
                         <label class="block text-sm text-gray-600 mb-1">未读数</label>
@@ -398,7 +398,9 @@
                         <div v-if="unreadCount" class="wechat-unread-badge ml-[1px]"
                              :class="isDarkMode ? 'bg-[#2c2c2c] text-white/90' : 'bg-[#dfdfdf] text-black'">{{ unreadCount }}</div>
                     </div>
-                    <div class="wechat-nav-title truncate flex-1">{{ chatName }}</div> 
+                    <div ref="chatTitleFrame" class="wechat-nav-title-frame">
+                        <div ref="chatTitle" class="wechat-nav-title" :style="{ transform: `scale(${chatTitleScale})` }">{{ chatName }}</div>
+                    </div>
                     <div class="wechat-nav-more cursor-pointer">
                         <img src="pic/wechat-nav-right.png" class="wechat-nav-img wechat-more-image" :class="{ 'theme-invert': isDarkMode }" alt="">
                     </div>

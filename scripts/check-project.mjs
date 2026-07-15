@@ -158,6 +158,9 @@ record(/OPPONENT_IDS\s*=\s*\[['"]other1['"],\s*['"]other2['"],\s*['"]other3['"]\
 record(/senderId:\s*['"]other1['"]/.test(applicationSource), 'Default message senderId was not found');
 record(/setMessageSender\s*\(/.test(applicationSource), 'Per-message sender selection method was not found');
 record(/v-for=["']\(opponent, opponentIndex\) in opponents["']/.test(html), 'Opponent settings controls were not found');
+record(!/wechat-nav-title\s+truncate/.test(html), 'Chat title must not use single-line truncation');
+record(/\.wechat-nav-title\s*\{[\s\S]*?letter-spacing:\s*0;[\s\S]*?white-space:\s*nowrap;/.test(appCss), 'Chat title must remain on one line without extra tracking');
+record(/updateChatTitleScale\s*\(/.test(appScript), 'Automatic chat-title fitting method was not found');
 record(/wechat-screenshot-pwa-v\d+/.test(serviceWorker), 'Versioned PWA cache name was not found');
 record(/pixelRatio:\s*3/.test(applicationSource), 'Expected 3x PNG export configuration was not found');
 record(/async\s+downloadGeneratedImage\s*\(/.test(applicationSource), 'Unified generated-image download action was not found');

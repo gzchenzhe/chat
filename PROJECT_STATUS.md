@@ -23,6 +23,7 @@
 
 - 三页式移动界面：`首页 / 编辑器 / 预览分享`，由 `activePage` 切换。
 - 浅色/深色主题、状态栏、我的资料与三位对方的昵称/头像设置。
+- 聊天标题无 `maxlength` 和换行，使用独立居中层避开两侧控件；超出可用宽度时按实际渲染宽度等比缩小，预览与导出使用同一布局。
 - 每条用户消息使用 `senderId` 在“对方1/2/3（动态显示真实昵称）/是我发出的”之间单选，群聊预览匹配对应头像与昵称。
 - 文字、图片、语音、转账、通话、拍一拍、时间戳、红包八类消息。
 - 消息添加、编辑、删除；鼠标拖动手柄与触屏上/下移动兜底。
@@ -30,8 +31,8 @@
 - 单一图片生成管线；同一生成结果分别用于下载和 Web Share 文件分享。
 - 状态 schema 3、旧单聊自动映射到对方1、v18→v19 安全迁移、图片压缩和 IndexedDB 二进制存储。
 - JSON 便携备份导出/导入，备份内联引用图片。
-- PWA Manifest、Service Worker v31 核心缓存、主屏幕图标和 IIS 配置。
-- 140 项静态检查、固定 PNG 视觉基线和 5 项 Playwright Chromium 回归。
+- PWA Manifest、Service Worker v32 核心缓存、主屏幕图标和 IIS 配置。
+- 143 项静态检查、固定 PNG 视觉基线和 5 项 Playwright Chromium 回归。
 - Cloudflare Workers 静态资源配置与 `.assetsignore`，避免部署时上传 `node_modules/workerd`。
 
 ## 3. 技术结构
@@ -40,15 +41,15 @@
 | --- | --- |
 | 应用形态 | 纯静态单页 PWA |
 | 框架 | Vue `3.5.35`，本地生产版全局脚本 |
-| 模板 | `index.html`，约 615 行 |
-| 样式 | `css/app.css`，约 1157 行；另有 Tailwind `3.4.17` 本地编译 CSS |
-| 业务逻辑 | `js/app.js`，约 1255 行 |
+| 模板 | `index.html`，约 621 行 |
+| 样式 | `css/app.css`，约 1180 行；另有 Tailwind `3.4.17` 本地编译 CSS |
+| 业务逻辑 | `js/app.js`，约 1273 行 |
 | 截图 | 本地 `html-to-image` + Canvas 图片覆盖层重绘 |
 | 文本状态 | `localStorage` 键 `wechat_editor_state_v19` |
 | 图片状态 | IndexedDB `wechat_screenshot_pwa_assets` / store `assets` |
 | 构建 | 运行无需构建；测试依赖 npm |
 | 自动化 | `scripts/check-project.mjs` + Playwright `1.61.1` |
-| PWA | `manifest.webmanifest` + `sw.js`，缓存 v31 |
+| PWA | `manifest.webmanifest` + `sw.js`，缓存 v32 |
 | Cloudflare | `wrangler.jsonc`，根目录静态资源；`.assetsignore` 排除开发依赖和测试文件 |
 
 核心数据流：
@@ -103,8 +104,8 @@ npm test
 
 2026-07-15 的结果：
 
-- 140 项项目检查通过：JS/Manifest/SW/Wrangler 语法、资源存在性、PWA 缓存、部署排除规则、群聊参与者、schema、依赖与 fixture 等。
-- 5 项 Playwright Chromium 测试通过：迁移/导航、三位群聊成员与消息发送人持久化、排序、390 px 移动布局、PNG/备份下载。
+- 143 项项目检查通过：JS/Manifest/SW/Wrangler 语法、资源存在性、PWA 缓存、部署排除规则、群聊参与者、单行自适应标题、schema、依赖与 fixture 等。
+- 5 项 Playwright Chromium 测试通过：迁移/导航、三位群聊成员与消息发送人持久化、排序、390 px 移动布局、标题单行居中/超长缩放、PNG/备份下载。
 - 浏览器人工回归通过三页、八类消息、深浅色、编辑持久化、390×844 与 412×915 布局。
 - 固定导出图为 `1125 × 2436`；相对既有视觉基线仅 841/2,740,500 像素变化（约 0.031%，平均通道差 0.0047）。
 - 图片压缩 fixture：`480 × 320`/24,620 字节 → `160 × 107`/5,604 字节，并通过 IndexedDB 写读。
