@@ -1,0 +1,1063 @@
+@font-face {
+    font-family: "SF Pro";
+    font-style: normal;
+    font-weight: 400;
+    src: url("../fonts/sf-pro-text_regular.woff2") format("woff2");
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "SF Pro";
+    font-style: normal;
+    font-weight: 500;
+    src: url("../fonts/sf-pro-text_medium.woff2") format("woff2");
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "SF Pro";
+    font-style: normal;
+    font-weight: 600;
+    src: url("../fonts/sf-pro-text_semibold.woff2") format("woff2");
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "SF Pro Display";
+    font-style: normal;
+    font-weight: 700;
+    src: url("../fonts/SF-Pro-Display-Bold.otf") format("opentype");
+    font-display: swap;
+}
+
+@font-face {
+    font-family: SansStdRegular;
+    font-style: normal;
+    font-weight: 400;
+    src: url("../fonts/SansStdRegular.ttf") format("truetype");
+    font-display: swap;
+}
+
+@font-face {
+    font-family: SansStdMedium;
+    font-style: normal;
+    font-weight: 400;
+    src: url("../fonts/SansStdMedium.ttf") format("truetype");
+    font-display: swap;
+}
+
+@font-face {
+    font-family: SansStdBold;
+    font-style: normal;
+    font-weight: 400;
+    src: url("../fonts/SansStdBold.ttf") format("truetype");
+    font-display: swap;
+}
+
+:root {
+    --ios-font: "SF Pro", "PingFang SC", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    --wechat-green: #95ec69;
+    --wechat-green-dark: #07c160;
+    --wechat-bg-light: #ededed;
+    --wechat-bg-dark: #111111;
+    --wechat-bar-light: #ededed;
+    --wechat-bar-dark: #111111;
+    --wechat-left-light: #ffffff;
+    --wechat-left-dark: #2c2c2e;
+    --wechat-text: #191919;
+}
+
+* { letter-spacing: 0; }
+
+body {
+    font-family: var(--ios-font);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    background: #f5f5f7;
+    color: #1f2329;
+}
+
+button, input, textarea, select {
+    font-family: var(--ios-font);
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.custom-scrollbar::-webkit-scrollbar { width: 6px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #d1d1d6; border-radius: 10px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #aeaeb2; }
+
+#app > div:first-child {
+    border-radius: 18px;
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.08);
+}
+
+#edit-panel-scroll input:not([type="checkbox"]),
+#edit-panel-scroll textarea,
+#edit-panel-scroll select {
+    border: 0.5px solid #d1d1d6;
+    border-radius: 9px;
+    background: #ffffff;
+    color: #111111;
+    font-size: 15px;
+    line-height: 20px;
+    box-shadow: inset 0 0 0 0.5px rgba(255,255,255,0.4);
+}
+
+#edit-panel-scroll input:not([type="checkbox"]):focus,
+#edit-panel-scroll textarea:focus,
+#edit-panel-scroll select:focus {
+    border-color: #07c160;
+    box-shadow: 0 0 0 3px rgba(7, 193, 96, 0.14);
+}
+
+.pwa-select-wrap {
+    position: relative;
+}
+
+select.pwa-native-select {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    height: 42px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    background-color: #ffffff !important;
+    background-image: none !important;
+    color: #111111;
+    font-size: 16px;
+    line-height: 24px;
+    padding-right: 40px;
+}
+
+.pwa-select-chevron {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    width: 16px;
+    height: 16px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #111111;
+}
+
+#edit-panel-scroll .bg-gray-50 {
+    background-color: #f7f7f8 !important;
+    border-color: #e5e5ea !important;
+    border-radius: 12px !important;
+}
+
+#app button {
+    border-radius: 10px;
+    font-weight: 500;
+    box-shadow: none !important;
+}
+
+#app > div:first-child > div:first-child button {
+    height: 36px;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+#app .grid.grid-cols-3 button {
+    height: 36px;
+    border: 0.5px solid #d1d1d6 !important;
+    background: #ffffff !important;
+    color: #111111 !important;
+    font-size: 14px;
+}
+
+#app .grid.grid-cols-3 button:hover {
+    background: #f2f2f7 !important;
+}
+
+#app .grid.grid-cols-3 button:last-child {
+    background: #f7f7f8 !important;
+}
+
+.phone-shell {
+    width: 391px;
+    height: 828px;
+    border: 8px solid #111113;
+    border-radius: 46px;
+    background: #111113;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.14), inset 0 0 0 1px rgba(255,255,255,0.08);
+    box-sizing: border-box;
+}
+
+.wechat-screen {
+    width: 375px;
+    height: 812px;
+    overflow: hidden;
+    font-family: var(--ios-font);
+    font-size: 17px;
+    line-height: 1.35;
+}
+
+.wechat-status-bar {
+    height: 44px;
+    padding: 0;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.wechat-status-left {
+    position: absolute;
+    left: 23px;
+    top: 10px;
+    width: 82px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.wechat-status-left.no-return-app {
+    top: 15px;
+}
+
+.wechat-status-left.has-return-app {
+    top: 11px;
+}
+
+.wechat-status-time {
+    font-family: "SF Pro", "Helvetica Neue", Arial, sans-serif;
+    font-size: 17px;
+    line-height: 22px;
+    font-weight: 600;
+    /*font-variant-numeric: tabular-nums;*/
+}
+
+.wechat-return-app {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    left: -8px;
+    top: 19px;
+    height: 13px;
+    font-size: 10.5px;
+    line-height: 13px;
+    font-weight: 500;
+    color: currentColor;
+    opacity: 1;
+}
+
+.wechat-return-triangle {
+    width: 7px;
+    height: 7px;
+    margin-right: 3px;
+    flex: 0 0 auto;
+}
+
+.wechat-status-right {
+    position: absolute;
+    right: 16px;
+    top: 16px;
+    width: 94px;
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.wechat-signal-icon {
+    width: 20px;
+    height: 14px;
+}
+
+.wechat-status-img {
+    display: block;
+    object-fit: contain;
+    flex: 0 0 auto;
+}
+
+.wechat-status-img.theme-invert,
+.wechat-nav-img.theme-invert,
+.wechat-battery-png.theme-invert,
+.wechat-tool-image.theme-invert {
+    filter: invert(1);
+}
+
+.wechat-signal-img {
+    width: 20px;
+    height: 14px;
+}
+
+.wechat-wifi-img {
+    width: 25px;
+    height: 19px;
+    margin-left: 6px;
+    margin-right: 0;
+}
+
+.wechat-network-label {
+    /* 手动调整参数 3：5G/4G/3G 文字。
+       margin-left 控制信号图标和文字的距离；width 是网络文字占位宽度，影响右侧电池位置；
+       font-size 是文字大小；line-height 是文字盒子高度；font-weight 是粗细；
+       transform 的 translateY 控制上下位置，scaleX 控制文字横向宽窄。 */
+    margin-left: 5px;
+    height: 14px;
+    width: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-family: "SF Pro", "Helvetica Neue", Arial, sans-serif;
+    font-size: 16.5px;
+    line-height: 16.5px;
+    font-weight: 500;
+    letter-spacing: 0;
+    transform: translateY(0) scaleX(0.95);
+    transform-origin: left center;
+}
+
+.wechat-battery-icon {
+    width: 27px;
+    height: 14px;
+    margin-left: 5px;
+    margin-right: 7px;
+}
+
+.wechat-battery-image-wrap {
+    position: relative;
+    width: 29px;
+    height: 14px;
+    margin-left: 5px;
+    margin-right: 7px;
+    flex: 0 0 auto;
+}
+
+.wechat-battery-fill {
+    position: absolute;
+    left: 2.7px;
+    top: 2.7px;
+    height: 8.55px;
+    border-radius: 1.7px;
+    background: currentColor;
+    z-index: 1;
+}
+
+.wechat-battery-png {
+    position: absolute;
+    inset: 0;
+    width: 29px;
+    height: 14px;
+    object-fit: contain;
+    z-index: 2;
+}
+
+.wechat-nav-bar {
+    height: 44px;
+    padding: 0 12px;
+    border-bottom-width: 0.5px;
+    flex-shrink: 0;
+}
+
+.wechat-back-area {
+    width: 104px;
+    min-width: 104px;
+    display: flex;
+    align-items: center;
+}
+
+.wechat-back-icon {
+    width: 24px;
+    height: 30px;
+    margin-left: -2px;
+    stroke-width: 1.9;
+}
+
+.wechat-back-image {
+    /* 手动调整参数 1：左上角微信返回箭头。
+       width/height 控制箭头大小；margin-left 控制左右位置；
+       transform: translateY(...) 控制箭头上下位置，正数向下，负数向上。 */
+    width: 10px;
+    height: 21px;
+    margin-left: 0;
+    object-fit: contain;
+    transform: translateY(1px);
+}
+
+.wechat-unread-badge {
+    /* 手动调整参数 2：未读信息气泡本体和数字。
+       min-width 控制气泡最小宽度；height 控制气泡高度；padding 控制数字左右留白；
+       border-radius 控制圆角；font-size 控制未读数字大小；line-height 通常跟 height 一致；
+       transform: translateY(...) 控制气泡上下位置。 */
+    min-width: 26px;
+    height: 22px;
+    padding: 0 7px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "SF Pro", "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 22px;
+    font-weight: 400;
+    text-align: center;
+    transform: translateY(1px);
+}
+
+.wechat-back-area .wechat-unread-badge {
+    /* 手动调整参数 2：未读气泡和返回箭头之间的距离，数值越大气泡越靠右。 */
+    margin-left: 6px;
+}
+
+.wechat-nav-title {
+    /* 手动调整参数 5：聊天标题文字。
+       font-size 控制标题大小；line-height 控制标题所在导航栏的垂直对齐；
+       font-weight 控制粗细。 */
+    font-size: 16px;
+    line-height: 44px;
+    font-weight: 500;
+    -webkit-text-stroke: 0.18px currentColor;
+    text-shadow: 0 0 0 currentColor;
+    text-align: center;
+    letter-spacing: 2px;
+}
+
+.wechat-nav-more {
+    width: 104px;
+    min-width: 104px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.wechat-more-image {
+    /* 手动调整参数 4：右上角三个点图标。
+       width/height 控制三点图标大小；margin-right 控制离手机右边的距离。 */
+    width: 26px;
+    height: 6px;
+    margin-right: 1px;
+    object-fit: contain;
+}
+
+.wechat-message-list {
+    padding: 10px 10px 10px;
+}
+
+.wechat-time-label {
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+}
+
+.wechat-nudge-label {
+    font-size: 13px;
+    line-height: 18px;
+    font-weight: 400;
+}
+
+.wechat-message-row {
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.wechat-bubble-stack {
+    min-width: 0;
+    max-width: calc(100% - 52px);
+}
+
+.wechat-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+}
+
+.wechat-nickname {
+    font-size: 12px;
+    line-height: 16px;
+    margin: -2px 0 3px 1px;
+}
+
+/* 气泡小尾巴基础设定 */
+.bubble-tail::before {
+    content: '';
+    position: absolute;
+    top: 13px;
+    width: 7px;
+    height: 10px;
+    transform: none;
+    border-radius: 0;
+    z-index: 0;
+}
+
+/* 尾巴方向与颜色映射 */
+.bubble-left-dark::before { left: -5px; background-color: var(--wechat-left-dark); clip-path: polygon(100% 0, 0 50%, 100% 100%); }
+.bubble-right-dark::before { right: -5px; background-color: var(--wechat-green-dark); clip-path: polygon(0 0, 100% 50%, 0 100%); }
+.bubble-left-light::before { left: -5px; background-color: var(--wechat-left-light); clip-path: polygon(100% 0, 0 50%, 100% 100%); }
+.bubble-right-light::before { right: -5px; background-color: var(--wechat-green); clip-path: polygon(0 0, 100% 50%, 0 100%); }
+
+/* 转账尾巴映射 */
+.bubble-left-orange-pending-light::before, .bubble-left-orange-pending-dark::before { left: -5px; background-color: #f99d3b; clip-path: polygon(100% 0, 0 50%, 100% 100%); }
+.bubble-right-orange-pending-light::before, .bubble-right-orange-pending-dark::before  { right: -5px; background-color: #f99d3b; clip-path: polygon(0 0, 100% 50%, 0 100%); }
+.bubble-left-orange-accepted-dark::before, .bubble-left-orange-accepted-light::before { left: -5px; background-color: #fde1c2; clip-path: polygon(100% 0, 0 50%, 100% 100%); }
+.bubble-right-orange-accepted-dark::before, .bubble-right-orange-accepted-light::before { right: -5px; background-color: #fde1c2; clip-path: polygon(0 0, 100% 50%, 0 100%); }
+
+.bubble-left-redpacket-pending-light::before, .bubble-left-redpacket-pending-dark::before { left: -5px; background-color: #fa9e3b; clip-path: polygon(100% 0, 0 50%, 100% 100%); }
+.bubble-right-redpacket-pending-light::before, .bubble-right-redpacket-pending-dark::before { right: -5px; background-color: #fa9e3b; clip-path: polygon(0 0, 100% 50%, 0 100%); }
+.bubble-left-redpacket-accepted-light::before, .bubble-left-redpacket-accepted-dark::before { left: -5px; background-color: #fccd9f; clip-path: polygon(100% 0, 0 50%, 100% 100%); }
+.bubble-right-redpacket-accepted-light::before, .bubble-right-redpacket-accepted-dark::before { right: -5px; background-color: #fccd9f; clip-path: polygon(0 0, 100% 50%, 0 100%); }
+
+/* 文本气泡核心规范（V18 修复字间距与左右内边距） */
+.text-bubble {
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+    padding: 9px 12px 9px;
+    min-height: 40px;
+    max-width: 255px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    overflow-wrap: anywhere;
+    word-break: normal;
+    white-space: pre-wrap;
+    position: relative;
+    z-index: 10;
+    isolation: isolate;
+}
+       
+.finance-bubble { width: 242px; border-radius: 5px; position: relative; z-index: 10; isolation: isolate; }
+.transfer-main {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 65px;
+    padding: 10px 12px 6px;
+    position: relative;
+    z-index: 10;
+}
+.transfer-amount {
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 400;
+    color: #ffffff;
+    word-break: break-all;
+}
+.transfer-title {
+    margin-top: 0;
+    font-size: 13px;
+    line-height: 19px;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.9);
+    word-break: break-all;
+}
+.transfer-title.is-accepted {
+    color: rgba(255, 255, 255, 0.75);
+}
+.transfer-footer {
+    padding: 0 12px 5px;
+    font-size: 11px;
+    line-height: 14px;
+    color: rgba(255, 255, 255, 0.8);
+    position: relative;
+    z-index: 10;
+}
+.transfer-footer.is-accepted {
+    color: rgba(255, 255, 255, 0.7);
+}
+.redpacket-bubble { width: 242px; border-radius: 5px; position: relative; z-index: 10; isolation: isolate; }
+.redpacket-main {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    min-height: 65px;
+    padding: 12px 12px 6px;
+    position: relative;
+    z-index: 10;
+}
+.redpacket-title {
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 400;
+    color: #ffffff;
+    word-break: break-all;
+}
+.redpacket-status {
+    margin-top: 1px;
+    font-size: 13px;
+    line-height: 16px;
+    color: rgba(255, 255, 255, 0.8);
+    word-break: break-all;
+}
+.redpacket-footer {
+    padding: 0 12px 5px;
+    font-size: 12px;
+    line-height: 16px;
+    color: rgba(255, 255, 255, 0.8);
+    position: relative;
+    z-index: 10;
+}
+.image-bubble {
+    width: 150px;
+    height: 150px;
+    max-width: none;
+    max-height: none;
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+    z-index: 10;
+    border: 0.5px solid rgba(255, 255, 255, 0.1);
+}
+
+.wechat-dark-bg { background-color: var(--wechat-bg-dark); }
+.wechat-dark-left { background-color: var(--wechat-left-dark); color: #f2f2f7; }
+.wechat-dark-right { background-color: var(--wechat-green-dark); color: #000000; }
+.transfer-pending { background-color: #f99d3b; color: #ffffff; }
+.transfer-accepted { background-color: #fde1c2; color: #ffffff; }
+       
+/* 背景与字体颜色基准 */
+.wechat-dark-bg { background-color: var(--wechat-bg-dark); }
+.wechat-dark-left { background-color: var(--wechat-left-dark); color: #f2f2f7; }
+.wechat-dark-right { background-color: var(--wechat-green-dark); color: #000000; }
+
+.wechat-light-bg { background-color: var(--wechat-bg-light); }
+.wechat-light-left { background-color: var(--wechat-left-light); color: var(--wechat-text); }
+.wechat-light-right { background-color: var(--wechat-green); color: var(--wechat-text); }
+
+/* 转账气泡颜色规范 */
+.transfer-pending-light, .transfer-pending-dark { background-color: #f99d3b; color: #ffffff; }
+.transfer-accepted-dark, .transfer-accepted-light { background-color: #fde1c2; color: #ffffff; }
+.redpacket-pending-light, .redpacket-pending-dark { background-color: #fa9e3b; color: #ffffff; }
+.redpacket-accepted-light, .redpacket-accepted-dark { background-color: #fccd9f; color: #ffffff; }
+
+/* 浅色模式极度柔和弥散阴影 */
+.wechat-soft-shadow {
+    box-shadow: none !important;
+}
+
+.wechat-light-left {
+    box-shadow: 0 0 0 0.5px rgba(0,0,0,0.03);
+}
+
+.wechat-bottom-bar {
+    min-height: 87px;
+    padding: 10px 8px 25px 9px;
+    border-top-width: 0.5px;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.wechat-tool-icon {
+    width: 29px;
+    height: 29px;
+    flex-shrink: 0;
+}
+
+.wechat-tool-image {
+    width: 29px;
+    height: 29px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.wechat-voice-wave {
+    width: 14px;
+    height: 20px;
+    object-fit: contain;
+    flex: 0 0 auto;
+}
+
+.wechat-voice-wave.is-dark:not(.is-me) {
+    filter: invert(1) grayscale(1);
+    opacity: 0.88;
+}
+
+.wechat-transfer-img {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: contain;
+    flex: 0 0 auto;
+}
+
+.wechat-redpacket-img {
+    width: 40px;
+    height: 47px;
+    object-fit: contain;
+    flex: 0 0 auto;
+}
+
+.wechat-voice-toggle {
+    margin-right: 0;
+}
+
+.wechat-input-field {
+    height: 36px;
+    border-radius: 7px;
+}
+
+.wechat-mic-icon {
+    position: absolute;
+    right: 9px;
+    top: 8px;
+    width: 15px;
+    height: 20px;
+    color: rgba(0, 0, 0, 0.30);
+}
+
+.wechat-bottom-outline {
+    stroke-width: 1.7;
+}
+
+.wechat-bottom-glyph {
+    stroke-width: 1.75;
+}
+
+.wechat-home-indicator {
+    position: absolute;
+    left: 50%;
+    bottom: 7px;
+    width: 134px;
+    height: 5px;
+    border-radius: 999px;
+    transform: translateX(-50%);
+}
+
+/* 消息排序 */
+.draggable-item { transition: transform 0.2s, box-shadow 0.2s; }
+.message-item-toolbar {
+    min-height: 30px;
+    margin: -4px 0 8px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+.message-drag-handle {
+    width: 34px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 0.5px solid #d1d1d6;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #6b7280;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+.message-drag-handle:active { cursor: grabbing; }
+.message-sort-controls {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+#app .message-sort-button {
+    width: 30px;
+    height: 30px;
+    padding: 0 !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 0.5px solid #d1d1d6;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #4b5563;
+    font-size: 16px;
+    line-height: 1;
+}
+#app .message-sort-button:hover:not(:disabled) { background: #f2f2f7; }
+#app .message-sort-button:disabled { opacity: 0.3; cursor: not-allowed; }
+#app .message-remove-button { color: #dc2626; }
+.is-dragging { opacity: 0.4; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); transform: scale(1.02); z-index: 50; }
+.drag-over { border-top: 3px solid #3b82f6 !important; padding-top: 13px !important; }
+.msg-list-move, .msg-list-enter-active, .msg-list-leave-active { transition: all 0.4s cubic-bezier(0.4,0,0.2,1); }
+.msg-list-enter-from, .msg-list-leave-to { opacity: 0; transform: translateY(15px); }
+.msg-list-leave-active { position: absolute; width: 100%; }
+
+html,
+body {
+    height: 100%;
+    overflow-x: hidden;
+    overscroll-behavior: none;
+}
+
+.pwa-app {
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 18px 18px calc(84px + env(safe-area-inset-bottom));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #f5f5f7;
+    overflow-x: hidden;
+}
+
+.pwa-pages {
+    width: min(100%, 520px);
+    flex: 1;
+    position: relative;
+    min-height: 0;
+    overflow: hidden;
+    padding-bottom: 10px;
+}
+
+.pwa-page {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transform: none;
+    transition: opacity 180ms ease;
+}
+
+.pwa-page.is-active {
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+    z-index: 2;
+}
+
+.pwa-editor-page:not(.is-active) {
+    transform: none;
+}
+
+.editor-card {
+    height: 100% !important;
+    max-height: 100%;
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06) !important;
+    margin-bottom: 1px;
+}
+
+.tool-toggle-btn {
+    min-width: 70px;
+    white-space: nowrap;
+    justify-content: center;
+}
+
+.pwa-topbar {
+    gap: 10px;
+    min-height: 64px;
+    padding: 14px 16px !important;
+}
+
+.pwa-topbar-title {
+    min-width: 0;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 17px !important;
+    line-height: 22px !important;
+}
+
+.pwa-action-row {
+    flex-shrink: 0;
+    gap: 8px !important;
+}
+
+.pwa-action-btn {
+    min-height: 34px;
+    padding: 0 10px !important;
+    border-radius: 10px !important;
+    font-size: 13px !important;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.pwa-action-btn svg {
+    width: 15px !important;
+    height: 15px !important;
+    flex-shrink: 0;
+}
+
+.pwa-action-btn.is-primary {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+}
+
+.pwa-preview-page {
+    align-items: center;
+    overflow: hidden;
+}
+
+.pwa-home-page .pwa-action-row,
+.pwa-editor-page .pwa-action-row {
+    display: none !important;
+}
+
+.preview-card {
+    width: 100%;
+    max-width: 480px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.pwa-preview-stage {
+    width: 100%;
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 22px 0 32px;
+    touch-action: pan-y;
+}
+
+.pwa-preview-stage .phone-shell {
+    flex: 0 0 auto;
+}
+
+.generated-export-panel {
+    margin: 0 18px 92px;
+    padding: 12px;
+    border: 1px solid rgba(17, 24, 39, 0.08);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 10px 26px rgba(15, 23, 42, 0.08);
+}
+
+.generated-export-panel img {
+    width: 112px;
+    max-height: 242px;
+    object-fit: contain;
+    border-radius: 8px;
+    border: 1px solid rgba(17, 24, 39, 0.08);
+    background: #ededed;
+}
+
+.generated-export-status {
+    font-size: 12px;
+    line-height: 18px;
+    color: #6b7280;
+}
+
+.generated-export-status.is-ready {
+    color: #07a857;
+}
+
+.generated-export-status.is-dirty {
+    color: #d97706;
+}
+
+.pwa-bottom-nav {
+    position: fixed;
+    left: 50%;
+    bottom: max(12px, env(safe-area-inset-bottom));
+    transform: translateX(-50%);
+    width: min(calc(100% - 28px), 480px);
+    height: 58px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    padding: 8px;
+    border: 1px solid rgba(17, 24, 39, 0.08);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+    backdrop-filter: blur(18px);
+    z-index: 50;
+}
+
+.pwa-bottom-nav button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border-radius: 12px !important;
+    color: #6b7280;
+    font-size: 13px;
+    font-weight: 600;
+    transition: background 160ms ease, color 160ms ease;
+}
+
+.pwa-bottom-nav button.is-active {
+    background: #e9f8ef;
+    color: #07c160;
+}
+
+.pwa-nav-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: currentColor;
+}
+
+@media (min-width: 900px) {
+    .pwa-app {
+        padding-top: 28px;
+        padding-bottom: calc(92px + env(safe-area-inset-bottom));
+    }
+}
+
+@media (max-width: 430px) {
+    .pwa-app {
+        padding: 10px 8px calc(78px + env(safe-area-inset-bottom));
+    }
+
+    .pwa-pages {
+        width: 100%;
+    }
+
+    .pwa-topbar {
+        min-height: 58px;
+        padding: 11px 14px !important;
+        gap: 8px;
+    }
+
+    .pwa-topbar-title {
+        font-size: 16px !important;
+        line-height: 20px !important;
+    }
+
+    .pwa-action-row {
+        gap: 6px !important;
+    }
+
+    .pwa-action-btn {
+        min-height: 32px;
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+        font-size: 12px !important;
+    }
+
+    .pwa-action-btn.is-primary {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+
+    .phone-shell {
+        transform: scale(0.88);
+        transform-origin: center top;
+    }
+}
+
+@media (max-height: 780px) {
+    .pwa-preview-stage {
+        align-items: flex-start;
+    }
+
+    .phone-shell {
+        transform: scale(0.82);
+        transform-origin: center top;
+    }
+}
+
+@media (max-width: 430px) and (max-height: 860px) {
+    .pwa-preview-stage {
+        padding-top: 18px;
+    }
+
+    .phone-shell {
+        transform: scale(0.78);
+        transform-origin: center top;
+    }
+}
+
+@media (max-width: 430px) and (max-height: 780px) {
+    .phone-shell {
+        transform: scale(0.72);
+        transform-origin: center top;
+    }
+}

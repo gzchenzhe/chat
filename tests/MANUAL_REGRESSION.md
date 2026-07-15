@@ -25,6 +25,7 @@ Environment: Codex in-app Chromium browser against `http://127.0.0.1:8188/`.
 - The preview page generates one `1125 × 2436` PNG that is reused by both download and system-share actions; the deprecated second rendering pipeline has been removed.
 - The unified download action produces an `image/png` file with a timestamped Chinese filename. The browser reports file-share support and exposes the separate system-share button without invoking the native share sheet during automated testing.
 - Pixel comparison against the visual baseline changed 841 of 2,740,500 pixels (about 0.031%, mean channel delta 0.0047) while preserving the exact dimensions.
+- After extracting the inline code, `css/app.css` and `js/app.js` both load, all local fonts report ready, Vue mounts successfully, and the export retains the same dimensions and pixel-diff result.
 
 ### Not covered by viewport simulation
 

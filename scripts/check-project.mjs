@@ -23,12 +23,17 @@ function read(relativePath) {
 }
 
 const html = read('index.html');
+const appScript = read('js/app.js');
+const appCss = read('css/app.css');
 const manifestSource = read('manifest.webmanifest');
 const serviceWorker = read('sw.js');
+const applicationSource = `${html}\n${appScript}`;
 
 for (const requiredPath of [
   'README.md',
   'PROJECT_STATUS.md',
+  'css/app.css',
+  'js/app.js',
   'vendor/vue.global.prod.js',
   'vendor/tailwind-local.css',
   'vendor/html-to-image.min.js'
@@ -40,7 +45,7 @@ const inlineScripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script
   .map(match => match[1])
   .filter(source => source.trim());
 
-record(inlineScripts.length > 0, 'No inline application script found in index.html');
+record(inlineScripts.length === 0, 'Application JavaScript must stay in js/app.js, not index.html');
 for (const [index, source] of inlineScripts.entries()) {
   try {
     new Function(source);
@@ -48,6 +53,13 @@ for (const [index, source] of inlineScripts.entries()) {
   } catch (error) {
     record(false, `Inline script ${index + 1} has invalid syntax: ${error.message}`);
   }
+}
+
+try {
+  new Function(appScript);
+  record(true, 'Application JavaScript is valid');
+} catch (error) {
+  record(false, `Application JavaScript has invalid syntax: ${error.message}`);
 }
 
 let manifest = null;
@@ -73,6 +85,14 @@ for (const reference of new Set(staticReferences)) {
   record(fs.existsSync(projectPath(reference)), `HTML references a missing file: ${reference}`);
 }
 
+const cssReferences = [...appCss.matchAll(/url\(["']?([^"')]+)["']?\)/g)]
+  .map(match => match[1])
+  .filter(reference => !/^(?:data:|https?:|#)/i.test(reference));
+
+for (const reference of new Set(cssReferences)) {
+  record(fs.existsSync(path.resolve(root, 'css', reference)), `CSS references a missing file: ${reference}`);
+}
+
 if (manifest) {
   record(manifest.start_url === './index.html', 'Manifest start_url must remain ./index.html');
   record(manifest.display === 'standalone', 'Manifest display must remain standalone');
@@ -88,17 +108,17 @@ for (const cachedPath of new Set(cachedPaths)) {
   record(fs.existsSync(projectPath(cachedPath)), `Service worker caches a missing path: ./${cachedPath}`);
 }
 
-record(/STATE_STORAGE_KEY\s*=\s*['"]wechat_editor_state_v19['"]/.test(html), 'Expected current localStorage key wechat_editor_state_v19 was not found');
-record(/LEGACY_STATE_STORAGE_KEY\s*=\s*['"]wechat_editor_state_v18['"]/.test(html), 'Expected legacy v18 migration key was not found');
-record(/CURRENT_STATE_SCHEMA\s*=\s*2/.test(html), 'Expected state schema version 2 was not found');
+record(/STATE_STORAGE_KEY\s*=\s*['"]wechat_editor_state_v19['"]/.test(applicationSource), 'Expected current localStorage key wechat_editor_state_v19 was not found');
+record(/LEGACY_STATE_STORAGE_KEY\s*=\s*['"]wechat_editor_state_v18['"]/.test(applicationSource), 'Expected legacy v18 migration key was not found');
+record(/CURRENT_STATE_SCHEMA\s*=\s*2/.test(applicationSource), 'Expected state schema version 2 was not found');
 record(/wechat-screenshot-pwa-v\d+/.test(serviceWorker), 'Versioned PWA cache name was not found');
-record(/pixelRatio:\s*3/.test(html), 'Expected 3x PNG export configuration was not found');
-record(/async\s+downloadGeneratedImage\s*\(/.test(html), 'Unified generated-image download action was not found');
-record(/async\s+shareGeneratedImage\s*\(/.test(html), 'Unified generated-image share action was not found');
+record(/pixelRatio:\s*3/.test(applicationSource), 'Expected 3x PNG export configuration was not found');
+record(/async\s+downloadGeneratedImage\s*\(/.test(applicationSource), 'Unified generated-image download action was not found');
+record(/async\s+shareGeneratedImage\s*\(/.test(applicationSource), 'Unified generated-image share action was not found');
 record(/data-testid=["']generated-image-preview["']/.test(html), 'Generated-image preview test hook was not found');
-record(!/async\s+generateImage\s*\(/.test(html), 'Deprecated duplicate image-generation pipeline is still present');
-record(!/shareOrDownloadImage\s*\(/.test(html), 'Deprecated share-or-download fallback is still present');
-record(/activePage:\s*['"]home['"]/.test(html), 'Expected home page initial state was not found');
+record(!/async\s+generateImage\s*\(/.test(applicationSource), 'Deprecated duplicate image-generation pipeline is still present');
+record(!/shareOrDownloadImage\s*\(/.test(applicationSource), 'Deprecated share-or-download fallback is still present');
+record(/activePage:\s*['"]home['"]/.test(applicationSource), 'Expected home page initial state was not found');
 
 const fixturePaths = [
   'tests/fixtures/export-baseline-state.json',

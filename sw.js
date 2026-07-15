@@ -1,4 +1,4 @@
-const CACHE_NAME = 'wechat-screenshot-pwa-v29';
+const CACHE_NAME = 'wechat-screenshot-pwa-v30';
 
 const CORE_ASSETS = [
   './',
@@ -11,6 +11,8 @@ const CORE_ASSETS = [
   './vendor/tailwind-local.css',
   './vendor/vue.global.prod.js',
   './vendor/html-to-image.min.js',
+  './css/app.css',
+  './js/app.js',
   './pic/ios-single-4-dark.png',
   './pic/ios-wifi-3-dark.png',
   './pic/ios-battery-dark.png',
