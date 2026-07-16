@@ -425,10 +425,13 @@
                             <div class="wechat-bubble-stack flex flex-col" :class="{'items-end': isMessageFromMe(msg)}">
                                 <span v-if="!isMessageFromMe(msg) && showOtherName" class="wechat-nickname" :class="isDarkMode ? 'text-white/50' : 'text-black/40'">{{ getMessageSenderName(msg) }}</span>
 
-                                <div v-if="msg.type === 'text'" 
-                                     class="text-bubble bubble-tail transition-colors duration-300" 
-                                     :class="getTextClass(msg)">
-                                    {{ msg.content }}
+                                <div v-if="msg.type === 'text'"
+                                     class="text-bubble wechat-text-message bubble-tail transition-colors duration-300"
+                                     :class="getTextClass(msg)"
+                                     :style="getTextBubbleStyle(msg)">
+                                    <span v-for="(line, lineIndex) in getWechatTextLines(msg.content)"
+                                          :key="`${msg.id}-text-line-${lineIndex}`"
+                                          class="wechat-text-line">{{ line }}</span>
                                 </div>
 
                                 <div v-if="msg.type === 'image'" class="image-bubble border-[0.5px] transition-colors duration-300"

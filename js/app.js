@@ -13,6 +13,12 @@ const ASSET_DATABASE_NAME = 'wechat_screenshot_pwa';
 const ASSET_DATABASE_VERSION = 1;
 const ASSET_STORE_NAME = 'assets';
 const MAX_STORED_IMAGE_BYTES = 1_500_000;
+const IOS_TEXT_FIT_TEST_MODE = new URLSearchParams(window.location.search).get('iosTextFitTest') === '1';
+const isIOSWebKitBrowser = () => {
+    const userAgent = navigator.userAgent || '';
+    const touchEnabledMac = navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
+    return IOS_TEXT_FIT_TEST_MODE || /iPad|iPhone|iPod/i.test(userAgent) || touchEnabledMac;
+};
 let assetDatabasePromise = null;
 
 function createAssetId(prefix = 'asset') {
@@ -227,6 +233,9 @@ createApp({
             generatedImageStatus: '',
             generatedImagePanelVisible: false,
             chatTitleScale: 1,
+            wechatTextMeasureCanvas: null,
+            iosTextFitFrame: 0,
+            iosTextResizeHandler: null,
             dragIndex: null,
             dragOverIndex: null,
             pointerSortPointerId: null,
@@ -240,13 +249,25 @@ createApp({
         // 页面加载时读取本地存储
         await this.loadState();
         this.updateChatTitleScale();
-        document.fonts?.ready?.then(() => this.updateChatTitleScale()).catch(() => {});
+        document.fonts?.ready?.then(() => {
+            this.wechatTextMeasureCanvas = null;
+            this.updateChatTitleScale();
+            this.$forceUpdate();
+            this.scheduleIOSWechatTextFit();
+        }).catch(() => {});
+        this.iosTextResizeHandler = () => this.scheduleIOSWechatTextFit();
+        window.addEventListener('resize', this.iosTextResizeHandler);
+        this.scheduleIOSWechatTextFit();
         try {
             const probeFile = new File([new Blob(['share-probe'], { type: 'image/png' })], 'share-probe.png', { type: 'image/png' });
             this.supportsFileShare = Boolean(navigator.share && navigator.canShare?.({ files: [probeFile] }));
         } catch (error) {
             this.supportsFileShare = false;
         }
+    },
+    beforeUnmount() {
+        if (this.iosTextFitFrame) cancelAnimationFrame(this.iosTextFitFrame);
+        if (this.iosTextResizeHandler) window.removeEventListener('resize', this.iosTextResizeHandler);
     },
     watch: {
         // 监听数据变化，实现自动保存功能
@@ -269,8 +290,14 @@ createApp({
             handler: 'saveState',
             deep: true
         },
+        activePage() {
+            this.scheduleIOSWechatTextFit();
+        },
         messages: {
-            handler: 'saveState',
+            handler() {
+                this.saveState();
+                this.scheduleIOSWechatTextFit();
+            },
             deep: true
         }
     },
@@ -628,6 +655,125 @@ createApp({
             msg.senderId = normalizedSenderId;
             msg.isMe = normalizedSenderId === 'me';
         },
+        getWechatTextMeasureContext() {
+            if (!this.wechatTextMeasureCanvas) {
+                this.wechatTextMeasureCanvas = document.createElement('canvas');
+            }
+            const context = this.wechatTextMeasureCanvas.getContext('2d');
+            if (context) {
+                context.font = '400 16px "SF Pro", "PingFang SC", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif';
+            }
+            return context;
+        },
+        measureWechatText(text, context = this.getWechatTextMeasureContext()) {
+            if (!context) return 0;
+            const units = Array.from(String(text || ''));
+            const letterSpacing = 0.3;
+            return units.reduce((width, unit, index) => {
+                const isCJKOrFullWidth = /[\u2E80-\u9FFF\uF900-\uFAFF\u3000-\u303F\uFF00-\uFFEF]/.test(unit);
+                const unitWidth = isCJKOrFullWidth ? 16 : context.measureText(unit).width;
+                return width + unitWidth + (index > 0 ? letterSpacing : 0);
+            }, 0);
+        },
+        wrapWechatTextParagraph(paragraph, maxWidth, context = this.getWechatTextMeasureContext()) {
+            const units = Array.from(String(paragraph ?? ''));
+            if (!units.length) return [''];
+
+            const lines = [];
+            let currentLine = '';
+            let currentWidth = 0;
+
+            units.forEach(unit => {
+                const unitWidth = this.measureWechatText(unit, context);
+                const spacing = currentLine ? 0.3 : 0;
+                if (currentLine && currentWidth + spacing + unitWidth > maxWidth) {
+                    lines.push(currentLine);
+                    currentLine = unit;
+                    currentWidth = unitWidth;
+                } else {
+                    currentLine += unit;
+                    currentWidth += spacing + unitWidth;
+                }
+            });
+
+            lines.push(currentLine);
+            return lines;
+        },
+        getWechatTextBubbleLayout(contentValue) {
+            const context = this.getWechatTextMeasureContext();
+            if (!context) return { width: 260, lines: [String(contentValue ?? '')] };
+
+            const content = String(contentValue ?? '');
+            const paragraphs = content.split('\n');
+            const horizontalPadding = 24;
+            const standardBubbleWidth = 255;
+            const elasticBubbleWidth = 260;
+            const standardContentWidth = standardBubbleWidth - horizontalPadding;
+            const elasticContentWidth = elasticBubbleWidth - horizontalPadding;
+            const paragraphWidths = paragraphs.map(paragraph => this.measureWechatText(paragraph, context));
+            const longestParagraphWidth = Math.max(0, ...paragraphWidths);
+            const roundUpToHalfPoint = value => Math.ceil(value * 2) / 2;
+
+            if (longestParagraphWidth <= standardContentWidth) {
+                const width = Math.max(40, roundUpToHalfPoint(longestParagraphWidth + horizontalPadding + 0.5));
+                return { width, lines: paragraphs };
+            }
+
+            const elasticLines = paragraphs.flatMap(paragraph => {
+                return this.wrapWechatTextParagraph(paragraph, elasticContentWidth, context);
+            });
+            const longestWrappedLine = Math.max(0, ...elasticLines.map(line => this.measureWechatText(line, context)));
+
+            const fittedWidth = roundUpToHalfPoint(longestWrappedLine + horizontalPadding + 0.5);
+            const width = Math.min(elasticBubbleWidth, Math.max(standardBubbleWidth, fittedWidth));
+            const finalContentWidth = width - horizontalPadding;
+            const lines = paragraphs.flatMap(paragraph => {
+                return this.wrapWechatTextParagraph(paragraph, finalContentWidth, context);
+            });
+            return { width, lines };
+        },
+        getTextBubbleStyle(msg) {
+            const layout = this.getWechatTextBubbleLayout(msg?.content);
+            return { width: `${layout.width}px`, maxWidth: '260px' };
+        },
+        getWechatTextLines(content) {
+            return this.getWechatTextBubbleLayout(content).lines;
+        },
+        fitIOSWechatTextLines(root = document.getElementById('wechat-preview')) {
+            if (!isIOSWebKitBrowser() || !root) return false;
+
+            const rootRect = root.getBoundingClientRect();
+            const rootScale = root.offsetWidth ? rootRect.width / root.offsetWidth : 1;
+            const lines = Array.from(root.querySelectorAll('.wechat-text-line'));
+
+            lines.forEach(line => {
+                line.style.transform = 'none';
+                line.style.letterSpacing = IOS_TEXT_FIT_TEST_MODE ? '1px' : '';
+
+                const range = document.createRange();
+                range.selectNodeContents(line);
+                const renderedWidth = range.getBoundingClientRect().width / Math.max(rootScale, 0.001);
+                range.detach?.();
+
+                const referenceWidth = this.measureWechatText(line.textContent || '');
+                const fitScale = renderedWidth > referenceWidth + 0.1
+                    ? Math.max(0.88, referenceWidth / renderedWidth)
+                    : 1;
+                line.style.transform = fitScale < 0.9995 ? `scaleX(${fitScale})` : 'none';
+            });
+
+            return true;
+        },
+        scheduleIOSWechatTextFit() {
+            if (!isIOSWebKitBrowser()) return;
+            if (this.iosTextFitFrame) cancelAnimationFrame(this.iosTextFitFrame);
+            this.$nextTick(() => {
+                this.iosTextFitFrame = requestAnimationFrame(() => {
+                    this.iosTextFitFrame = 0;
+                    this.fitIOSWechatTextLines();
+                });
+            });
+        },
         getTextClass(msg) {
             const theme = this.isDarkMode ? 'dark' : 'light';
             const side = this.isMessageFromMe(msg) ? 'right' : 'left';
@@ -872,6 +1018,7 @@ createApp({
                 ]);
             }
             await this.nextFrame();
+            if (this.fitIOSWechatTextLines(node)) await this.nextFrame();
         },
         getImageSource(img) {
             const source = img.currentSrc || img.getAttribute('src') || img.src || '';

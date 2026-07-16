@@ -7,7 +7,7 @@ const testDirectory = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(testDirectory, '../..');
 const exportFixture = JSON.parse(fs.readFileSync(path.join(root, 'tests/fixtures/export-baseline-state.json'), 'utf8'));
 
-async function openLegacyFixture(page, fixture = exportFixture) {
+async function openLegacyFixture(page, fixture = exportFixture, url = '/index.html') {
   await page.addInitScript(state => {
     if (sessionStorage.getItem('e2e_fixture_loaded')) return;
     localStorage.removeItem('wechat_editor_state_v18');
@@ -15,7 +15,7 @@ async function openLegacyFixture(page, fixture = exportFixture) {
     localStorage.setItem('wechat_editor_state_v18', JSON.stringify(state));
     sessionStorage.setItem('e2e_fixture_loaded', '1');
   }, fixture);
-  await page.goto('/index.html');
+  await page.goto(url);
   await expect(page.getByRole('heading', { name: '首页', exact: true })).toBeVisible();
   await expect.poll(() => page.evaluate(() => Boolean(localStorage.getItem('wechat_editor_state_v19')))).toBe(true);
 }
@@ -46,6 +46,76 @@ test('migrates v18 state and navigates all three pages', async ({ page }) => {
   await expect(page.getByRole('heading', { name: '预览图分享', exact: true })).toBeVisible();
   await page.getByRole('button', { name: '首页', exact: true }).click();
   await expect(page.getByRole('heading', { name: '首页', exact: true })).toBeVisible();
+});
+
+test('uses mirrored elastic width only when text wrapping needs it', async ({ page }) => {
+  const standardText = '海力士已跌的不是大力士也不是海公公，只能叫它海狗';
+  const elasticText = '海力士已跌的不是大力士,也不是海公公，只能叫它海狗';
+  const fixture = {
+    ...exportFixture,
+    messages: [
+      { id: 2001, type: 'text', senderId: 'me', isMe: true, content: standardText },
+      { id: 2002, type: 'text', senderId: 'me', isMe: true, content: elasticText },
+      { id: 2003, type: 'text', senderId: 'other1', isMe: false, content: elasticText }
+    ]
+  };
+
+  await openLegacyFixture(page, fixture);
+  await page.locator('.pwa-bottom-nav button').nth(2).click();
+  const bubbles = page.locator('.wechat-text-message');
+  await expect(bubbles).toHaveCount(3);
+  await expect(bubbles.nth(0).locator('.wechat-text-line')).toHaveText([
+    '海力士已跌的不是大力士也不是',
+    '海公公，只能叫它海狗'
+  ]);
+  await expect(bubbles.nth(1).locator('.wechat-text-line')).toHaveText([
+    '海力士已跌的不是大力士,也不是',
+    '海公公，只能叫它海狗'
+  ]);
+
+  const metrics = await page.locator('#wechat-preview').evaluate(preview => {
+    const previewRect = preview.getBoundingClientRect();
+    const scale = previewRect.width / preview.offsetWidth;
+    return Array.from(preview.querySelectorAll('.wechat-message-row')).map(row => {
+      const bubble = row.querySelector('.wechat-text-message');
+      const rect = bubble.getBoundingClientRect();
+      return {
+        side: row.classList.contains('flex-row-reverse') ? 'right' : 'left',
+        left: (rect.left - previewRect.left) / scale,
+        right: (rect.right - previewRect.left) / scale,
+        width: rect.width / scale
+      };
+    });
+  });
+
+  expect(metrics[0].width).toBeCloseTo(255, 1);
+  expect(metrics[1].width).toBeGreaterThan(255);
+  expect(metrics[1].width).toBeLessThanOrEqual(260);
+  expect(metrics[1].right).toBeCloseTo(metrics[0].right, 1);
+  expect(metrics[1].left).toBeLessThan(metrics[0].left);
+  expect(metrics[2].width).toBeCloseTo(metrics[1].width, 1);
+  expect(metrics[2].left).toBeCloseTo(metrics[0].left, 1);
+  expect(metrics[2].right).toBeGreaterThan(metrics[0].right);
+});
+
+test('keeps desktop line breaks when iOS renders wider glyphs', async ({ page }) => {
+  const content = '海力士已跌的不是大力士也不是海公公，只能叫它海狗';
+  const fixture = {
+    ...exportFixture,
+    messages: [
+      { id: 2101, type: 'text', senderId: 'other1', isMe: false, content }
+    ]
+  };
+
+  await openLegacyFixture(page, fixture, '/index.html?iosTextFitTest=1');
+  await page.locator('.pwa-bottom-nav button').nth(2).click();
+
+  const lines = page.locator('.wechat-text-message .wechat-text-line');
+  await expect(lines).toHaveText([
+    '海力士已跌的不是大力士也不是',
+    '海公公，只能叫它海狗'
+  ]);
+  await expect.poll(() => lines.first().evaluate(line => line.style.transform)).toMatch(/^scaleX\(0\./);
 });
 
 test('selects named group participants per message and persists the sender', async ({ page }) => {

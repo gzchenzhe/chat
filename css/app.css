@@ -193,6 +193,8 @@ select.pwa-native-select {
     font-family: var(--ios-font);
     font-size: 17px;
     line-height: 1.35;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
 }
 
 .wechat-status-bar {
@@ -538,6 +540,18 @@ select.pwa-native-select {
     position: relative;
     z-index: 10;
     isolation: isolate;
+}
+
+/* Text bubbles may borrow up to 5pt toward the opposite side for natural wrapping. */
+.text-bubble.wechat-text-message {
+    max-width: 260px;
+}
+
+.wechat-text-line {
+    display: block;
+    min-height: 20px;
+    white-space: pre;
+    transform-origin: left center;
 }
        
 .finance-bubble { width: 242px; border-radius: 5px; position: relative; z-index: 10; isolation: isolate; }
